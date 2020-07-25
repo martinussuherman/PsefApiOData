@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace PsefApi.Controllers
     /// Provinsi REST service.
     /// </summary>
     [ApiVersion(ApiInfo.V1_0)]
+    [ApiVersion(ApiInfo.V1_1)]
     [ODataRoutePrefix(nameof(Provinsi))]
     public class ProvinsiController : ODataController
     {
@@ -99,7 +101,6 @@ namespace PsefApi.Controllers
             }
 
             return Created(create);
-            // return CreatedAtAction(nameof(Get), new { id = provinsi.Id }, provinsi);
         }
 
         /// <summary>
@@ -114,6 +115,7 @@ namespace PsefApi.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
+        [ProducesResponseType(Status422UnprocessableEntity)]
         public async Task<IActionResult> Patch(
             [FromODataUri] byte id,
             [FromBody] Delta<Provinsi> delta)
@@ -131,7 +133,22 @@ namespace PsefApi.Controllers
             }
 
             delta.Patch(update);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                if (update.Id != id)
+                {
+                    ModelState.AddModelError(nameof(update.Id), "must not set on patch.");
+                    return UnprocessableEntity(ModelState);
+                }
+
+                throw;
+            }
+
             return Updated(update);
         }
 
