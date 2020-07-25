@@ -3,6 +3,7 @@ using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.IO;
 using System.Reflection;
-using static Microsoft.AspNet.OData.Query.AllowedQueryOptions;
 using static Microsoft.AspNetCore.Mvc.CompatibilityVersion;
 using static Microsoft.OData.ODataUrlKeyDelimiter;
 
@@ -48,7 +48,16 @@ namespace PsefApi
             services
                 .AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(Latest);
-            services.AddApiVersioning(options => options.ReportApiVersions = true);
+            services.AddApiVersioning(
+                options =>
+                {
+                    options.ReportApiVersions = true;
+                    options.AssumeDefaultVersionWhenUnspecified = true;
+
+                    // note: this is optional, but it will take away versioning by query string
+                    // the default behavior is a composite reader
+                    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                });
             services.AddOData().EnableApiVersioning();
             services.AddODataApiExplorer(
                 options =>
@@ -111,15 +120,26 @@ namespace PsefApi
             app.UseMvc(
                 routeBuilder =>
                 {
+                    // global odata query options
+                    routeBuilder.Count();
                     // the following will not work as expected
                     // BUG: https://github.com/OData/WebApi/issues/1837
                     // routeBuilder.SetDefaultODataOptions( new ODataOptions() { UrlKeyDelimiter = Parentheses } );
-                    routeBuilder.ServiceProvider.GetRequiredService<ODataOptions>().UrlKeyDelimiter = Parentheses;
+                    routeBuilder
+                        .ServiceProvider
+                        .GetRequiredService<ODataOptions>()
+                        .UrlKeyDelimiter = Parentheses;
 
-                    // global odata query options
-                    routeBuilder.Count();
-
-                    routeBuilder.MapVersionedODataRoutes("odata", "api", modelBuilder.GetEdmModels());
+                    // register routes with and without the api version constraint
+                    var models = modelBuilder.GetEdmModels();
+                    routeBuilder.MapVersionedODataRoutes(
+                        "explicit",
+                        "api/v{version:apiVersion}",
+                        models);
+                    // routeBuilder.MapVersionedODataRoutes(
+                    //     "implicit",
+                    //     "api",
+                    //     models);
                 });
             app.UseSwagger();
             app.UseSwaggerUI(
@@ -128,7 +148,9 @@ namespace PsefApi
                     // build a swagger endpoint for each discovered API version
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
-                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                        options.SwaggerEndpoint(
+                            $"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
                     }
                 });
         }
