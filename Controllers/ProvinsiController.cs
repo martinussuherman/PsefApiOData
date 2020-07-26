@@ -9,20 +9,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PsefApi.Model;
 using static Microsoft.AspNetCore.Http.StatusCodes;
+using static PsefApi.ApiInfo;
 
 namespace PsefApi.Controllers
 {
     /// <summary>
     /// Provinsi REST service.
     /// </summary>
-    [ApiVersion(ApiInfo.V1_0)]
-    [ApiVersion(ApiInfo.V1_1)]
+    [ApiVersion(V1_0)]
+    [ApiVersion(V1_1)]
     [ODataRoutePrefix(nameof(Provinsi))]
     public class ProvinsiController : ODataController
     {
-        private readonly PsefMySqlContext _context;
-
-
         /// <summary>
         /// Provinsi REST service.
         /// </summary>
@@ -37,10 +35,8 @@ namespace PsefApi.Controllers
         /// </summary>
         /// <returns>List item.</returns>
         [ODataRoute]
-        [Produces(ApiInfo.JsonOutput)]
-        [ProducesResponseType(
-            typeof(ODataValue<IEnumerable<Provinsi>>),
-            Status200OK)]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Provinsi>>), Status200OK)]
         [EnableQuery(
             PageSize = 50,
             MaxTop = 100,
@@ -56,8 +52,8 @@ namespace PsefApi.Controllers
         /// </summary>
         /// <param name="id">Id item.</param>
         /// <returns>Item.</returns>
-        [ODataRoute(ApiInfo.IdRoute)]
-        [Produces(ApiInfo.JsonOutput)]
+        [ODataRoute(IdRoute)]
+        [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
@@ -72,7 +68,7 @@ namespace PsefApi.Controllers
         /// </summary>
         /// <param name="create">Item.</param>
         /// <returns>Status.</returns>
-        [Produces(ApiInfo.JsonOutput)]
+        [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
@@ -109,8 +105,8 @@ namespace PsefApi.Controllers
         /// <param name="id">Id item</param>
         /// <param name="delta">Item.</param>
         /// <returns></returns>
-        [ODataRoute(ApiInfo.IdRoute)]
-        [Produces(ApiInfo.JsonOutput)]
+        [ODataRoute(IdRoute)]
+        [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
@@ -142,7 +138,7 @@ namespace PsefApi.Controllers
             {
                 if (update.Id != id)
                 {
-                    ModelState.AddModelError(nameof(update.Id), "must not set on patch.");
+                    ModelState.AddModelError(nameof(update.Id), DontSetKeyOnPatch);
                     return UnprocessableEntity(ModelState);
                 }
 
@@ -157,7 +153,7 @@ namespace PsefApi.Controllers
         /// </summary>
         /// <param name="id">Id item</param>
         /// <returns>Status.</returns>
-        [ODataRoute(ApiInfo.IdRoute)]
+        [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<IActionResult> Delete([FromODataUri] byte id)
@@ -180,8 +176,8 @@ namespace PsefApi.Controllers
         /// <param name="id">Id item</param>
         /// <param name="update">Item.</param>
         /// <returns>Status.</returns>
-        [ODataRoute(ApiInfo.IdRoute)]
-        [Produces(ApiInfo.JsonOutput)]
+        [ODataRoute(IdRoute)]
+        [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
@@ -218,5 +214,7 @@ namespace PsefApi.Controllers
         {
             return _context.Provinsi.Any(e => e.Id == id);
         }
+
+        private readonly PsefMySqlContext _context;
     }
 }

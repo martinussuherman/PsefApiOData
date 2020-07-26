@@ -6,6 +6,7 @@ namespace PsefApi
     {
         internal const string JsonOutput = "application/json";
         internal const string IdRoute = "({id})";
+        internal const string DontSetKeyOnPatch = "must not set on patch.";
         internal const string V0_1 = "0.1";
         internal const string V1_0 = "1.0";
         internal const string V1_1 = "1.1";
