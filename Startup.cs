@@ -2,6 +2,7 @@
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -48,53 +49,50 @@ namespace PsefApi
             services
                 .AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(Latest);
-            services.AddApiVersioning(
-                options =>
-                {
-                    options.ReportApiVersions = true;
-                    options.AssumeDefaultVersionWhenUnspecified = true;
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
 
-                    // note: this is optional, but it will take away versioning by query string
-                    // the default behavior is a composite reader
-                    options.ApiVersionReader = new UrlSegmentApiVersionReader();
-                });
+                // note: this is optional, but it will take away versioning by query string
+                // the default behavior is a composite reader
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            });
             services.AddOData().EnableApiVersioning();
-            services.AddODataApiExplorer(
-                options =>
-                {
-                    // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-                    // note: the specified format code will format the version as "'v'major[.minor][-status]"
-                    options.GroupNameFormat = "'v'VVV";
+            services.AddODataApiExplorer(options =>
+            {
+                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+                // note: the specified format code will format the version as "'v'major[.minor][-status]"
+                options.GroupNameFormat = "'v'VVV";
 
-                    // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-                    // can also be used to control the format of the API version in route templates
-                    options.SubstituteApiVersionInUrl = true;
+                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+                // can also be used to control the format of the API version in route templates
+                options.SubstituteApiVersionInUrl = true;
 
-                    // configure query options (which cannot otherwise be configured by OData conventions)
-                    // options.QueryOptions.Controller<V2.PeopleController>()
-                    //                     .Action( c => c.Get( default ) )
-                    //                         .Allow( Skip | Count )
-                    //                         .AllowTop( 100 )
-                    //                         .AllowOrderBy( "firstName", "lastName" );
+                // configure query options (which cannot otherwise be configured by OData conventions)
+                // options.QueryOptions.Controller<V2.PeopleController>()
+                //                     .Action( c => c.Get( default ) )
+                //                         .Allow( Skip | Count )
+                //                         .AllowTop( 100 )
+                //                         .AllowOrderBy( "firstName", "lastName" );
 
-                    // options.QueryOptions.Controller<V3.PeopleController>()
-                    //                     .Action( c => c.Get( default ) )
-                    //                         .Allow( Skip | Count )
-                    //                         .AllowTop( 100 )
-                    //                         .AllowOrderBy( "firstName", "lastName" );
-                });
+                // options.QueryOptions.Controller<V3.PeopleController>()
+                //                     .Action( c => c.Get( default ) )
+                //                         .Allow( Skip | Count )
+                //                         .AllowTop( 100 )
+                //                         .AllowOrderBy( "firstName", "lastName" );
+            });
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen(
-                options =>
-                {
-                    // add a custom operation filter which sets default values
-                    options.OperationFilter<SwaggerDefaultValues>();
+            services.AddSwaggerGen(options =>
+            {
+                // add a custom operation filter which sets default values
+                options.OperationFilter<SwaggerDefaultValues>();
 
-                    // integrate xml comments
-                    options.IncludeXmlComments(XmlCommentsFilePath);
-                });
-            services.AddDbContextPool<Models.PsefMySqlContext>(
-                options => options.UseMySql(
+                // integrate xml comments
+                options.IncludeXmlComments(XmlCommentsFilePath);
+            });
+            services.AddDbContextPool<Models.PsefMySqlContext>(options =>
+                options.UseMySql(
                     Configuration.GetConnectionString("MySql"),
                     sqlOptions =>
                     {
@@ -102,7 +100,8 @@ namespace PsefApi
                             10,
                             System.TimeSpan.FromSeconds(30),
                             null);
-                    }), 16);
+                    }),
+                16);
         }
 
         /// <summary>
@@ -116,9 +115,15 @@ namespace PsefApi
             VersionedODataModelBuilder modelBuilder,
             IApiVersionDescriptionProvider provider)
         {
-            app.UsePathBase(Configuration.GetValue<string>("BasePath"));
-            app.UseMvc(
-                routeBuilder =>
+            string basePath = Configuration.GetValue<string>("BasePath");
+
+            app
+                .UsePathBase(basePath)
+                .UseForwardedHeaders(new ForwardedHeadersOptions()
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                })
+                .UseMvc(routeBuilder =>
                 {
                     // global odata query options
                     routeBuilder.Count();
@@ -140,28 +145,27 @@ namespace PsefApi
                     //     "implicit",
                     //     "api",
                     //     models);
-                });
-            app.UseSwagger();
-            app.UseSwaggerUI(
-                options =>
+                })
+                .UseSwagger()
+                .UseSwaggerUI(options =>
                 {
                     // build a swagger endpoint for each discovered API version
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
                         options.SwaggerEndpoint(
-                            $"/swagger/{description.GroupName}/swagger.json",
+                            $"{basePath}/swagger/{description.GroupName}/swagger.json",
                             description.GroupName.ToUpperInvariant());
                     }
                 });
         }
 
-        static string XmlCommentsFilePath
+        private static string XmlCommentsFilePath
         {
             get
             {
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
-                return Path.Combine(basePath, fileName);
+                return Path.Combine(
+                    PlatformServices.Default.Application.ApplicationBasePath,
+                    typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml");
             }
         }
     }
