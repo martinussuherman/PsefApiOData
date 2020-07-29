@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace PsefApi.Models
 {
@@ -32,6 +32,7 @@ namespace PsefApi.Models
         /// Gets or sets Kabupaten/Kota associated with the Provinsi.
         /// </summary>
         /// <value>The collection of associated Kabupaten/Kota.</value>
+        [IgnoreDataMember]
         public virtual ICollection<Kabkota> Kabkota { get; set; }
     }
 }
