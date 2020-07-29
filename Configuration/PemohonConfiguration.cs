@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 using PsefApi.Models;
+using PsefApi.Controllers;
 
 namespace PsefApi.Configuration
 {
@@ -21,11 +21,16 @@ namespace PsefApi.Configuration
                 .EntitySet<Pemohon>(nameof(Pemohon))
                 .EntityType;
 
+            pemohon.Collection
+                .Function(nameof(PemohonController.CurrentUser))
+                .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
+
             pemohon.HasKey(p => p.Id);
             pemohon
                 .Filter()
                 .Select()
-                .OrderBy();
+                .OrderBy()
+                .Expand();
         }
     }
 }

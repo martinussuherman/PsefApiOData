@@ -72,6 +72,7 @@ namespace PsefApi.Controllers
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
+        [HttpGet]
         [ODataRoute(nameof(CurrentUser))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
