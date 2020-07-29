@@ -14,10 +14,9 @@ using static PsefApi.ApiInfo;
 namespace PsefApi.Controllers
 {
     /// <summary>
-    /// Provinsi REST service.
+    /// Represents a RESTful service of Provinsi.
     /// </summary>
     [ApiVersion(V1_0)]
-    [ApiVersion(V1_1)]
     [ODataRoutePrefix(nameof(Provinsi))]
     public class ProvinsiController : ODataController
     {
@@ -31,9 +30,10 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// GET item.
+        /// Retrieves all Provinsi.
         /// </summary>
-        /// <returns>List item.</returns>
+        /// <returns>All available Provinsi.</returns>
+        /// <response code="200">Provinsi successfully retrieved.</response>
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Provinsi>>), Status200OK)]
@@ -48,10 +48,12 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// GET item.
+        /// Gets a single Provinsi.
         /// </summary>
-        /// <param name="id">Id item.</param>
-        /// <returns>Item.</returns>
+        /// <param name="id">The requested Provinsi identifier.</param>
+        /// <returns>The requested Provinsi.</returns>
+        /// <response code="200">The Provinsi was successfully retrieved.</response>
+        /// <response code="404">The Provinsi does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
@@ -64,10 +66,14 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// POST item.
+        /// Creates a new Provinsi.
         /// </summary>
-        /// <param name="create">Item.</param>
-        /// <returns>Status.</returns>
+        /// <param name="create">The Provinsi to create.</param>
+        /// <returns>The created Provinsi.</returns>
+        /// <response code="201">The Provinsi was successfully created.</response>
+        /// <response code="204">The Provinsi was successfully created.</response>
+        /// <response code="400">The Provinsi is invalid.</response>
+        /// <response code="409">The Provinsi with supplied id already exist.</response>
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
@@ -100,11 +106,16 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// PATCH item.
+        /// Updates an existing Provinsi.
         /// </summary>
-        /// <param name="id">Id item</param>
-        /// <param name="delta">Item.</param>
-        /// <returns></returns>
+        /// <param name="id">The requested Provinsi identifier.</param>
+        /// <param name="delta">The partial Provinsi to update.</param>
+        /// <returns>The updated Provinsi.</returns>
+        /// <response code="200">The Provinsi was successfully updated.</response>
+        /// <response code="204">The Provinsi was successfully updated.</response>
+        /// <response code="400">The Provinsi is invalid.</response>
+        /// <response code="404">The Provinsi does not exist.</response>
+        /// <response code="422">The Provinsi identifier is specified on delta and its value is different from id.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
@@ -149,10 +160,12 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// DELETE item.
+        /// Deletes a Provinsi.
         /// </summary>
-        /// <param name="id">Id item</param>
-        /// <returns>Status.</returns>
+        /// <param name="id">The Provinsi to delete.</param>
+        /// <returns>None</returns>
+        /// <response code="204">The Provinsi was successfully deleted.</response>
+        /// <response code="404">The Provinsi does not exist.</response>
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
@@ -171,11 +184,15 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// PUT item.
+        /// Updates an existing Provinsi.
         /// </summary>
-        /// <param name="id">Id item</param>
-        /// <param name="update">Item.</param>
-        /// <returns>Status.</returns>
+        /// <param name="id">The requested Provinsi identifier.</param>
+        /// <param name="update">The Provinsi to update.</param>
+        /// <returns>The updated Provinsi.</returns>
+        /// <response code="200">The Provinsi was successfully updated.</response>
+        /// <response code="204">The Provinsi was successfully updated.</response>
+        /// <response code="400">The Provinsi is invalid.</response>
+        /// <response code="404">The Provinsi does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
