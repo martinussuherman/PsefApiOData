@@ -27,12 +27,14 @@ namespace PsefApi.Configuration
                 .EntityType;
 
             provinsi.HasKey(p => p.Id);
-            provinsi.Filter(
-                QueryOptionSetting.Allowed,
-                new string[]
-                {
-                    nameof(Provinsi.Name).ToLowerInvariant()
-                })
+            provinsi
+                .Filter(
+                    QueryOptionSetting.Allowed,
+                    new string[]
+                    {
+                        nameof(Provinsi.Name).ToLowerInvariant()
+                    })
+                .Expand(SelectExpandType.Disabled)
                 .Select()
                 .OrderBy();
         }
