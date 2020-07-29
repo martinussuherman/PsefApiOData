@@ -6,7 +6,7 @@ using PsefApi.Models;
 namespace PsefApi.Configuration
 {
     /// <summary>
-    /// Represents the model configuration for provinsi.
+    /// Represents the model configuration for Provinsi.
     /// </summary>
     public class ProvinsiConfiguration : IModelConfiguration
     {
