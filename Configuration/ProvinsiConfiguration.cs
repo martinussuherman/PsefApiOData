@@ -22,18 +22,19 @@ namespace PsefApi.Configuration
                 return;
             }
 
-            EntityTypeConfiguration<Provinsi> supplier = builder
+            EntityTypeConfiguration<Provinsi> provinsi = builder
                 .EntitySet<Provinsi>(nameof(Provinsi))
                 .EntityType;
 
-            supplier.HasKey(p => p.Id);
-            supplier.Filter(
+            provinsi.HasKey(p => p.Id);
+            provinsi.Filter(
                 QueryOptionSetting.Allowed,
                 new string[]
                 {
-                    nameof(Provinsi.Id).ToLowerInvariant(),
                     nameof(Provinsi.Name).ToLowerInvariant()
-                });
+                })
+                .Select()
+                .OrderBy();
         }
     }
 }
