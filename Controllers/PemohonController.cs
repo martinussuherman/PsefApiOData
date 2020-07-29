@@ -7,6 +7,7 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PsefApi.Misc;
 using PsefApi.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApi.ApiInfo;
@@ -63,6 +64,23 @@ namespace PsefApi.Controllers
         {
             return SingleResult.Create(
                 _context.Pemohon.Where(e => e.Id == id));
+        }
+
+        /// <summary>
+        /// Gets a single Pemohon for the current user.
+        /// </summary>
+        /// <returns>The requested Pemohon.</returns>
+        /// <response code="200">The Pemohon was successfully retrieved.</response>
+        /// <response code="404">The Pemohon does not exist.</response>
+        [ODataRoute(nameof(CurrentUser))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
+        public SingleResult<Pemohon> CurrentUser()
+        {
+            return SingleResult.Create(
+                _context.Pemohon.Where(e => e.UserId == ApiHelper.GetUserId(HttpContext.User)));
         }
 
         /// <summary>
