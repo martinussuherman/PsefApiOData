@@ -1,20 +1,18 @@
-﻿namespace PsefApi.Model
+﻿using System;
+using System.Collections.Generic;
+
+namespace PsefApi.Models
 {
-    /// <summary>
-    /// Provinsi.
-    /// </summary>
     public partial class Provinsi
     {
-        /// <summary>
-        /// Id (key)
-        /// </summary>
-        /// <value></value>
-        public byte Id { get; set; }
+        public Provinsi()
+        {
+            Kabkota = new HashSet<Kabkota>();
+        }
 
-        /// <summary>
-        /// Nama
-        /// </summary>
-        /// <value></value>
+        public byte Id { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Kabkota> Kabkota { get; set; }
     }
 }

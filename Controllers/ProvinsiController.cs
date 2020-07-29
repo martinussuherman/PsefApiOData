@@ -7,7 +7,7 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PsefApi.Model;
+using PsefApi.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApi.ApiInfo;
 

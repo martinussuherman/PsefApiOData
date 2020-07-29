@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
-using PsefApi.Model;
+using PsefApi.Models;
 
 namespace PsefApi.Configuration
 {

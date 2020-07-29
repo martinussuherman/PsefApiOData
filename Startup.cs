@@ -93,7 +93,7 @@ namespace PsefApi
                     // integrate xml comments
                     options.IncludeXmlComments(XmlCommentsFilePath);
                 });
-            services.AddDbContextPool<PsefApi.Model.PsefMySqlContext>(
+            services.AddDbContextPool<Models.PsefMySqlContext>(
                 options => options.UseMySql(
                     Configuration.GetConnectionString("MySql"),
                     sqlOptions =>
