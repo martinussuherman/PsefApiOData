@@ -16,7 +16,7 @@ namespace PsefApi.Controllers
     /// <summary>
     /// Represents a RESTful service of Pemohon.
     /// </summary>
-    [ApiVersion(V1_0)]
+    [ApiVersion(V0_1)]
     [ODataRoutePrefix(nameof(Pemohon))]
     public class PemohonController : ODataController
     {
