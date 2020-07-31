@@ -18,7 +18,7 @@ namespace PsefApi.Misc
         internal static string GetUserId(ClaimsPrincipal user)
         {
             return user.Claims
-                .FirstOrDefault(c => c.Type == "sub")
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 .Value;
         }
 
