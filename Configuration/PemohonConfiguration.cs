@@ -22,7 +22,13 @@ namespace PsefApi.Configuration
                 .EntityType;
 
             pemohon.Collection
-                .Function(nameof(PemohonController.CurrentUser))
+                .Function(nameof(PemohonController.GetCurrentUser))
+                .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
+            pemohon.Collection
+                .Function(nameof(PemohonController.PostCurrentUser))
+                .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
+            pemohon.Collection
+                .Function(nameof(PemohonController.PatchCurrentUser))
                 .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
 
             pemohon.HasKey(p => p.Id);

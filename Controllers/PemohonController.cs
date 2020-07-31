@@ -37,6 +37,7 @@ namespace PsefApi.Controllers
         /// </summary>
         /// <returns>All available Pemohon.</returns>
         /// <response code="200">Pemohon successfully retrieved.</response>
+        /// <remark>Role: Verifikator up</remark>
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Pemohon>>), Status200OK)]
@@ -57,6 +58,7 @@ namespace PsefApi.Controllers
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
+        /// <remark>Role: Verifikator up</remark>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
@@ -66,24 +68,6 @@ namespace PsefApi.Controllers
         {
             return SingleResult.Create(
                 _context.Pemohon.Where(e => e.Id == id));
-        }
-
-        /// <summary>
-        /// Gets a single Pemohon for the current user.
-        /// </summary>
-        /// <returns>The requested Pemohon.</returns>
-        /// <response code="200">The Pemohon was successfully retrieved.</response>
-        /// <response code="404">The Pemohon does not exist.</response>
-        [HttpGet]
-        [ODataRoute(nameof(CurrentUser))]
-        [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status200OK)]
-        [ProducesResponseType(Status404NotFound)]
-        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<Pemohon> CurrentUser()
-        {
-            return SingleResult.Create(
-                _context.Pemohon.Where(e => e.UserId == ApiHelper.GetUserId(HttpContext.User)));
         }
 
         /// <summary>
@@ -187,6 +171,7 @@ namespace PsefApi.Controllers
         /// <returns>None</returns>
         /// <response code="204">The Pemohon was successfully deleted.</response>
         /// <response code="404">The Pemohon does not exist.</response>
+        /// <remark>Role: Admin</remark>
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
@@ -240,6 +225,129 @@ namespace PsefApi.Controllers
                 if (!Exists(id))
                 {
                     return NotFound();
+                }
+
+                throw;
+            }
+
+            return Updated(update);
+        }
+
+        /// <summary>
+        /// Gets a single Pemohon for the current user.
+        /// </summary>
+        /// <returns>The requested Pemohon.</returns>
+        /// <response code="200">The Pemohon was successfully retrieved.</response>
+        /// <response code="404">The Pemohon does not exist.</response>
+        [HttpGet]
+        [ODataRoute(nameof(GetCurrentUser))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
+        public SingleResult<Pemohon> GetCurrentUser()
+        {
+            return SingleResult.Create(
+                _context.Pemohon.Where(e => e.UserId == ApiHelper.GetUserId(HttpContext.User)));
+        }
+
+        /// <summary>
+        /// Creates a new Pemohon for the current user.
+        /// </summary>
+        /// <param name="create">The Pemohon to create.</param>
+        /// <returns>The created Pemohon.</returns>
+        /// <response code="201">The Pemohon was successfully created.</response>
+        /// <response code="204">The Pemohon was successfully created.</response>
+        /// <response code="400">The Pemohon is invalid.</response>
+        /// <response code="409">The Pemohon with supplied id already exist.</response>
+        [HttpGet]
+        [ODataRoute(nameof(PostCurrentUser))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(Pemohon), Status201Created)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        [ProducesResponseType(Status409Conflict)]
+        public async Task<IActionResult> PostCurrentUser([FromBody] Pemohon create)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            create.UserId = ApiHelper.GetUserId(HttpContext.User);
+            _context.Pemohon.Add(create);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (Exists(create.Id))
+                {
+                    return Conflict();
+                }
+
+                throw;
+            }
+
+            return Created(create);
+        }
+
+        /// <summary>
+        /// Updates an existing Pemohon for the current user.
+        /// </summary>
+        /// <param name="delta">The partial Pemohon to update.</param>
+        /// <returns>The updated Pemohon.</returns>
+        /// <response code="200">The Pemohon was successfully updated.</response>
+        /// <response code="204">The Pemohon was successfully updated.</response>
+        /// <response code="400">The Pemohon is invalid.</response>
+        /// <response code="401">Not authorized to modify Pemohon.</response>
+        /// <response code="404">The Pemohon does not exist.</response>
+        /// <response code="422">The Pemohon identifier is specified on delta and its value is different from id.</response>
+        [HttpPatch]
+        [ODataRoute(nameof(PatchCurrentUser))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        [ProducesResponseType(Status401Unauthorized)]
+        [ProducesResponseType(Status404NotFound)]
+        [ProducesResponseType(Status422UnprocessableEntity)]
+        public async Task<IActionResult> PatchCurrentUser([FromBody] Delta<Pemohon> delta)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string currentUserId = ApiHelper.GetUserId(HttpContext.User);
+            Pemohon update = await _context.Pemohon
+                .FirstOrDefaultAsync(c => c.UserId == currentUserId);
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            var oldId = update.Id;
+            delta.Patch(update);
+
+            if (update.UserId != currentUserId)
+            {
+                return Unauthorized(currentUserId);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                if (update.Id != oldId)
+                {
+                    ModelState.AddModelError(nameof(update.Id), DontSetKeyOnPatch);
+                    return UnprocessableEntity(ModelState);
                 }
 
                 throw;
