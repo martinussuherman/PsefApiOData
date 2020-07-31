@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PsefApi.Models;
@@ -16,6 +17,7 @@ namespace PsefApi.Controllers
     /// <summary>
     /// Represents a RESTful service of Provinsi.
     /// </summary>
+    [Authorize]
     [ApiVersion(V1_0)]
     [ODataRoutePrefix(nameof(Provinsi))]
     public class ProvinsiController : ODataController
