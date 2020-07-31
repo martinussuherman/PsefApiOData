@@ -29,7 +29,7 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Gets a single OSS Information.
         /// </summary>
-        /// <param name="nib">The requested OSS Information identifier.</param>
+        /// <param name="id">The requested OSS Information identifier.</param>
         /// <returns>The requested OSS Information.</returns>
         /// <response code="200">The OSS Information was successfully retrieved.</response>
         /// <response code="404">The OSS Information does not exist.</response>
@@ -38,15 +38,14 @@ namespace PsefApi.Controllers
         [ProducesResponseType(typeof(OssInfo), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<OssInfo> Get([FromODataUri] string nib)
+        public SingleResult<OssInfo> Get([FromODataUri] string id)
         {
-            return SingleResult.Create(
-                dummy.Where(e => e.Nib == nib).AsQueryable());
+            return SingleResult.Create(dummy.Where(e => e.Nib == id).AsQueryable());
         }
 
-        private bool Exists(string nib)
+        private bool Exists(string id)
         {
-            return dummy.Any(e => e.Nib == nib);
+            return dummy.Any(e => e.Nib == id);
         }
 
         private static readonly List<OssInfo> dummy = new List<OssInfo>
