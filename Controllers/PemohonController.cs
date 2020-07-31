@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PsefApi.Misc;
@@ -17,6 +18,7 @@ namespace PsefApi.Controllers
     /// <summary>
     /// Represents a RESTful service of Pemohon.
     /// </summary>
+    [Authorize]
     [ApiVersion(V0_1)]
     [ODataRoutePrefix(nameof(Pemohon))]
     public class PemohonController : ODataController

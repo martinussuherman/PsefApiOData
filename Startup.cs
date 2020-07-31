@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -10,7 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.OpenApi.Models;
+using PsefApi.Misc;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using static Microsoft.AspNetCore.Mvc.CompatibilityVersion;
@@ -49,6 +54,7 @@ namespace PsefApi
             services
                 .AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(Latest);
+
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
@@ -58,6 +64,7 @@ namespace PsefApi
                 // the default behavior is a composite reader
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
+
             services.AddOData().EnableApiVersioning();
             services.AddODataApiExplorer(options =>
             {
@@ -82,15 +89,42 @@ namespace PsefApi
                 //                         .AllowTop( 100 )
                 //                         .AllowOrderBy( "firstName", "lastName" );
             });
+
+            IConfigurationSection bearerConfiguration = Configuration.GetSection("Bearer");
+            string identityServerUrl = bearerConfiguration.GetValue<string>("Authority");
+            string scope = bearerConfiguration.GetValue<string>("Audience");
+            ApiHelper.InitializeRequirements(scope);
+
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen(options =>
             {
                 // add a custom operation filter which sets default values
                 options.OperationFilter<SwaggerDefaultValues>();
+                options.OperationFilter<SwaggerOdataAuthorization>();
 
                 // integrate xml comments
                 options.IncludeXmlComments(XmlCommentsFilePath);
+
+                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
+                options.AddSecurityDefinition(
+                    ApiInfo.SchemeOauth2,
+                    new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows
+                        {
+                            Implicit = new OpenApiOAuthFlow
+                            {
+                                AuthorizationUrl = new Uri($"{identityServerUrl}/connect/authorize"),
+                                Scopes = new Dictionary<string, string>
+                                {
+                                    { scope, "Api access" }
+                                }
+                            }
+                        }
+                    });
             });
+
             services.AddDbContextPool<Models.PsefMySqlContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("MySql"),
@@ -102,6 +136,18 @@ namespace PsefApi
                             null);
                     }),
                 16);
+
+            // https://identityserver4.readthedocs.io/en/latest/topics/apis.html
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    // base-address of your identityserver
+                    options.Authority = identityServerUrl;
+
+                    // if you are using API resources, you can specify the name here
+                    options.Audience = scope;
+                });
         }
 
         /// <summary>
@@ -119,10 +165,13 @@ namespace PsefApi
 
             app
                 .UsePathBase(basePath)
+                .UseHttpsRedirection()
                 .UseForwardedHeaders(new ForwardedHeadersOptions()
                 {
                     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                 })
+                .UseAuthentication()
+                .UseAuthorization()
                 .UseMvc(routeBuilder =>
                 {
                     // global odata query options
@@ -149,6 +198,9 @@ namespace PsefApi
                 .UseSwagger()
                 .UseSwaggerUI(options =>
                 {
+                    options.OAuthClientId(Configuration.GetValue<string>("ClientId"));
+                    options.OAuthAppName("PsefApiOdata Swagger");
+
                     // build a swagger endpoint for each discovered API version
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
