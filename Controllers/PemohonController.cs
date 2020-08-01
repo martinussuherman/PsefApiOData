@@ -277,7 +277,6 @@ namespace PsefApi.Controllers
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
-        [HttpGet]
         [ODataRoute(CurrentUser)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
@@ -301,7 +300,6 @@ namespace PsefApi.Controllers
         /// <response code="204">The Pemohon was successfully created.</response>
         /// <response code="400">The Pemohon is invalid.</response>
         /// <response code="409">The Pemohon with supplied id already exist.</response>
-        [HttpPost]
         [ODataRoute(CurrentUser)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status201Created)]
@@ -349,7 +347,6 @@ namespace PsefApi.Controllers
         /// <response code="401">Not authorized to modify Pemohon.</response>
         /// <response code="404">The Pemohon does not exist.</response>
         /// <response code="422">The Pemohon identifier is specified on delta and its value is different from id.</response>
-        [HttpPatch]
         [ODataRoute(CurrentUser)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
