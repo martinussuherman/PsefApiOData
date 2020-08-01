@@ -33,8 +33,28 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
+        /// Retrieves Pemohon total count.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>Pemohon total count.</returns>
+        /// <response code="200">Total count of Pemohon retrieved.</response>
+        [HttpGet]
+        [ODataRoute(nameof(TotalCount))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> TotalCount()
+        {
+            return await _context.Pemohon.LongCountAsync();
+        }
+
+        /// <summary>
         /// Retrieves all Pemohon.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Verifikator*
+        /// </remarks>
         /// <returns>All available Pemohon.</returns>
         /// <response code="200">Pemohon successfully retrieved.</response>
         /// <remark>Role: Verifikator up</remark>
@@ -54,6 +74,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Gets a single Pemohon.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Verifikator*
+        /// </remarks>
         /// <param name="id">The requested Pemohon identifier.</param>
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
@@ -73,6 +96,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Creates a new Pemohon.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="create">The Pemohon to create.</param>
         /// <returns>The created Pemohon.</returns>
         /// <response code="201">The Pemohon was successfully created.</response>
@@ -113,6 +139,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Updates an existing Pemohon.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="id">The requested Pemohon identifier.</param>
         /// <param name="delta">The partial Pemohon to update.</param>
         /// <returns>The updated Pemohon.</returns>
@@ -167,6 +196,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Deletes a Pemohon.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="id">The Pemohon to delete.</param>
         /// <returns>None</returns>
         /// <response code="204">The Pemohon was successfully deleted.</response>
@@ -192,6 +224,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Updates an existing Pemohon.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="id">The requested Pemohon identifier.</param>
         /// <param name="update">The Pemohon to update.</param>
         /// <returns>The updated Pemohon.</returns>
@@ -236,6 +271,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Gets a single Pemohon for the current user.
         /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
@@ -254,6 +292,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Creates a new Pemohon for the current user.
         /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
         /// <param name="create">The Pemohon to create.</param>
         /// <returns>The created Pemohon.</returns>
         /// <response code="201">The Pemohon was successfully created.</response>
@@ -298,6 +339,9 @@ namespace PsefApi.Controllers
         /// Updates an existing Pemohon for the current user.
         /// </summary>
         /// <param name="delta">The partial Pemohon to update.</param>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
         /// <returns>The updated Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully updated.</response>
         /// <response code="204">The Pemohon was successfully updated.</response>

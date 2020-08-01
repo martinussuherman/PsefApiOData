@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using PsefApi.Controllers;
 using PsefApi.Models;
 
 namespace PsefApi.Configuration
@@ -25,6 +26,10 @@ namespace PsefApi.Configuration
             EntityTypeConfiguration<Provinsi> provinsi = builder
                 .EntitySet<Provinsi>(nameof(Provinsi))
                 .EntityType;
+
+            provinsi.Collection
+                .Function(nameof(ProvinsiController.TotalCount))
+                .Returns(typeof(int));
 
             provinsi.HasKey(p => p.Id);
             provinsi

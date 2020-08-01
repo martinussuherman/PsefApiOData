@@ -24,6 +24,9 @@ namespace PsefApi.Configuration
             pemohon.Collection
                 .Function(ApiInfo.CurrentUser)
                 .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
+            pemohon.Collection
+                .Function(nameof(PemohonController.TotalCount))
+                .Returns(typeof(long));
 
             pemohon.HasKey(p => p.Id);
             pemohon

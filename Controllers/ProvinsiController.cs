@@ -32,8 +32,28 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
+        /// Retrieves Provinsi total count.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>Provinsi total count.</returns>
+        /// <response code="200">Total count of Provinsi retrieved.</response>
+        [HttpGet]
+        [ODataRoute(nameof(TotalCount))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(int), Status200OK)]
+        public async Task<int> TotalCount()
+        {
+            return await _context.Provinsi.CountAsync();
+        }
+
+        /// <summary>
         /// Retrieves all Provinsi.
         /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
         /// <returns>All available Provinsi.</returns>
         /// <response code="200">Provinsi successfully retrieved.</response>
         [ODataRoute]
@@ -52,6 +72,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Gets a single Provinsi.
         /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
         /// <param name="id">The requested Provinsi identifier.</param>
         /// <returns>The requested Provinsi.</returns>
         /// <response code="200">The Provinsi was successfully retrieved.</response>
@@ -70,6 +93,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Creates a new Provinsi.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="create">The Provinsi to create.</param>
         /// <returns>The created Provinsi.</returns>
         /// <response code="201">The Provinsi was successfully created.</response>
@@ -110,6 +136,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Updates an existing Provinsi.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="id">The requested Provinsi identifier.</param>
         /// <param name="delta">The partial Provinsi to update.</param>
         /// <returns>The updated Provinsi.</returns>
@@ -164,6 +193,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Deletes a Provinsi.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="id">The Provinsi to delete.</param>
         /// <returns>None</returns>
         /// <response code="204">The Provinsi was successfully deleted.</response>
@@ -188,6 +220,9 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Updates an existing Provinsi.
         /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
         /// <param name="id">The requested Provinsi identifier.</param>
         /// <param name="update">The Provinsi to update.</param>
         /// <returns>The updated Provinsi.</returns>
