@@ -29,10 +29,14 @@ namespace PsefApi.Controllers
         /// <summary>
         /// Gets a single OSS Information.
         /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
         /// <param name="id">The requested OSS Information identifier.</param>
         /// <returns>The requested OSS Information.</returns>
         /// <response code="200">The OSS Information was successfully retrieved.</response>
         /// <response code="404">The OSS Information does not exist.</response>
+        /// <example>OssInfo('123456789')</example>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(OssInfo), Status200OK)]
