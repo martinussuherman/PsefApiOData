@@ -57,7 +57,6 @@ namespace PsefApi.Controllers
         /// </remarks>
         /// <returns>All available Pemohon.</returns>
         /// <response code="200">Pemohon successfully retrieved.</response>
-        /// <remark>Role: Verifikator up</remark>
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Pemohon>>), Status200OK)]
@@ -81,7 +80,6 @@ namespace PsefApi.Controllers
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
-        /// <remark>Role: Verifikator up</remark>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
@@ -203,7 +201,6 @@ namespace PsefApi.Controllers
         /// <returns>None</returns>
         /// <response code="204">The Pemohon was successfully deleted.</response>
         /// <response code="404">The Pemohon does not exist.</response>
-        /// <remark>Role: Admin</remark>
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
