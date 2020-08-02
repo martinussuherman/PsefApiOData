@@ -65,65 +65,10 @@ namespace PsefApi
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
 
-            services.AddOData().EnableApiVersioning();
-            services.AddODataApiExplorer(options =>
-            {
-                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-                // note: the specified format code will format the version as "'v'major[.minor][-status]"
-                options.GroupNameFormat = "'v'VVV";
-
-                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-                // can also be used to control the format of the API version in route templates
-                options.SubstituteApiVersionInUrl = true;
-
-                // configure query options (which cannot otherwise be configured by OData conventions)
-                // options.QueryOptions.Controller<V2.PeopleController>()
-                //                     .Action( c => c.Get( default ) )
-                //                         .Allow( Skip | Count )
-                //                         .AllowTop( 100 )
-                //                         .AllowOrderBy( "firstName", "lastName" );
-
-                // options.QueryOptions.Controller<V3.PeopleController>()
-                //                     .Action( c => c.Get( default ) )
-                //                         .Allow( Skip | Count )
-                //                         .AllowTop( 100 )
-                //                         .AllowOrderBy( "firstName", "lastName" );
-            });
-
-            IConfigurationSection bearerConfiguration = Configuration.GetSection("Bearer");
-            string identityServerUrl = bearerConfiguration.GetValue<string>("Authority");
-            string scope = bearerConfiguration.GetValue<string>("Audience");
-            ApiHelper.InitializeRequirements(scope);
-
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen(options =>
-            {
-                // add a custom operation filter which sets default values
-                options.OperationFilter<SwaggerDefaultValues>();
-                options.OperationFilter<SwaggerOdataAuthorization>();
-
-                // integrate xml comments
-                options.IncludeXmlComments(XmlCommentsFilePath);
-
-                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
-                options.AddSecurityDefinition(
-                    ApiInfo.SchemeOauth2,
-                    new OpenApiSecurityScheme
-                    {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows
-                        {
-                            Implicit = new OpenApiOAuthFlow
-                            {
-                                AuthorizationUrl = new Uri($"{identityServerUrl}/connect/authorize"),
-                                Scopes = new Dictionary<string, string>
-                                {
-                                    { scope, "Api access" }
-                                }
-                            }
-                        }
-                    });
-            });
+            ApiHelper.ReadConfiguration(Configuration);
+            ApiHelper.InitializeRequirements();
+            ConfigureOData(services);
+            ConfigureSwaggerGen(services);
 
             services.AddDbContextPool<Models.PsefMySqlContext>(options =>
                 options.UseMySql(
@@ -143,10 +88,10 @@ namespace PsefApi
                 .AddJwtBearer(options =>
                 {
                     // base-address of your identityserver
-                    options.Authority = identityServerUrl;
+                    options.Authority = ApiHelper.Authority;
 
                     // if you are using API resources, you can specify the name here
-                    options.Audience = scope;
+                    options.Audience = ApiHelper.Audience;
                 });
         }
 
@@ -209,6 +154,72 @@ namespace PsefApi
                             description.GroupName.ToUpperInvariant());
                     }
                 });
+        }
+
+        private void ConfigureSwaggerGen(IServiceCollection services)
+        {
+            var authUrl = new Uri($"{ApiHelper.Authority}/connect/authorize");
+            var implicitFlow = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = authUrl,
+                Scopes = new Dictionary<string, string>
+                {
+                    { ApiHelper.Audience, "Api access" }
+                }
+            };
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
+            services.AddSwaggerGen(options =>
+            {
+                // add a custom operation filter which sets default values
+                options.OperationFilter<SwaggerDefaultValues>();
+                options.OperationFilter<SwaggerOdataAuthorization>();
+
+                // integrate xml comments
+                options.IncludeXmlComments(XmlCommentsFilePath);
+
+                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
+                options.AddSecurityDefinition(
+                    ApiInfo.SchemeOauth2,
+                    new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows
+                        {
+                            Implicit = implicitFlow
+                        }
+                    });
+            });
+        }
+
+        private void ConfigureOData(IServiceCollection services)
+        {
+            services.AddOData().EnableApiVersioning();
+
+            services.AddODataApiExplorer(options =>
+            {
+                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+                // note: the specified format code will format the version as "'v'major[.minor][-status]"
+                options.GroupNameFormat = "'v'VVV";
+
+                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+                // can also be used to control the format of the API version in route templates
+                options.SubstituteApiVersionInUrl = true;
+
+                // configure query options (which cannot otherwise be configured by OData conventions)
+                // options.QueryOptions.Controller<V2.PeopleController>()
+                //                     .Action( c => c.Get( default ) )
+                //                         .Allow( Skip | Count )
+                //                         .AllowTop( 100 )
+                //                         .AllowOrderBy( "firstName", "lastName" );
+
+                // options.QueryOptions.Controller<V3.PeopleController>()
+                //                     .Action( c => c.Get( default ) )
+                //                         .Allow( Skip | Count )
+                //                         .AllowTop( 100 )
+                //                         .AllowOrderBy( "firstName", "lastName" );
+            });
         }
 
         private static string XmlCommentsFilePath
