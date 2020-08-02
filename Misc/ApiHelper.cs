@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 
@@ -14,36 +11,6 @@ namespace PsefApi.Misc
     /// </summary>
     internal class ApiHelper
     {
-        /// <summary>
-        /// Retrieve delegation token for calling another API from this API.
-        /// </summary>
-        /// <param name="userToken">User token to pass to IdentityServer.</param>
-        /// <returns>Access token for the other API.</returns>
-        internal async Task<TokenResponse> DelegateAsync(string userToken)
-        {
-            // var client = _httpClientFactory.CreateClient();
-            // or
-            var client = new HttpClient();
-
-            var disco = await client.GetDiscoveryDocumentAsync(Authority);
-
-            // send custom grant to token endpoint, return response
-            return await client.RequestTokenAsync(new TokenRequest
-            {
-                Address = disco.TokenEndpoint,
-                GrantType = "delegation",
-
-                ClientId = DelegationClientId,
-                ClientSecret = DelegationClientSecret,
-
-                Parameters =
-                {
-                    { "scope", DelegationScope },
-                    { "token", userToken}
-                }
-            });
-        }
-
         /// <summary>
         /// OpenApiSecurityRequirement for OpenApiOperation
         /// </summary>

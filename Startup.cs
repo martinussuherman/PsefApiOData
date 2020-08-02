@@ -70,6 +70,8 @@ namespace PsefApi
             ConfigureOData(services);
             ConfigureSwaggerGen(services);
 
+            services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
+
             services.AddDbContextPool<Models.PsefMySqlContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("MySql"),
