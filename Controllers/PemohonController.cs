@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel.Client;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -27,8 +28,15 @@ namespace PsefApi.Controllers
         /// Pemohon REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
-        public PemohonController(PsefMySqlContext context)
+        /// <param name="delegateService">Api delegation service.</param>
+        /// <param name="identityApi">Identity Api service.</param>
+        public PemohonController(
+            PsefMySqlContext context,
+            IApiDelegateService delegateService,
+            IIdentityApiService identityApi)
         {
+            _identityApi = identityApi;
+            _delegateService = delegateService;
             _context = context;
         }
 
@@ -59,15 +67,32 @@ namespace PsefApi.Controllers
         /// <response code="200">Pemohon successfully retrieved.</response>
         [ODataRoute]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Pemohon>>), Status200OK)]
-        [EnableQuery(
-            PageSize = 50,
-            MaxTop = 100,
-            AllowedQueryOptions = AllowedQueryOptions.All,
-            AllowedFunctions = AllowedFunctions.AllFunctions)]
-        public IQueryable<Pemohon> Get()
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PemohonUserInfo>>), Status200OK)]
+        [EnableQuery]
+        public async Task<IQueryable<PemohonUserInfo>> Get()
         {
-            return _context.Pemohon;
+            TokenResponse tokenResponse = await _delegateService.DelegateAsync(
+                HttpContext.Request.Headers["Authorization"][0]
+                    .Substring("Bearer ".Length));
+
+            List<UserInfo> userInfoList = await _identityApi.CallApiAsync<List<UserInfo>>(
+                tokenResponse,
+                "/BasicUserInfo");
+            List<Pemohon> pemohonList = await _context.Pemohon.ToListAsync();
+            List<PemohonUserInfo> result = new List<PemohonUserInfo>();
+
+            foreach (Pemohon pemohon in pemohonList)
+            {
+                UserInfo userInfo = userInfoList.FirstOrDefault(o => o.UserId == pemohon.UserId);
+
+                result.Add(new PemohonUserInfo
+                {
+                    Pemohon = pemohon,
+                    UserInfo = userInfo
+                });
+            }
+
+            return result.AsQueryable();
         }
 
         /// <summary>
@@ -82,13 +107,33 @@ namespace PsefApi.Controllers
         /// <response code="404">The Pemohon does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(typeof(PemohonUserInfo), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
-        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<Pemohon> Get([FromODataUri] uint id)
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.None)]
+        public async Task<IActionResult> Get([FromODataUri] uint id)
         {
-            return SingleResult.Create(
-                _context.Pemohon.Where(e => e.Id == id));
+            Pemohon pemohon = await _context.Pemohon
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (pemohon == null)
+            {
+                return NotFound();
+            }
+
+            TokenResponse tokenResponse = await _delegateService.DelegateAsync(
+                HttpContext.Request.Headers["Authorization"][0]
+                    .Substring("Bearer ".Length));
+            UserInfo userInfo = await _identityApi.CallApiAsync<UserInfo>(
+                tokenResponse,
+                $"/BasicUserInfo/{pemohon.UserId}");
+            PemohonUserInfo result = new PemohonUserInfo()
+            {
+                Pemohon = pemohon,
+                UserInfo = userInfo
+            };
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -400,5 +445,7 @@ namespace PsefApi.Controllers
         }
 
         private readonly PsefMySqlContext _context;
+        private readonly IApiDelegateService _delegateService;
+        private readonly IIdentityApiService _identityApi;
     }
 }

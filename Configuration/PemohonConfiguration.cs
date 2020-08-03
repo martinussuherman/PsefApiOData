@@ -20,20 +20,28 @@ namespace PsefApi.Configuration
             EntityTypeConfiguration<Pemohon> pemohon = builder
                 .EntitySet<Pemohon>(nameof(Pemohon))
                 .EntityType;
+            ComplexTypeConfiguration<PemohonUserInfo> pemohonUserInfo = builder
+                .ComplexType<PemohonUserInfo>();
 
             pemohon.Collection
                 .Function(ApiInfo.CurrentUser)
                 .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
             pemohon.Collection
                 .Function(nameof(PemohonController.TotalCount))
-                .Returns(typeof(long));
+                .Returns<long>();
 
             pemohon.HasKey(p => p.Id);
             pemohon
                 .Filter()
-                .Select()
                 .OrderBy()
-                .Expand();
+                .Page(50, 50)
+                .Select();
+
+            pemohonUserInfo
+                .Filter()
+                .OrderBy()
+                .Page(50, 50)
+                .Select();
         }
     }
 }
