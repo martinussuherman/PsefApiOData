@@ -109,16 +109,18 @@ namespace PsefApi.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(PemohonUserInfo), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
-        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.None)]
-        public async Task<IActionResult> Get([FromODataUri] uint id)
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
+        public async Task<SingleResult<PemohonUserInfo>> Get([FromODataUri] uint id)
         {
+            List<PemohonUserInfo> result = new List<PemohonUserInfo>();
+
             Pemohon pemohon = await _context.Pemohon
                 .Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
 
             if (pemohon == null)
             {
-                return NotFound();
+                return SingleResult.Create(result.AsQueryable());
             }
 
             TokenResponse tokenResponse = await _delegateService.DelegateAsync(
@@ -127,13 +129,14 @@ namespace PsefApi.Controllers
             UserInfo userInfo = await _identityApi.CallApiAsync<UserInfo>(
                 tokenResponse,
                 $"/BasicUserInfo/{pemohon.UserId}");
-            PemohonUserInfo result = new PemohonUserInfo()
+
+            result.Add(new PemohonUserInfo()
             {
                 Pemohon = pemohon,
                 UserInfo = userInfo
-            };
+            });
 
-            return Ok(result);
+            return SingleResult.Create(result.AsQueryable());
         }
 
         /// <summary>
