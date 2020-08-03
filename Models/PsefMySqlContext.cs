@@ -17,16 +17,22 @@ namespace PsefApi.Models
         }
 
         /// <summary>
-        /// Provinsi table
+        /// Desa/Kelurahan table
         /// </summary>
-        /// <value>Provinsi</value>
-        public virtual DbSet<Provinsi> Provinsi { get; set; }
+        /// <value>Desa/Kelurahan</value>
+        public virtual DbSet<DesaKelurahan> DesaKelurahan { get; set; }
 
         /// <summary>
-        /// Kabupaten/kota table
+        /// Kabupaten/Kota table
         /// </summary>
-        /// <value>Kabupaten/kota</value>
-        public virtual DbSet<Kabkota> Kabkota { get; set; }
+        /// <value>Kabupaten/Kota</value>
+        public virtual DbSet<KabKota> KabKota { get; set; }
+
+        /// <summary>
+        /// Kecamatan table
+        /// </summary>
+        /// <value>Kecamatan</value>
+        public virtual DbSet<Kecamatan> Kecamatan { get; set; }
 
         /// <summary>
         /// Pemohon table
@@ -35,12 +41,45 @@ namespace PsefApi.Models
         public virtual DbSet<Pemohon> Pemohon { get; set; }
 
         /// <summary>
+        /// Provinsi table
+        /// </summary>
+        /// <value>Provinsi</value>
+        public virtual DbSet<Provinsi> Provinsi { get; set; }
+
+        /// <summary>
         /// Configure model
         /// </summary>
         /// <param name="modelBuilder">Model builder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Kabkota>(entity =>
+            modelBuilder.Entity<DesaKelurahan>(entity =>
+            {
+                entity.ToTable("desakelurahan");
+
+                entity.HasIndex(e => e.KecamatanId)
+                    .HasName("FK_desakelurahan_kecamatan");
+
+                entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.KecamatanId)
+                    .HasColumnType("smallint(5) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Kecamatan)
+                    .WithMany(p => p.DesaKelurahan)
+                    .HasForeignKey(d => d.KecamatanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_desakelurahan_kecamatan");
+            });
+
+            modelBuilder.Entity<KabKota>(entity =>
             {
                 entity.ToTable("kabkota");
 
@@ -61,10 +100,37 @@ namespace PsefApi.Models
                     .HasDefaultValueSql("'NULL'");
 
                 entity.HasOne(d => d.Provinsi)
-                    .WithMany(p => p.Kabkota)
+                    .WithMany(p => p.KabKota)
                     .HasForeignKey(d => d.ProvinsiId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_kabkota_provinsi");
+            });
+
+            modelBuilder.Entity<Kecamatan>(entity =>
+            {
+                entity.ToTable("kecamatan");
+
+                entity.HasIndex(e => e.KabKotaId)
+                    .HasName("FK_kecamatan_kabkota");
+
+                entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.KabKotaId)
+                    .HasColumnType("smallint(5) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.KabKota)
+                    .WithMany(p => p.Kecamatan)
+                    .HasForeignKey(d => d.KabKotaId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_kecamatan_kabkota");
             });
 
             modelBuilder.Entity<Pemohon>(entity =>

@@ -13,7 +13,7 @@ namespace PsefApi.Models
         /// </summary>
         public Provinsi()
         {
-            Kabkota = new HashSet<Kabkota>();
+            KabKota = new HashSet<KabKota>();
         }
 
         /// <summary>
@@ -33,6 +33,6 @@ namespace PsefApi.Models
         /// </summary>
         /// <value>The collection of associated Kabupaten/Kota.</value>
         [IgnoreDataMember]
-        public virtual ICollection<Kabkota> Kabkota { get; set; }
+        public virtual ICollection<KabKota> KabKota { get; set; }
     }
 }

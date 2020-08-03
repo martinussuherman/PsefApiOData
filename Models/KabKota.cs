@@ -1,10 +1,20 @@
-﻿namespace PsefApi.Models
+﻿using System.Collections.Generic;
+
+namespace PsefApi.Models
 {
     /// <summary>
     /// Represents a Kabupaten/Kota.
     /// </summary>
-    public partial class Kabkota
+    public partial class KabKota
     {
+        /// <summary>
+        /// Initializes a new instance of Kabupaten/Kota.
+        /// </summary>
+        public KabKota()
+        {
+            Kecamatan = new HashSet<Kecamatan>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier for the Kabupaten/Kota.
         /// </summary>
@@ -28,5 +38,11 @@
         /// </summary>
         /// <value>The associated Provinsi.</value>
         public virtual Provinsi Provinsi { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Kecamatan associated with the Kabupaten/Kota.
+        /// </summary>
+        /// <value>The associated list of Kecamatan.</value>
+        public virtual ICollection<Kecamatan> Kecamatan { get; set; }
     }
 }
