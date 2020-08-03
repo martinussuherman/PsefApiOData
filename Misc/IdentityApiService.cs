@@ -27,7 +27,7 @@ namespace PsefApi.Misc
         /// <param name="uri">Uri of Api.</param>
         /// <typeparam name="T">Type of object to return.</typeparam>
         /// <returns>Object retrieved from the Identity Api.</returns>
-        public async Task<T> CallApi<T>(TokenResponse token, string uri)
+        public async Task<T> CallApiAsync<T>(TokenResponse token, string uri)
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Get,
