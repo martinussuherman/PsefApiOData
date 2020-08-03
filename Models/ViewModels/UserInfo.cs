@@ -9,7 +9,7 @@ namespace PsefApi.Models
         /// Gets or sets the unique identifier for the User.
         /// </summary>
         /// <value>The User's unique identifier.</value>
-        public byte Id { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the User name.

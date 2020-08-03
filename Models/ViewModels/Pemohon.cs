@@ -11,6 +11,6 @@ namespace PsefApi.Models
         /// </summary>
         /// <value>The Pemohon's OSS information.</value>
         [NotMapped]
-        public OssInfo OssInfo { get; set; } = new OssInfo();
+        public OssInfo OssInfo { get; set; }
     }
 }
