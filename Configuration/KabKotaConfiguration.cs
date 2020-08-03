@@ -29,13 +29,14 @@ namespace PsefApi.Configuration
 
             kabKota.Collection
                 .Function(nameof(KabKotaController.TotalCount))
-                .Returns(typeof(int));
+                .Returns<int>();
 
             kabKota.HasKey(p => p.Id);
             kabKota
                 .Expand(SelectExpandType.Disabled)
                 .Filter()
                 .OrderBy()
+                .Page(50, 50)
                 .Select();
         }
     }

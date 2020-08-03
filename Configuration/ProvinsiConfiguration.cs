@@ -29,7 +29,7 @@ namespace PsefApi.Configuration
 
             provinsi.Collection
                 .Function(nameof(ProvinsiController.TotalCount))
-                .Returns(typeof(int));
+                .Returns<int>();
 
             provinsi.HasKey(p => p.Id);
             provinsi
@@ -41,6 +41,7 @@ namespace PsefApi.Configuration
                         nameof(Provinsi.Name).ToLowerInvariant()
                     })
                 .OrderBy()
+                .Page(50, 50)
                 .Select();
         }
     }

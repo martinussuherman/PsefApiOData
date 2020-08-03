@@ -59,11 +59,7 @@ namespace PsefApi.Controllers
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<KabKota>>), Status200OK)]
-        [EnableQuery(
-            PageSize = 50,
-            MaxTop = 100,
-            AllowedQueryOptions = AllowedQueryOptions.All,
-            AllowedFunctions = AllowedFunctions.AllFunctions)]
+        [EnableQuery]
         public IQueryable<KabKota> Get()
         {
             return _context.KabKota;
