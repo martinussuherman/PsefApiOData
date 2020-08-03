@@ -19,14 +19,14 @@ namespace PsefApi.Controllers
     /// </summary>
     [Authorize]
     [ApiVersion(V1_0)]
-    [ODataRoutePrefix(nameof(KabKota))]
-    public class KabKotaController : ODataController
+    [ODataRoutePrefix(nameof(KabupatenKota))]
+    public class KabupatenKotaController : ODataController
     {
         /// <summary>
         /// Kabupaten/Kota REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
-        public KabKotaController(PsefMySqlContext context)
+        public KabupatenKotaController(PsefMySqlContext context)
         {
             _context = context;
         }
@@ -45,7 +45,7 @@ namespace PsefApi.Controllers
         [ProducesResponseType(typeof(int), Status200OK)]
         public async Task<int> TotalCount()
         {
-            return await _context.KabKota.CountAsync();
+            return await _context.KabupatenKota.CountAsync();
         }
 
         /// <summary>
@@ -58,11 +58,11 @@ namespace PsefApi.Controllers
         /// <response code="200">Kabupaten/Kota successfully retrieved.</response>
         [ODataRoute]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<KabKota>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<KabupatenKota>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<KabKota> Get()
+        public IQueryable<KabupatenKota> Get()
         {
-            return _context.KabKota;
+            return _context.KabupatenKota;
         }
 
         /// <summary>
@@ -77,13 +77,13 @@ namespace PsefApi.Controllers
         /// <response code="404">The Kabupaten/Kota does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(KabKota), Status200OK)]
+        [ProducesResponseType(typeof(KabupatenKota), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<KabKota> Get([FromODataUri] ushort id)
+        public SingleResult<KabupatenKota> Get([FromODataUri] ushort id)
         {
             return SingleResult.Create(
-                _context.KabKota.Where(e => e.Id == id));
+                _context.KabupatenKota.Where(e => e.Id == id));
         }
 
         /// <summary>
@@ -99,18 +99,18 @@ namespace PsefApi.Controllers
         /// <response code="400">The Kabupaten/Kota is invalid.</response>
         /// <response code="409">The Kabupaten/Kota with supplied id already exist.</response>
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(KabKota), Status201Created)]
+        [ProducesResponseType(typeof(KabupatenKota), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status409Conflict)]
-        public async Task<IActionResult> Post([FromBody] KabKota create)
+        public async Task<IActionResult> Post([FromBody] KabupatenKota create)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.KabKota.Add(create);
+            _context.KabupatenKota.Add(create);
 
             try
             {
@@ -145,21 +145,21 @@ namespace PsefApi.Controllers
         /// <response code="422">The Kabupaten/Kota identifier is specified on delta and its value is different from id.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(KabKota), Status200OK)]
+        [ProducesResponseType(typeof(KabupatenKota), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status422UnprocessableEntity)]
         public async Task<IActionResult> Patch(
             [FromODataUri] ushort id,
-            [FromBody] Delta<KabKota> delta)
+            [FromBody] Delta<KabupatenKota> delta)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var update = await _context.KabKota.FindAsync(id);
+            var update = await _context.KabupatenKota.FindAsync(id);
 
             if (update == null)
             {
@@ -201,14 +201,14 @@ namespace PsefApi.Controllers
         [ProducesResponseType(Status404NotFound)]
         public async Task<IActionResult> Delete([FromODataUri] ushort id)
         {
-            var delete = await _context.KabKota.FindAsync(id);
+            var delete = await _context.KabupatenKota.FindAsync(id);
 
             if (delete == null)
             {
                 return NotFound();
             }
 
-            _context.KabKota.Remove(delete);
+            _context.KabupatenKota.Remove(delete);
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -228,13 +228,13 @@ namespace PsefApi.Controllers
         /// <response code="404">The Kabupaten/Kota does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(KabKota), Status200OK)]
+        [ProducesResponseType(typeof(KabupatenKota), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<IActionResult> Put(
             [FromODataUri] ushort id,
-            [FromBody] KabKota update)
+            [FromBody] KabupatenKota update)
         {
             if (id != update.Id)
             {
@@ -262,7 +262,7 @@ namespace PsefApi.Controllers
 
         private bool Exists(ushort id)
         {
-            return _context.KabKota.Any(e => e.Id == id);
+            return _context.KabupatenKota.Any(e => e.Id == id);
         }
 
         private readonly PsefMySqlContext _context;

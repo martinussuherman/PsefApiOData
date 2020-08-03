@@ -26,7 +26,7 @@ namespace PsefApi.Models
         /// Kabupaten/Kota table
         /// </summary>
         /// <value>Kabupaten/Kota</value>
-        public virtual DbSet<KabKota> KabKota { get; set; }
+        public virtual DbSet<KabupatenKota> KabupatenKota { get; set; }
 
         /// <summary>
         /// Kecamatan table
@@ -79,12 +79,12 @@ namespace PsefApi.Models
                     .HasConstraintName("FK_desakelurahan_kecamatan");
             });
 
-            modelBuilder.Entity<KabKota>(entity =>
+            modelBuilder.Entity<KabupatenKota>(entity =>
             {
-                entity.ToTable("kabkota");
+                entity.ToTable("kabupatenkota");
 
                 entity.HasIndex(e => e.ProvinsiId)
-                    .HasName("FK_kabkota_provinsi");
+                    .HasName("FK_kabupatenkota_provinsi");
 
                 entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
 
@@ -100,22 +100,22 @@ namespace PsefApi.Models
                     .HasDefaultValueSql("'NULL'");
 
                 entity.HasOne(d => d.Provinsi)
-                    .WithMany(p => p.KabKota)
+                    .WithMany(p => p.KabupatenKota)
                     .HasForeignKey(d => d.ProvinsiId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK_kabkota_provinsi");
+                    .HasConstraintName("FK_kabupatenkota_provinsi");
             });
 
             modelBuilder.Entity<Kecamatan>(entity =>
             {
                 entity.ToTable("kecamatan");
 
-                entity.HasIndex(e => e.KabKotaId)
-                    .HasName("FK_kecamatan_kabkota");
+                entity.HasIndex(e => e.KabupatenKotaId)
+                    .HasName("FK_kecamatan_kabupatenkota");
 
                 entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
 
-                entity.Property(e => e.KabKotaId)
+                entity.Property(e => e.KabupatenKotaId)
                     .HasColumnType("smallint(5) unsigned")
                     .HasDefaultValueSql("'NULL'");
 
@@ -126,11 +126,11 @@ namespace PsefApi.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.HasOne(d => d.KabKota)
+                entity.HasOne(d => d.KabupatenKota)
                     .WithMany(p => p.Kecamatan)
-                    .HasForeignKey(d => d.KabKotaId)
+                    .HasForeignKey(d => d.KabupatenKotaId)
                     .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK_kecamatan_kabkota");
+                    .HasConstraintName("FK_kecamatan_kabupatenkota");
             });
 
             modelBuilder.Entity<Pemohon>(entity =>

@@ -6,12 +6,12 @@ namespace PsefApi.Models
     /// <summary>
     /// Represents a Kabupaten/Kota.
     /// </summary>
-    public partial class KabKota
+    public partial class KabupatenKota
     {
         /// <summary>
         /// Initializes a new instance of Kabupaten/Kota.
         /// </summary>
-        public KabKota()
+        public KabupatenKota()
         {
             Kecamatan = new HashSet<Kecamatan>();
         }

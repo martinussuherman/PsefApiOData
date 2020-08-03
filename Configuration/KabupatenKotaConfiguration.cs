@@ -9,7 +9,7 @@ namespace PsefApi.Configuration
     /// <summary>
     /// Represents the model configuration for Kabupaten/Kota.
     /// </summary>
-    public class KabKotaConfiguration : IModelConfiguration
+    public class KabupatenKotaConfiguration : IModelConfiguration
     {
         /// <summary>
         /// Applies model configurations using the provided builder for the specified API version.
@@ -23,16 +23,16 @@ namespace PsefApi.Configuration
                 return;
             }
 
-            EntityTypeConfiguration<KabKota> kabKota = builder
-                .EntitySet<KabKota>(nameof(KabKota))
+            EntityTypeConfiguration<KabupatenKota> kabupatenKota = builder
+                .EntitySet<KabupatenKota>(nameof(KabupatenKota))
                 .EntityType;
 
-            kabKota.Collection
-                .Function(nameof(KabKotaController.TotalCount))
+            kabupatenKota.Collection
+                .Function(nameof(KabupatenKotaController.TotalCount))
                 .Returns<int>();
 
-            kabKota.HasKey(p => p.Id);
-            kabKota
+            kabupatenKota.HasKey(p => p.Id);
+            kabupatenKota
                 .Expand(SelectExpandType.Disabled)
                 .Filter()
                 .OrderBy()

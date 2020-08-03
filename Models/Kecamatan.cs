@@ -32,13 +32,13 @@ namespace PsefApi.Models
         /// Gets or sets the associated Kabupaten/Kota identifier.
         /// </summary>
         /// <value>The associated Kabupaten/Kota identifier.</value>
-        public ushort? KabKotaId { get; set; }
+        public ushort? KabupatenKotaId { get; set; }
 
         /// <summary>
         /// Gets or sets Kabupaten/Kota associated with the Kecamatan.
         /// </summary>
         /// <value>The associated Kabupaten/Kota.</value>
-        public virtual KabKota KabKota { get; set; }
+        public virtual KabupatenKota KabupatenKota { get; set; }
 
         /// <summary>
         /// Gets or sets list of Desa/Kelurahan associated with the Kecamatan.
