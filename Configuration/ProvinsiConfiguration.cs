@@ -33,15 +33,15 @@ namespace PsefApi.Configuration
 
             provinsi.HasKey(p => p.Id);
             provinsi
+                .Expand(SelectExpandType.Disabled)
                 .Filter(
                     QueryOptionSetting.Allowed,
                     new string[]
                     {
                         nameof(Provinsi.Name).ToLowerInvariant()
                     })
-                .Expand(SelectExpandType.Disabled)
-                .Select()
-                .OrderBy();
+                .OrderBy()
+                .Select();
         }
     }
 }
