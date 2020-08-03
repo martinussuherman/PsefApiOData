@@ -21,6 +21,8 @@ namespace PsefApi.Misc
 
         internal static string Audience { get; set; }
 
+        internal static string DelegationBaseUri { get; set; }
+
         internal static string DelegationClientId { get; set; }
 
         internal static string DelegationClientSecret { get; set; }
@@ -50,6 +52,7 @@ namespace PsefApi.Misc
             Audience = bearerConfiguration.GetValue<string>("Audience");
 
             IConfigurationSection delegationConfiguration = configuration.GetSection("Delegation");
+            DelegationBaseUri = delegationConfiguration.GetValue<string>("BaseUri");
             DelegationClientId = delegationConfiguration.GetValue<string>("ClientId");
             DelegationClientSecret = delegationConfiguration.GetValue<string>("ClientSecret");
             DelegationScope = delegationConfiguration.GetValue<string>("Scope");

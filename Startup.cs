@@ -71,6 +71,7 @@ namespace PsefApi
             ConfigureSwaggerGen(services);
 
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
+            services.AddHttpClient<IIdentityApiService, IdentityApiService>();
 
             services.AddDbContextPool<Models.PsefMySqlContext>(options =>
                 options.UseMySql(
