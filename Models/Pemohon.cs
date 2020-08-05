@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace PsefApi.Models
 {
@@ -8,6 +9,14 @@ namespace PsefApi.Models
     /// </summary>
     public partial class Pemohon
     {
+        /// <summary>
+        /// Initializes a new instance of Pemohon.
+        /// </summary>
+        public Pemohon()
+        {
+            Permohonan = new HashSet<Permohonan>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier for the Pemohon.
         /// </summary>
@@ -67,5 +76,12 @@ namespace PsefApi.Models
         /// </summary>
         /// <value>The Pemohon's apoteker STRA document url.</value>
         public string StraUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Permohonan associated with the Pemohon.
+        /// </summary>
+        /// <value>The associated list of Permohonan.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<Permohonan> Permohonan { get; set; }
     }
 }

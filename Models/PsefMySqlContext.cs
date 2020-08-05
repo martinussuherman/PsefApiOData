@@ -41,6 +41,12 @@ namespace PsefApi.Models
         public virtual DbSet<Pemohon> Pemohon { get; set; }
 
         /// <summary>
+        /// Permohonan table
+        /// </summary>
+        /// <value>Permohonan</value>
+        public virtual DbSet<Permohonan> Permohonan { get; set; }
+
+        /// <summary>
         /// Provinsi table
         /// </summary>
         /// <value>Provinsi</value>
@@ -201,6 +207,83 @@ namespace PsefApi.Models
                     .HasDefaultValueSql("''''''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<Permohonan>(entity =>
+            {
+                entity.ToTable("permohonan");
+
+                entity.HasIndex(e => e.PemohonId)
+                    .HasName("FK_permohonan_pemohon");
+
+                entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.DokumenApiUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Domain)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.NomorPermohonan)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PemohonId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.PreviousPerizinanId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.ProsesBisnisUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProviderName)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StatusId).HasColumnType("tinyint(3) unsigned");
+
+                entity.Property(e => e.SuratPermohonanUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SystemName)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TypeId).HasColumnType("tinyint(3) unsigned");
+
+                entity.HasOne(d => d.Pemohon)
+                    .WithMany(p => p.Permohonan)
+                    .HasForeignKey(d => d.PemohonId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_permohonan_pemohon");
             });
 
             modelBuilder.Entity<Provinsi>(entity =>
