@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Runtime.Serialization;
 
 namespace PsefApi.Models
 {
@@ -30,6 +29,7 @@ namespace PsefApi.Models
         /// Gets or sets Kecamatan associated with the Desa/Kelurahan.
         /// </summary>
         /// <value>The associated Kecamatan.</value>
+        [IgnoreDataMember]
         public virtual Kecamatan Kecamatan { get; set; }
     }
 }
