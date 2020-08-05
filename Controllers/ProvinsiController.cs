@@ -8,6 +8,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PsefApi.Misc;
 using PsefApi.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApi.ApiInfo;
@@ -98,6 +99,9 @@ namespace PsefApi.Controllers
         /// <response code="204">The Provinsi was successfully created.</response>
         /// <response code="400">The Provinsi is invalid.</response>
         /// <response code="409">The Provinsi with supplied id already exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
@@ -143,6 +147,9 @@ namespace PsefApi.Controllers
         /// <response code="400">The Provinsi is invalid.</response>
         /// <response code="404">The Provinsi does not exist.</response>
         /// <response code="422">The Provinsi identifier is specified on delta and its value is different from id.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]
@@ -196,6 +203,9 @@ namespace PsefApi.Controllers
         /// <returns>None</returns>
         /// <response code="204">The Provinsi was successfully deleted.</response>
         /// <response code="404">The Provinsi does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
@@ -226,6 +236,9 @@ namespace PsefApi.Controllers
         /// <response code="204">The Provinsi was successfully updated.</response>
         /// <response code="400">The Provinsi is invalid.</response>
         /// <response code="404">The Provinsi does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Provinsi), Status200OK)]

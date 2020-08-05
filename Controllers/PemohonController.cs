@@ -65,9 +65,18 @@ namespace PsefApi.Controllers
         /// </remarks>
         /// <returns>All available Pemohon.</returns>
         /// <response code="200">Pemohon successfully retrieved.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<PemohonUserInfo>>), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public async Task<IQueryable<PemohonUserInfo>> Get()
         {
@@ -105,9 +114,18 @@ namespace PsefApi.Controllers
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(PemohonUserInfo), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public async Task<SingleResult<PemohonUserInfo>> Get([FromODataUri] uint id)
@@ -151,6 +169,9 @@ namespace PsefApi.Controllers
         /// <response code="204">The Pemohon was successfully created.</response>
         /// <response code="400">The Pemohon is invalid.</response>
         /// <response code="409">The Pemohon with supplied id already exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
@@ -196,6 +217,9 @@ namespace PsefApi.Controllers
         /// <response code="400">The Pemohon is invalid.</response>
         /// <response code="404">The Pemohon does not exist.</response>
         /// <response code="422">The Pemohon identifier is specified on delta and its value is different from id.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
@@ -249,6 +273,9 @@ namespace PsefApi.Controllers
         /// <returns>None</returns>
         /// <response code="204">The Pemohon was successfully deleted.</response>
         /// <response code="404">The Pemohon does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
@@ -279,6 +306,9 @@ namespace PsefApi.Controllers
         /// <response code="204">The Pemohon was successfully updated.</response>
         /// <response code="400">The Pemohon is invalid.</response>
         /// <response code="404">The Pemohon does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
