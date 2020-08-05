@@ -34,12 +34,7 @@ namespace PsefApi.Configuration
             provinsi.HasKey(p => p.Id);
             provinsi
                 .Expand(SelectExpandType.Disabled)
-                .Filter(
-                    QueryOptionSetting.Allowed,
-                    new string[]
-                    {
-                        nameof(Provinsi.Name).ToLowerInvariant()
-                    })
+                .Filter()
                 .OrderBy()
                 .Page(50, 50)
                 .Select();
