@@ -7,7 +7,7 @@ using PsefApi.Models;
 namespace PsefApi.Configuration
 {
     /// <summary>
-    /// Represents the model configuration for Kabupaten/Kota.
+    /// Represents the model configuration for Apotek.
     /// </summary>
     public class ApotekConfiguration : IModelConfiguration
     {

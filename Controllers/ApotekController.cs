@@ -77,7 +77,7 @@ namespace PsefApi.Controllers
         /// <response code="404">The Apotek does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(KabupatenKota), Status200OK)]
+        [ProducesResponseType(typeof(Apotek), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Apotek> Get([FromODataUri] ulong id)
