@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace PsefApi.Models
 {
@@ -12,7 +13,7 @@ namespace PsefApi.Models
         /// </summary>
         public Permohonan()
         {
-            // Historypermohonan = new HashSet<Historypermohonan>();
+            HistoryPermohonan = new HashSet<HistoryPermohonan>();
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace PsefApi.Models
         /// Gets or sets the Permohonan number.
         /// </summary>
         /// <value>The Permohonan's number.</value>
-        public string NomorPermohonan { get; set; }
+        public string PermohonanNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the Permohonan domain.
@@ -94,7 +95,11 @@ namespace PsefApi.Models
         [IgnoreDataMember]
         public virtual Pemohon Pemohon { get; set; }
 
-        // [IgnoreDataMember]
-        // public virtual ICollection<Historypermohonan> Historypermohonan { get; set; }
+        /// <summary>
+        /// Gets or sets list of History Permohonan associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated list of History Permohonan.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<HistoryPermohonan> HistoryPermohonan { get; set; }
     }
 }

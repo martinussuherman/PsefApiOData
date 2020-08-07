@@ -72,6 +72,12 @@ namespace PsefApi.Models
         public string StraNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the Pemohon apoteker STRA expiry date.
+        /// </summary>
+        /// <value>The Pemohon's apoteker STRA expiry date.</value>
+        public DateTime StraExpiry { get; set; }
+
+        /// <summary>
         /// Gets or sets the Pemohon apoteker STRA document url.
         /// </summary>
         /// <value>The Pemohon's apoteker STRA document url.</value>

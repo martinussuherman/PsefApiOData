@@ -187,6 +187,10 @@ namespace PsefApi.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.StraExpiry)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("'''0000-00-00'''");
+
                 entity.Property(e => e.StraNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
@@ -232,7 +236,7 @@ namespace PsefApi.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.NomorPermohonan)
+                entity.Property(e => e.PermohonanNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
                     .HasDefaultValueSql("''''''")
