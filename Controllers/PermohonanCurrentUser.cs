@@ -16,20 +16,20 @@ using static PsefApi.ApiInfo;
 namespace PsefApi.Controllers
 {
     /// <summary>
-    /// Represents a RESTful service of Permohonan.
+    /// Represents a RESTful service of Permohonan for current user.
     /// </summary>
     [Authorize]
     [ApiVersion(V0_1)]
-    [ODataRoutePrefix(nameof(Permohonan))]
-    public class PermohonanController : ODataController
+    [ODataRoutePrefix(nameof(PermohonanCurrentUser))]
+    public class PermohonanCurrentUser : ODataController
     {
         /// <summary>
-        /// Permohonan REST service.
+        /// Permohonan for current user REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
         /// <param name="delegateService">Api delegation service.</param>
         /// <param name="identityApi">Identity Api service.</param>
-        public PermohonanController(
+        public PermohonanCurrentUser(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
             IIdentityApiService identityApi)
@@ -40,38 +40,13 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// Retrieves Permohonan total count.
+        /// Retrieves all Permohonan for the current user.
         /// </summary>
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
-        /// <returns>Permohonan total count.</returns>
-        /// <response code="200">Total count of Permohonan retrieved.</response>
-        [HttpGet]
-        [ODataRoute(nameof(TotalCount))]
-        [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(long), Status200OK)]
-        public async Task<long> TotalCount()
-        {
-            return await _context.Permohonan.LongCountAsync();
-        }
-
-        /// <summary>
-        /// Retrieves all Permohonan.
-        /// </summary>
-        /// <remarks>
-        /// *Min role: Verifikator*
-        /// </remarks>
-        /// <returns>All available Permohonan.</returns>
+        /// <returns>All available Permohonan for the current user.</returns>
         /// <response code="200">Permohonan successfully retrieved.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Verifikator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
-            ApiRole.Dirjen,
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
@@ -79,44 +54,38 @@ namespace PsefApi.Controllers
         [EnableQuery]
         public IQueryable<Permohonan> Get()
         {
-            return _context.Permohonan;
+            return _context.Permohonan.Where(e =>
+                e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
         }
 
         /// <summary>
-        /// Gets a single Permohonan.
+        /// Gets a single Permohonan for the current user.
         /// </summary>
         /// <remarks>
-        /// *Min role: Verifikator*
+        /// *Min role: None*
         /// </remarks>
         /// <param name="id">The requested Permohonan identifier.</param>
         /// <returns>The requested Permohonan.</returns>
         /// <response code="200">The Permohonan was successfully retrieved.</response>
         /// <response code="404">The Permohonan does not exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Verifikator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
-            ApiRole.Dirjen,
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Permohonan), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Permohonan> Get([FromODataUri] uint id)
         {
             return SingleResult.Create(
-                _context.Permohonan.Where(e => e.Id == id));
+                _context.Permohonan.Where(e =>
+                    e.Id == id &&
+                    e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User)));
         }
 
         /// <summary>
-        /// Creates a new Permohonan.
+        /// Creates a new Permohonan for the current user.
         /// </summary>
         /// <remarks>
-        /// *Min role: Admin*
+        /// *Min role: None*
         /// </remarks>
         /// <param name="create">The Permohonan to create.</param>
         /// <returns>The created Permohonan.</returns>
@@ -124,9 +93,7 @@ namespace PsefApi.Controllers
         /// <response code="204">The Permohonan was successfully created.</response>
         /// <response code="400">The Permohonan is invalid.</response>
         /// <response code="409">The Permohonan with supplied id already exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
+        [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Permohonan), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
@@ -139,6 +106,16 @@ namespace PsefApi.Controllers
                 return BadRequest(ModelState);
             }
 
+            Pemohon pemohon = await _context.Pemohon
+                .FirstOrDefaultAsync(c =>
+                    c.UserId == ApiHelper.GetUserId(HttpContext.User));
+
+            if (pemohon == null)
+            {
+                return BadRequest();
+            }
+
+            create.PemohonId = pemohon.Id;
             _context.Permohonan.Add(create);
 
             try
@@ -159,10 +136,10 @@ namespace PsefApi.Controllers
         }
 
         /// <summary>
-        /// Updates an existing Permohonan.
+        /// Updates an existing Permohonan for the current user.
         /// </summary>
         /// <remarks>
-        /// *Min role: Admin*
+        /// *Min role: None*
         /// </remarks>
         /// <param name="id">The requested Permohonan identifier.</param>
         /// <param name="delta">The partial Permohonan to update.</param>
@@ -172,17 +149,15 @@ namespace PsefApi.Controllers
         /// <response code="400">The Permohonan is invalid.</response>
         /// <response code="404">The Permohonan does not exist.</response>
         /// <response code="422">The Permohonan identifier is specified on delta and its value is different from id.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Permohonan), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
+        [ProducesResponseType(Status401Unauthorized)]
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status422UnprocessableEntity)]
-        public async Task<IActionResult> Patch(
+        public async Task<IActionResult> PatchCurrentUser(
             [FromODataUri] uint id,
             [FromBody] Delta<Permohonan> delta)
         {
@@ -191,14 +166,25 @@ namespace PsefApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var update = await _context.Permohonan.FindAsync(id);
+            string currentUserId = ApiHelper.GetUserId(HttpContext.User);
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == id &&
+                    c.Pemohon.UserId == currentUserId);
 
             if (update == null)
             {
                 return NotFound();
             }
 
+            var oldId = update.Id;
+            var oldPemohonId = update.PemohonId;
             delta.Patch(update);
+
+            if (update.PemohonId != oldPemohonId)
+            {
+                return Unauthorized(update.PemohonId);
+            }
 
             try
             {
@@ -206,90 +192,10 @@ namespace PsefApi.Controllers
             }
             catch (InvalidOperationException)
             {
-                if (update.Id != id)
+                if (update.Id != oldId)
                 {
                     ModelState.AddModelError(nameof(update.Id), DontSetKeyOnPatch);
                     return UnprocessableEntity(ModelState);
-                }
-
-                throw;
-            }
-
-            return Updated(update);
-        }
-
-        /// <summary>
-        /// Deletes a Permohonan.
-        /// </summary>
-        /// <remarks>
-        /// *Min role: Admin*
-        /// </remarks>
-        /// <param name="id">The Permohonan to delete.</param>
-        /// <returns>None</returns>
-        /// <response code="204">The Permohonan was successfully deleted.</response>
-        /// <response code="404">The Permohonan does not exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
-        [ODataRoute(IdRoute)]
-        [ProducesResponseType(Status204NoContent)]
-        [ProducesResponseType(Status404NotFound)]
-        public async Task<IActionResult> Delete([FromODataUri] uint id)
-        {
-            var delete = await _context.Permohonan.FindAsync(id);
-
-            if (delete == null)
-            {
-                return NotFound();
-            }
-
-            _context.Permohonan.Remove(delete);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Updates an existing Permohonan.
-        /// </summary>
-        /// <remarks>
-        /// *Min role: Admin*
-        /// </remarks>
-        /// <param name="id">The requested Permohonan identifier.</param>
-        /// <param name="update">The Permohonan to update.</param>
-        /// <returns>The updated Permohonan.</returns>
-        /// <response code="200">The Permohonan was successfully updated.</response>
-        /// <response code="204">The Permohonan was successfully updated.</response>
-        /// <response code="400">The Permohonan is invalid.</response>
-        /// <response code="404">The Permohonan does not exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
-        [ODataRoute(IdRoute)]
-        [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Permohonan), Status200OK)]
-        [ProducesResponseType(Status204NoContent)]
-        [ProducesResponseType(Status400BadRequest)]
-        [ProducesResponseType(Status404NotFound)]
-        public async Task<IActionResult> Put(
-            [FromODataUri] uint id,
-            [FromBody] Permohonan update)
-        {
-            if (id != update.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(update).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!Exists(id))
-                {
-                    return NotFound();
                 }
 
                 throw;
