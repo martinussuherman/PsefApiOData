@@ -17,6 +17,12 @@ namespace PsefApi.Models
         }
 
         /// <summary>
+        /// Apotek table
+        /// </summary>
+        /// <value>Apotek</value>
+        public virtual DbSet<Apotek> Apotek { get; set; }
+
+        /// <summary>
         /// Desa/Kelurahan table
         /// </summary>
         /// <value>Desa/Kelurahan</value>
@@ -58,6 +64,81 @@ namespace PsefApi.Models
         /// <param name="modelBuilder">Model builder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Apotek>(entity =>
+            {
+                entity.ToTable("apotek");
+
+                entity.HasIndex(e => e.PermohonanId)
+                    .HasName("FK_apotek_permohonan");
+
+                entity.HasIndex(e => e.ProvinsiId)
+                    .HasName("FK_apotek_provinsi");
+
+                entity.Property(e => e.Id).HasColumnType("bigint(20) unsigned");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ApotekerName)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PermohonanId)
+                    .HasColumnType("int(11) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.ProvinsiId)
+                    .HasColumnType("tinyint(3) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.SiaNumber)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SipaNumber)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StraNumber)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Permohonan)
+                    .WithMany(p => p.Apotek)
+                    .HasForeignKey(d => d.PermohonanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_apotek_permohonan");
+
+                entity.HasOne(d => d.Provinsi)
+                    .WithMany(p => p.Apotek)
+                    .HasForeignKey(d => d.ProvinsiId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_apotek_provinsi");
+            });
+
             modelBuilder.Entity<DesaKelurahan>(entity =>
             {
                 entity.ToTable("desakelurahan");
@@ -200,7 +281,7 @@ namespace PsefApi.Models
 
                 entity.Property(e => e.StraUrl)
                     .IsRequired()
-                    .HasColumnType("tinytext")
+                    .HasColumnType("text")
                     .HasDefaultValueSql("''''''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
@@ -222,6 +303,27 @@ namespace PsefApi.Models
 
                 entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
 
+                entity.Property(e => e.ApotekerEmail)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ApotekerName)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ApotekerPhone)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.DokumenApiUrl)
                     .IsRequired()
                     .HasColumnType("text")
@@ -236,16 +338,16 @@ namespace PsefApi.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.PemohonId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
                 entity.Property(e => e.PermohonanNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
                     .HasDefaultValueSql("''''''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.PemohonId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
 
                 entity.Property(e => e.PreviousPerizinanId)
                     .HasColumnType("int(10) unsigned")
@@ -266,6 +368,24 @@ namespace PsefApi.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.StatusId).HasColumnType("tinyint(3) unsigned");
+
+                entity.Property(e => e.StraExpiry)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("'''0000-00-00'''");
+
+                entity.Property(e => e.StraNumber)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StraUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.SuratPermohonanUrl)
                     .IsRequired()

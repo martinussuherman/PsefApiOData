@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace PsefApi.Models
@@ -13,6 +14,7 @@ namespace PsefApi.Models
         /// </summary>
         public Permohonan()
         {
+            Apotek = new HashSet<Apotek>();
             HistoryPermohonan = new HashSet<HistoryPermohonan>();
         }
 
@@ -71,6 +73,42 @@ namespace PsefApi.Models
         public string ProviderName { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan apoteker name.
+        /// </summary>
+        /// <value>The Permohonan's apoteker name.</value>
+        public string ApotekerName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan apoteker email.
+        /// </summary>
+        /// <value>The Permohonan's apoteker email.</value>
+        public string ApotekerEmail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan apoteker phone number.
+        /// </summary>
+        /// <value>The Permohonan's apoteker phone number.</value>
+        public string ApotekerPhone { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan apoteker STRA number.
+        /// </summary>
+        /// <value>The Permohonan's apoteker STRA number.</value>
+        public string StraNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan apoteker STRA expiry date.
+        /// </summary>
+        /// <value>The Permohonan's apoteker STRA expiry date.</value>
+        public DateTime StraExpiry { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan apoteker STRA document url.
+        /// </summary>
+        /// <value>The Permohonan's apoteker STRA document url.</value>
+        public string StraUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the Permohonan Surat Permohonan document url.
         /// </summary>
         /// <value>The Permohonan's Surat Permohonan document url.</value>
@@ -94,6 +132,13 @@ namespace PsefApi.Models
         /// <value>The associated Pemohon.</value>
         [IgnoreDataMember]
         public virtual Pemohon Pemohon { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Apotek associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated list of Apotek.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<Apotek> Apotek { get; set; }
 
         /// <summary>
         /// Gets or sets list of History Permohonan associated with the Permohonan.

@@ -13,6 +13,7 @@ namespace PsefApi.Models
         /// </summary>
         public Provinsi()
         {
+            Apotek = new HashSet<Apotek>();
             KabupatenKota = new HashSet<KabupatenKota>();
         }
 
@@ -29,9 +30,16 @@ namespace PsefApi.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets Kabupaten/Kota associated with the Provinsi.
+        /// Gets or sets list of Apotek associated with the Provinsi.
         /// </summary>
-        /// <value>The collection of associated Kabupaten/Kota.</value>
+        /// <value>The associated list of Apotek.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<Apotek> Apotek { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Kabupaten/Kota associated with the Provinsi.
+        /// </summary>
+        /// <value>The associated list of Kabupaten/Kota.</value>
         [IgnoreDataMember]
         public virtual ICollection<KabupatenKota> KabupatenKota { get; set; }
     }
