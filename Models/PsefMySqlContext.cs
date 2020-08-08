@@ -29,6 +29,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<DesaKelurahan> DesaKelurahan { get; set; }
 
         /// <summary>
+        /// History Permohonan table
+        /// </summary>
+        /// <value>History Permohonan</value>
+        public virtual DbSet<HistoryPermohonan> HistoryPermohonan { get; set; }
+
+        /// <summary>
         /// Kabupaten/Kota table
         /// </summary>
         /// <value>Kabupaten/Kota</value>
@@ -164,6 +170,39 @@ namespace PsefApiOData.Models
                     .HasForeignKey(d => d.KecamatanId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_desakelurahan_kecamatan");
+            });
+
+            modelBuilder.Entity<HistoryPermohonan>(entity =>
+            {
+                entity.ToTable("historypermohonan");
+
+                entity.HasIndex(e => e.PermohonanId)
+                    .HasName("FK_historypermohonan_permohonan");
+
+                entity.Property(e => e.Id).HasColumnType("bigint(20) unsigned");
+
+                entity.Property(e => e.PermohonanId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.StatusId).HasColumnType("tinyint(3) unsigned");
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.UpdatedBy)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Permohonan)
+                    .WithMany(p => p.HistoryPermohonan)
+                    .HasForeignKey(d => d.PermohonanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_historypermohonan_permohonan");
             });
 
             modelBuilder.Entity<KabupatenKota>(entity =>
