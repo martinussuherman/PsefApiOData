@@ -177,7 +177,7 @@ namespace PsefApiOData
             {
                 // add a custom operation filter which sets default values
                 options.OperationFilter<SwaggerDefaultValues>();
-                options.OperationFilter<SwaggerOdataAuthorization>();
+                options.OperationFilter<SwaggerODataAuthorization>();
 
                 // integrate xml comments
                 options.IncludeXmlComments(XmlCommentsFilePath);
