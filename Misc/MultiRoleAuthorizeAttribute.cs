@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace PsefApi.Misc
+namespace PsefApiOData.Misc
 {
     /// <summary>
     /// Enum based multi role authorization attribute

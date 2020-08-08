@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 
-namespace PsefApi.Misc
+namespace PsefApiOData.Misc
 {
     /// <summary>
     /// Api helpers.

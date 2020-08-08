@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 
-namespace PsefApi
+namespace PsefApiOData
 {
     /// <summary>
     /// Configures the Swagger generation options.

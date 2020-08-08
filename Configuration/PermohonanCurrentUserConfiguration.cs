@@ -1,9 +1,9 @@
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
-using PsefApi.Controllers;
-using PsefApi.Models;
+using PsefApiOData.Controllers;
+using PsefApiOData.Models;
 
-namespace PsefApi.Configuration
+namespace PsefApiOData.Configuration
 {
     /// <summary>
     /// Represents the model configuration for Permohonan for current user.

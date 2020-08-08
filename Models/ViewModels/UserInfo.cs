@@ -1,4 +1,4 @@
-namespace PsefApi.Models
+namespace PsefApiOData.Models
 {
     /// <summary>
     /// Represents a User information.

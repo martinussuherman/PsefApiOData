@@ -1,4 +1,4 @@
-namespace PsefApi.Misc
+namespace PsefApiOData.Misc
 {
     /// <summary>
     /// Api role.

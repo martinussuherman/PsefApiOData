@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
-using PsefApi.Misc;
+using PsefApiOData.Misc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ using System.Reflection;
 using static Microsoft.AspNetCore.Mvc.CompatibilityVersion;
 using static Microsoft.OData.ODataUrlKeyDelimiter;
 
-namespace PsefApi
+namespace PsefApiOData
 {
     /// <summary>
     /// Represents the startup process for the application.
@@ -147,7 +147,7 @@ namespace PsefApi
                 .UseSwaggerUI(options =>
                 {
                     options.OAuthClientId(Configuration.GetValue<string>("ClientId"));
-                    options.OAuthAppName("PsefApiOdata Swagger");
+                    options.OAuthAppName("PsefApiOData Swagger");
 
                     // build a swagger endpoint for each discovered API version
                     foreach (var description in provider.ApiVersionDescriptions)

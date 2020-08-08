@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace PsefApi.Models
+namespace PsefApiOData.Models
 {
     /// <summary>
     /// Database context

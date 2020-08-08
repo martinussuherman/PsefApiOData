@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PsefApi.Models
+namespace PsefApiOData.Models
 {
     public partial class Pemohon
     {

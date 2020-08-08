@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PsefApi.Models
+namespace PsefApiOData.Models
 {
     /// <summary>
     /// Represents a OSS Information.

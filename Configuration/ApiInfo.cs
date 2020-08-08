@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PsefApi
+namespace PsefApiOData
 {
     internal class ApiInfo
     {

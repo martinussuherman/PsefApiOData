@@ -9,12 +9,12 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PsefApi.Misc;
-using PsefApi.Models;
+using PsefApiOData.Misc;
+using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
-using static PsefApi.ApiInfo;
+using static PsefApiOData.ApiInfo;
 
-namespace PsefApi.Controllers
+namespace PsefApiOData.Controllers
 {
     /// <summary>
     /// Represents a RESTful service of Pemohon.

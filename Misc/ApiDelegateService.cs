@@ -2,7 +2,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 
-namespace PsefApi.Misc
+namespace PsefApiOData.Misc
 {
     /// <summary>
     /// Api delegation service.

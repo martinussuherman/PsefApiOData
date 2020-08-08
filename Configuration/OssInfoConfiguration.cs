@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
-using PsefApi.Models;
+using PsefApiOData.Models;
 
-namespace PsefApi.Configuration
+namespace PsefApiOData.Configuration
 {
     /// <summary>
     /// Represents the model configuration for Pemohon.

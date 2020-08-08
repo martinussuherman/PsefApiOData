@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PsefApiOdata": {
+    "PsefApiOData": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

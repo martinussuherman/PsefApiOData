@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PsefApi.Models
+namespace PsefApiOData.Models
 {
     /// <summary>
     /// Represents a Desa/Kelurahan.

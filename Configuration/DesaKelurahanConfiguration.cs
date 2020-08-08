@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
-using PsefApi.Controllers;
-using PsefApi.Models;
+using PsefApiOData.Controllers;
+using PsefApiOData.Models;
 
-namespace PsefApi.Configuration
+namespace PsefApiOData.Configuration
 {
     /// <summary>
     /// Represents the model configuration for Desa/Kelurahan.

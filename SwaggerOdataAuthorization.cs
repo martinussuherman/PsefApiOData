@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
-using PsefApi.Misc;
+using PsefApiOData.Misc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PsefApi
+namespace PsefApiOData
 {
     /// <summary>
     /// Represents the Swagger/Swashbuckle operation filter used to document the authorization requirement.
     /// </summary>
-    public class SwaggerOdataAuthorization : IOperationFilter
+    public class SwaggerODataAuthorization : IOperationFilter
     {
         /// <summary>
         /// Applies the filter to the specified operation using the given context.

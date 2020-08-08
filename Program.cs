@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace PsefApi
+namespace PsefApiOData
 {
     /// <summary>
     /// Represents the current application.
