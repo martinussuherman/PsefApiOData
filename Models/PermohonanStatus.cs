@@ -24,7 +24,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the Permohonan Status name displayed to user.
         /// </summary>
         /// <value>The Permohonan Status's name displayed to user.</value>
-        public string UserDisplayedName { get; set; }
+        public string PemohonDisplayedName { get; set; }
 
         /// <summary>
         /// Gets list of predefined Permohonan Status.
@@ -36,79 +36,79 @@ namespace PsefApiOData.Models
             {
                 Id=1,
                 Name="Dibuat oleh Pemohon",
-                UserDisplayedName="Dibuat"
+                PemohonDisplayedName="Dibuat"
             },
             new PermohonanStatus
             {
                 Id=2,
                 Name="Diajukan oleh Pemohon",
-                UserDisplayedName="Diajukan"
+                PemohonDisplayedName="Diajukan"
             },
             new PermohonanStatus
             {
                 Id=3,
                 Name="Disetujui oleh Verifikator",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=4,
                 Name="Dikembalikan oleh Verifikator",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=5,
                 Name="Disetujui oleh Kepala Seksi",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=6,
                 Name="Dikembalikan oleh Kepala Seksi",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=7,
                 Name="Disetujui oleh Kepala Sub Direktorat",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=8,
                 Name="Dikembalikan oleh Kepala Sub Direktorat",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=9,
                 Name="Disetujui oleh Direktur Pelayanan Farmasi",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=10,
                 Name="Dikembalikan oleh Direktur Pelayanan Farmasi",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=11,
                 Name="Disetujui oleh Direktur Jenderal",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=12,
                 Name="Dikembalikan oleh Direktur Jenderal",
-                UserDisplayedName="Dalam proses"
+                PemohonDisplayedName="Dalam proses"
             },
             new PermohonanStatus
             {
                 Id=13,
                 Name="Selesai",
-                UserDisplayedName="Selesai"
+                PemohonDisplayedName="Selesai"
             }
         };
     }
