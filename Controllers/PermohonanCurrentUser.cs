@@ -210,7 +210,7 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
-        /// <param name="id">The requested Permohonan identifier.</param>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
         /// <returns>All available Apotek for the specified current user Permohonan.</returns>
         /// <response code="200">List of Apotek successfully retrieved.</response>
         /// <response code="403">Current user doesn't have right for the requested Permohonan identifier.</response>
@@ -221,10 +221,10 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status403Forbidden)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery]
-        public IQueryable<Apotek> Apotek([FromODataUri] uint id)
+        public IQueryable<Apotek> ListApotek(uint permohonanId)
         {
             return _context.Apotek.Where(e =>
-                e.PermohonanId == id &&
+                e.PermohonanId == permohonanId &&
                 e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
         }
 
@@ -234,20 +234,16 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
-        /// <param name="id">The requested Permohonan identifier.</param>
         /// <param name="create">The list of Apotek to create.</param>
-        /// <returns>The created list of Apotek.</returns>
-        /// <response code="201">The list of Apotek was successfully created.</response>
+        /// <returns>The created list of Apotek count.</returns>
         /// <response code="204">The list of Apotek was successfully created.</response>
         /// <response code="400">The list of Apotek is invalid.</response>
         [HttpPost]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Apotek>>), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> Apotek(
-            [FromODataUri] uint id,
-            [FromBody] List<Apotek> create)
+        public async Task<IActionResult> CreateApotek(
+            [FromBody] MultiApotekPostData create)
         {
             if (!ModelState.IsValid)
             {
@@ -256,7 +252,7 @@ namespace PsefApiOData.Controllers
 
             Permohonan permohonan = await _context.Permohonan
                 .FirstOrDefaultAsync(e =>
-                    e.Id == id &&
+                    e.Id == create.PermohonanId &&
                     e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
 
             if (permohonan == null)
@@ -264,13 +260,13 @@ namespace PsefApiOData.Controllers
                 return BadRequest();
             }
 
-            foreach (Apotek apotek in create)
+            foreach (Apotek apotek in create.Apotek)
             {
                 apotek.Id = 0;
-                apotek.PermohonanId = id;
+                apotek.PermohonanId = create.PermohonanId;
             }
 
-            await _context.Apotek.AddRangeAsync(create);
+            await _context.Apotek.AddRangeAsync(create.Apotek);
 
             try
             {
@@ -281,7 +277,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            return Created(create);
+            return NoContent();
         }
 
         private bool Exists(uint id)

@@ -20,10 +20,16 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<Permohonan> permohonan = builder
                 .EntitySet<Permohonan>(nameof(PermohonanCurrentUser))
                 .EntityType;
+            builder.ComplexType<MultiApotekPostData>();
 
-            permohonan.Collection
-                .Function(nameof(PermohonanCurrentUser.Apotek))
-                .ReturnsFromEntitySet<Apotek>(nameof(Apotek));
+            var list = permohonan.Collection
+                .Function(nameof(PermohonanCurrentUser.ListApotek));
+            list.Parameter<uint>("permohonanId");
+            list.ReturnsFromEntitySet<Apotek>(nameof(Apotek));
+
+            var create = permohonan.Collection
+                .Action(nameof(PermohonanCurrentUser.CreateApotek));
+            create.Returns<int>();
 
             permohonan.HasKey(p => p.Id);
             permohonan
