@@ -177,7 +177,6 @@ namespace PsefApiOData
             {
                 // add a custom operation filter which sets default values
                 options.OperationFilter<SwaggerDefaultValues>();
-                options.OperationFilter<SwaggerODataAuthorization>();
 
                 // integrate xml comments
                 options.IncludeXmlComments(XmlCommentsFilePath);
@@ -191,6 +190,24 @@ namespace PsefApiOData
                         Flows = new OpenApiOAuthFlows
                         {
                             Implicit = implicitFlow
+                        }
+                    });
+                options.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = ApiInfo.SchemeOauth2
+                                }
+                            },
+                            new[]
+                            {
+                                ApiHelper.Audience
+                            }
                         }
                     });
             });
