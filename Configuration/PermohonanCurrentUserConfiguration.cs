@@ -22,8 +22,8 @@ namespace PsefApiOData.Configuration
                 .EntityType;
 
             permohonan.Collection
-                .Function(nameof(PermohonanController.TotalCount))
-                .Returns<long>();
+                .Function(nameof(PermohonanCurrentUser.Apotek))
+                .ReturnsFromEntitySet<Apotek>(nameof(Apotek));
 
             permohonan.HasKey(p => p.Id);
             permohonan

@@ -204,6 +204,86 @@ namespace PsefApiOData.Controllers
             return Updated(update);
         }
 
+        /// <summary>
+        /// Retrieves all Apotek for the specified current user Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="id">The requested Permohonan identifier.</param>
+        /// <returns>All available Apotek for the specified current user Permohonan.</returns>
+        /// <response code="200">List of Apotek successfully retrieved.</response>
+        /// <response code="403">Current user doesn't have right for the requested Permohonan identifier.</response>
+        /// <response code="404">The list of Apotek does not exist.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Apotek>>), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery]
+        public IQueryable<Apotek> Apotek([FromODataUri] uint id)
+        {
+            return _context.Apotek.Where(e =>
+                e.PermohonanId == id &&
+                e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+        }
+
+        /// <summary>
+        /// Creates a new list of Apotek for the specified current user Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="id">The requested Permohonan identifier.</param>
+        /// <param name="create">The list of Apotek to create.</param>
+        /// <returns>The created list of Apotek.</returns>
+        /// <response code="201">The list of Apotek was successfully created.</response>
+        /// <response code="204">The list of Apotek was successfully created.</response>
+        /// <response code="400">The list of Apotek is invalid.</response>
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Apotek>>), Status201Created)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> Apotek(
+            [FromODataUri] uint id,
+            [FromBody] List<Apotek> create)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Permohonan permohonan = await _context.Permohonan
+                .FirstOrDefaultAsync(e =>
+                    e.Id == id &&
+                    e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+
+            if (permohonan == null)
+            {
+                return BadRequest();
+            }
+
+            foreach (Apotek apotek in create)
+            {
+                apotek.Id = 0;
+                apotek.PermohonanId = id;
+            }
+
+            await _context.Apotek.AddRangeAsync(create);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return Created(create);
+        }
+
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);
