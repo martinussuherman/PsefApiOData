@@ -62,7 +62,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public IQueryable<Apotek> Get()
         {
-            return _context.Apotek;
+            return _context.Apotek.Include(e => e.Provinsi);
         }
 
         /// <summary>
@@ -83,7 +83,9 @@ namespace PsefApiOData.Controllers
         public SingleResult<Apotek> Get([FromODataUri] ulong id)
         {
             return SingleResult.Create(
-                _context.Apotek.Where(e => e.Id == id));
+                _context.Apotek
+                    .Include(e => e.Provinsi)
+                    .Where(e => e.Id == id));
         }
 
         /// <summary>

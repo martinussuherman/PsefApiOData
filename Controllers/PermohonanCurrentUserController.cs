@@ -223,9 +223,11 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public IQueryable<Apotek> ListApotek(uint permohonanId)
         {
-            return _context.Apotek.Where(e =>
-                e.PermohonanId == permohonanId &&
-                e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+            return _context.Apotek
+                .Include(e => e.Provinsi)
+                .Where(e =>
+                    e.PermohonanId == permohonanId &&
+                    e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
         }
 
         /// <summary>

@@ -26,6 +26,7 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(ApotekController.TotalCount))
                 .Returns<long>();
 
+            apotek.Property(e => e.ProvinsiName).AddedExplicitly = true;
             apotek.HasKey(p => p.Id);
             apotek
                 .Expand(SelectExpandType.Disabled)
