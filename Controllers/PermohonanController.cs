@@ -298,6 +298,64 @@ namespace PsefApiOData.Controllers
             return Updated(update);
         }
 
+        /// <summary>
+        /// Retrieves all Apotek for the specified Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: Verifikator*
+        /// </remarks>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
+        /// <returns>All available Apotek for the specified Permohonan.</returns>
+        /// <response code="200">List of Apotek successfully retrieved.</response>
+        /// <response code="404">The list of Apotek does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Apotek>>), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery]
+        public IQueryable<Apotek> ListApotek(uint permohonanId)
+        {
+            return _context.Apotek
+                .Include(e => e.Provinsi)
+                .Where(e => e.PermohonanId == permohonanId);
+        }
+
+        /// <summary>
+        /// Retrieves all History Permohonan for the specified Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: Verifikator*
+        /// </remarks>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
+        /// <returns>All available History Permohonan for the specified Permohonan.</returns>
+        /// <response code="200">List of History Permohonan successfully retrieved.</response>
+        /// <response code="404">The list of History Permohonan does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<HistoryPermohonan>>), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery]
+        public IQueryable<HistoryPermohonan> ListHistory(uint permohonanId)
+        {
+            return _context.HistoryPermohonan.Where(e => e.PermohonanId == permohonanId);
+        }
+
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);
