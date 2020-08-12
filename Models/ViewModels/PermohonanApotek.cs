@@ -5,7 +5,7 @@ namespace PsefApiOData.Models
     /// <summary>
     /// Represents multiple Apotek HTTP Post data.
     /// </summary>
-    public class MultiApotekPostData
+    public class PermohonanApotek
     {
         /// <summary>
         /// Gets or sets the Permohonan unique identifier.

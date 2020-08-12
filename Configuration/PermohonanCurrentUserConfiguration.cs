@@ -20,7 +20,7 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<Permohonan> permohonan = builder
                 .EntitySet<Permohonan>(nameof(PermohonanCurrentUser))
                 .EntityType;
-            builder.ComplexType<MultiApotekPostData>();
+            builder.ComplexType<PermohonanApotek>();
 
             var list = permohonan.Collection
                 .Function(nameof(PermohonanCurrentUser.ListApotek));

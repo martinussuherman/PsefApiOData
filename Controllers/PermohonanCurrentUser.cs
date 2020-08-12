@@ -243,7 +243,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> CreateApotek(
-            [FromBody] MultiApotekPostData create)
+            [FromBody] PermohonanApotek create)
         {
             if (!ModelState.IsValid)
             {
