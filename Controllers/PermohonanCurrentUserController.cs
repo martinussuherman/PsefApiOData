@@ -20,8 +20,8 @@ namespace PsefApiOData.Controllers
     /// </summary>
     [Authorize]
     [ApiVersion(V0_1)]
-    [ODataRoutePrefix(nameof(PermohonanCurrentUser))]
-    public class PermohonanCurrentUser : ODataController
+    [ODataRoutePrefix(nameof(Permohonan) + CurrentUser)]
+    public class PermohonanCurrentUserController : ODataController
     {
         /// <summary>
         /// Permohonan for current user REST service.
@@ -29,7 +29,7 @@ namespace PsefApiOData.Controllers
         /// <param name="context">Database context.</param>
         /// <param name="delegateService">Api delegation service.</param>
         /// <param name="identityApi">Identity Api service.</param>
-        public PermohonanCurrentUser(
+        public PermohonanCurrentUserController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
             IIdentityApiService identityApi)

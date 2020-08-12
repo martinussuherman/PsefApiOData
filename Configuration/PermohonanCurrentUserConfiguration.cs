@@ -18,17 +18,17 @@ namespace PsefApiOData.Configuration
         public void Apply(ODataModelBuilder builder, ApiVersion apiVersion)
         {
             EntityTypeConfiguration<Permohonan> permohonan = builder
-                .EntitySet<Permohonan>(nameof(PermohonanCurrentUser))
+                .EntitySet<Permohonan>(nameof(PermohonanCurrentUserController))
                 .EntityType;
             builder.ComplexType<PermohonanApotek>();
 
             var list = permohonan.Collection
-                .Function(nameof(PermohonanCurrentUser.ListApotek));
+                .Function(nameof(PermohonanCurrentUserController.ListApotek));
             list.Parameter<uint>("permohonanId");
             list.ReturnsFromEntitySet<Apotek>(nameof(Apotek));
 
             var create = permohonan.Collection
-                .Action(nameof(PermohonanCurrentUser.CreateApotek));
+                .Action(nameof(PermohonanCurrentUserController.CreateApotek));
             create.Returns<int>();
 
             permohonan.HasKey(p => p.Id);
