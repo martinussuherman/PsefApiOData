@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace PsefApiOData.Models
@@ -62,6 +61,19 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The associated Provinsi identifier.</value>
         public byte? ProvinsiId { get; set; }
+
+        /// <summary>
+        /// (Read only) Gets the associated Provinsi name.
+        /// </summary>
+        /// <value>The associated Provinsi name.</value>
+        [NotMapped]
+        public string ProvinsiName
+        {
+            get => Provinsi?.Name;
+            set
+            {
+            }
+        }
 
         /// <summary>
         /// Gets or sets Permohonan associated with the Apotek.
