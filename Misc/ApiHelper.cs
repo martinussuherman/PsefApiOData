@@ -42,6 +42,18 @@ namespace PsefApiOData.Misc
         }
 
         /// <summary>
+        /// Retrieve name of the user executing the request.
+        /// </summary>
+        /// <param name="user">User info.</param>
+        /// <returns>User name.</returns>
+        internal static string GetUserName(ClaimsPrincipal user)
+        {
+            return user.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.Name || c.Type == "name")
+                .Value;
+        }
+
+        /// <summary>
         /// Read configuration data.
         /// </summary>
         /// <param name="configuration">Application configuration.</param>
