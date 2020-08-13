@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace PsefApiOData.Models
@@ -37,16 +38,77 @@ namespace PsefApiOData.Models
         public uint? PreviousPerizinanId { get; set; }
 
         /// <summary>
-        /// Gets or sets the associated Status Permohonan identifier.
+        /// Gets or sets the associated Permohonan Status identifier.
         /// </summary>
-        /// <value>The associated Status Permohonan identifier.</value>
-        public byte StatusId { get; set; }
+        /// <value>The associated Permohonan Status identifier.</value>
+        public byte StatusId
+        {
+            get
+            {
+                return _statusId;
+            }
+            set
+            {
+                _statusId = value;
+                Status = PermohonanStatus.List.Find(e => e.Id == value);
+            }
+        }
 
         /// <summary>
-        /// Gets or sets the associated Type Permohonan identifier.
+        /// (Read Only) Gets the associated Permohonan Status name.
         /// </summary>
-        /// <value>The associated Type Permohonan identifier.</value>
-        public byte TypeId { get; set; }
+        /// <value>The associated Permohonan Status name.</value>
+        [NotMapped]
+        public string StatusName
+        {
+            get => Status.Name;
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// (Read Only) Gets the associated Permohonan Status name for Pemohon.
+        /// </summary>
+        /// <value>The associated Permohonan Status name for Pemohon.</value>
+        [NotMapped]
+        public string PemohonStatusName
+        {
+            get => Status.PemohonDisplayedName;
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the associated Permohonan Type identifier.
+        /// </summary>
+        /// <value>The associated Permohonan Type identifier.</value>
+        public byte TypeId
+        {
+            get
+            {
+                return _typeId;
+            }
+            set
+            {
+                _typeId = value;
+                Type = PermohonanType.List.Find(e => e.Id == value);
+            }
+        }
+
+        /// <summary>
+        /// (Read Only) Gets the associated Permohonan Type name.
+        /// </summary>
+        /// <value>The associated Permohonan Type name.</value>
+        [NotMapped]
+        public string TypeName
+        {
+            get => Type.Name;
+            set
+            {
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Permohonan number.
@@ -146,5 +208,22 @@ namespace PsefApiOData.Models
         /// <value>The associated list of History Permohonan.</value>
         [IgnoreDataMember]
         public virtual ICollection<HistoryPermohonan> HistoryPermohonan { get; set; }
+
+        /// <summary>
+        /// Gets or sets Permohonan Status associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated Permohonan Status.</value>
+        [NotMapped]
+        public PermohonanStatus Status { get; set; } = PermohonanStatus.Dibuat;
+
+        /// <summary>
+        /// Gets or sets Permohonan Type associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated Permohonan Type.</value>
+        [NotMapped]
+        public PermohonanType Type { get; set; } = PermohonanType.Baru;
+
+        private byte _statusId;
+        private byte _typeId;
     }
 }
