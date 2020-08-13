@@ -177,7 +177,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status401Unauthorized)]
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status422UnprocessableEntity)]
-        public async Task<IActionResult> PatchCurrentUser(
+        public async Task<IActionResult> Patch(
             [FromODataUri] uint id,
             [FromBody] Delta<Permohonan> delta)
         {
@@ -257,7 +257,7 @@ namespace PsefApiOData.Controllers
         /// *Min role: None*
         /// </remarks>
         /// <param name="create">The list of Apotek to create.</param>
-        /// <returns>The created list of Apotek count.</returns>
+        /// <returns>None.</returns>
         /// <response code="204">The list of Apotek was successfully created.</response>
         /// <response code="400">The list of Apotek is invalid.</response>
         [HttpPost]
