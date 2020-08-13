@@ -7,7 +7,6 @@ namespace PsefApiOData.Models
     /// </summary>
     public partial class PermohonanStatus
     {
-
         /// <summary>
         /// Gets or sets the unique identifier for the Permohonan Status.
         /// </summary>
@@ -27,89 +26,167 @@ namespace PsefApiOData.Models
         public string PemohonDisplayedName { get; set; }
 
         /// <summary>
+        /// Permohonan Status Dibuat.
+        /// </summary>
+        /// <value>Permohonan Status Dibuat.</value>
+        public static PermohonanStatus Dibuat => new PermohonanStatus
+        {
+            Id = 1,
+            Name = "Dibuat oleh Pemohon",
+            PemohonDisplayedName = "Dibuat"
+        };
+
+        /// <summary>
+        /// Permohonan Status Diajukan.
+        /// </summary>
+        /// <value>Permohonan Status Diajukan.</value>
+        public static PermohonanStatus Diajukan => new PermohonanStatus
+        {
+            Id = 2,
+            Name = "Diajukan oleh Pemohon",
+            PemohonDisplayedName = "Diajukan"
+        };
+
+        /// <summary>
+        /// Permohonan Status Disetujui Verifikator.
+        /// </summary>
+        /// <value>Permohonan Status Disetujui Verifikator.</value>
+        public static PermohonanStatus DisetujuiVerifikator => new PermohonanStatus
+        {
+            Id = 3,
+            Name = "Disetujui oleh Verifikator",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Dikembalikan Verifikator.
+        /// </summary>
+        /// <value>Permohonan Status Dikembalikan Verifikator.</value>
+        public static PermohonanStatus DikembalikanVerifikator => new PermohonanStatus
+        {
+            Id = 4,
+            Name = "Dikembalikan oleh Verifikator",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Disetujui Kepala Seksi.
+        /// </summary>
+        /// <value>Permohonan Status Disetujui Kepala Seksi.</value>
+        public static PermohonanStatus DisetujuiKepalaSeksi => new PermohonanStatus
+        {
+            Id = 5,
+            Name = "Disetujui oleh Kepala Seksi",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Dikembalikan Kepala Seksi.
+        /// </summary>
+        /// <value>Permohonan Status Dikembalikan Kepala Seksi.</value>
+        public static PermohonanStatus DikembalikanKepalaSeksi => new PermohonanStatus
+        {
+            Id = 6,
+            Name = "Dikembalikan oleh Kepala Seksi",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Disetujui Kepala Sub Direktorat.
+        /// </summary>
+        /// <value>Permohonan Status Disetujui Kepala Sub Direktorat.</value>
+        public static PermohonanStatus DisetujuiKepalaSubDirektorat => new PermohonanStatus
+        {
+            Id = 7,
+            Name = "Disetujui oleh Kepala Sub Direktorat",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Dikembalikan Kepala Sub Direktorat.
+        /// </summary>
+        /// <value>Permohonan Status Dikembalikan Kepala Sub Direktorat.</value>
+        public static PermohonanStatus DikembalikanKepalaSubDirektorat => new PermohonanStatus
+        {
+            Id = 8,
+            Name = "Dikembalikan oleh Kepala Sub Direktorat",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Disetujui Direktur Pelayanan Farmasi.
+        /// </summary>
+        /// <value>Permohonan Status Disetujui Direktur Pelayanan Farmasi.</value>
+        public static PermohonanStatus DisetujuiDirekturPelayananFarmasi => new PermohonanStatus
+        {
+            Id = 9,
+            Name = "Disetujui oleh Direktur Pelayanan Farmasi",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Dikembalikan Direktur Pelayanan Farmasi.
+        /// </summary>
+        /// <value>Permohonan Status Dikembalikan Direktur Pelayanan Farmasi.</value>
+        public static PermohonanStatus DikembalikanDirekturPelayananFarmasi => new PermohonanStatus
+        {
+            Id = 10,
+            Name = "Dikembalikan oleh Direktur Pelayanan Farmasi",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Disetujui Direktur Jenderal.
+        /// </summary>
+        /// <value>Permohonan Status Disetujui Direktur Jenderal.</value>
+        public static PermohonanStatus DisetujuiDirekturJenderal => new PermohonanStatus
+        {
+            Id = 11,
+            Name = "Disetujui oleh Direktur Jenderal",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Dikembalikan Direktur Jenderal.
+        /// </summary>
+        /// <value>Permohonan Status Dikembalikan Direktur Jenderal.</value>
+        public static PermohonanStatus DikembalikanDirekturJenderal => new PermohonanStatus
+        {
+            Id = 12,
+            Name = "Dikembalikan oleh Direktur Jenderal",
+            PemohonDisplayedName = "Dalam proses"
+        };
+
+        /// <summary>
+        /// Permohonan Status Selesai.
+        /// </summary>
+        /// <value>Permohonan Status Selesai.</value>
+        public static PermohonanStatus Selesai => new PermohonanStatus
+        {
+            Id = 13,
+            Name = "Selesai",
+            PemohonDisplayedName = "Selesai"
+        };
+
+        /// <summary>
         /// Gets list of predefined Permohonan Status.
         /// </summary>
         /// <value></value>
         public static List<PermohonanStatus> List => new List<PermohonanStatus>
         {
-            new PermohonanStatus
-            {
-                Id=1,
-                Name="Dibuat oleh Pemohon",
-                PemohonDisplayedName="Dibuat"
-            },
-            new PermohonanStatus
-            {
-                Id=2,
-                Name="Diajukan oleh Pemohon",
-                PemohonDisplayedName="Diajukan"
-            },
-            new PermohonanStatus
-            {
-                Id=3,
-                Name="Disetujui oleh Verifikator",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=4,
-                Name="Dikembalikan oleh Verifikator",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=5,
-                Name="Disetujui oleh Kepala Seksi",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=6,
-                Name="Dikembalikan oleh Kepala Seksi",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=7,
-                Name="Disetujui oleh Kepala Sub Direktorat",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=8,
-                Name="Dikembalikan oleh Kepala Sub Direktorat",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=9,
-                Name="Disetujui oleh Direktur Pelayanan Farmasi",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=10,
-                Name="Dikembalikan oleh Direktur Pelayanan Farmasi",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=11,
-                Name="Disetujui oleh Direktur Jenderal",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=12,
-                Name="Dikembalikan oleh Direktur Jenderal",
-                PemohonDisplayedName="Dalam proses"
-            },
-            new PermohonanStatus
-            {
-                Id=13,
-                Name="Selesai",
-                PemohonDisplayedName="Selesai"
-            }
+            Dibuat,
+            Diajukan,
+            DisetujuiVerifikator,
+            DikembalikanVerifikator,
+            DisetujuiKepalaSeksi,
+            DikembalikanKepalaSeksi,
+            DisetujuiKepalaSubDirektorat,
+            DikembalikanKepalaSubDirektorat,
+            DisetujuiDirekturPelayananFarmasi,
+            DikembalikanDirekturPelayananFarmasi,
+            DisetujuiDirekturJenderal,
+            DikembalikanDirekturJenderal,
+            Selesai
         };
     }
 }
