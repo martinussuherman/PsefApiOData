@@ -116,6 +116,7 @@ namespace PsefApiOData.Controllers
             }
 
             create.PemohonId = pemohon.Id;
+            create.StatusId = 1;
             _context.Permohonan.Add(create);
 
             try
@@ -129,6 +130,25 @@ namespace PsefApiOData.Controllers
                     return Conflict();
                 }
 
+                throw;
+            }
+
+            HistoryPermohonan createHistory = new HistoryPermohonan
+            {
+                PermohonanId = create.Id,
+                StatusId = 1,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(createHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
                 throw;
             }
 
