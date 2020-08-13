@@ -7,7 +7,6 @@ namespace PsefApiOData.Models
     /// </summary>
     public partial class PermohonanType
     {
-
         /// <summary>
         /// Gets or sets the unique identifier for the Permohonan Type.
         /// </summary>
@@ -21,21 +20,33 @@ namespace PsefApiOData.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Permohonan Type Baru.
+        /// </summary>
+        /// <value>Permohonan Type Baru.</value>
+        public static PermohonanType Baru => new PermohonanType
+        {
+            Id = 1,
+            Name = "Baru"
+        };
+
+        /// <summary>
+        /// Permohonan Type Perpanjangan.
+        /// </summary>
+        /// <value>Permohonan Type Perpanjangan.</value>
+        public static PermohonanType Perpanjangan => new PermohonanType
+        {
+            Id = 2,
+            Name = "Perpanjangan"
+        };
+
+        /// <summary>
         /// Gets list of predefined Permohonan Type.
         /// </summary>
         /// <value></value>
         public static List<PermohonanType> List => new List<PermohonanType>
         {
-            new PermohonanType
-            {
-                Id=1,
-                Name="Baru"
-            },
-            new PermohonanType
-            {
-                Id=2,
-                Name="Perpanjangan"
-            }
+            Baru,
+            Perpanjangan
         };
     }
 }
