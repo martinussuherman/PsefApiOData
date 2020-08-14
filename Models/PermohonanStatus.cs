@@ -33,7 +33,7 @@ namespace PsefApiOData.Models
         {
             Id = 1,
             Name = "Dibuat oleh Pemohon",
-            PemohonDisplayedName = "Dibuat"
+            PemohonDisplayedName = "Rumusan"
         };
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace PsefApiOData.Models
         {
             Id = 3,
             Name = "Disetujui oleh Verifikator",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace PsefApiOData.Models
         {
             Id = 4,
             Name = "Dikembalikan oleh Verifikator",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Rumusan"
         };
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace PsefApiOData.Models
         {
             Id = 5,
             Name = "Disetujui oleh Kepala Seksi",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace PsefApiOData.Models
         {
             Id = 6,
             Name = "Dikembalikan oleh Kepala Seksi",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace PsefApiOData.Models
         {
             Id = 7,
             Name = "Disetujui oleh Kepala Sub Direktorat",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace PsefApiOData.Models
         {
             Id = 8,
             Name = "Dikembalikan oleh Kepala Sub Direktorat",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace PsefApiOData.Models
         {
             Id = 9,
             Name = "Disetujui oleh Direktur Pelayanan Farmasi",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace PsefApiOData.Models
         {
             Id = 10,
             Name = "Dikembalikan oleh Direktur Pelayanan Farmasi",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace PsefApiOData.Models
         {
             Id = 11,
             Name = "Disetujui oleh Direktur Jenderal",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace PsefApiOData.Models
         {
             Id = 12,
             Name = "Dikembalikan oleh Direktur Jenderal",
-            PemohonDisplayedName = "Dalam proses"
+            PemohonDisplayedName = "Dalam Proses"
         };
 
         /// <summary>
