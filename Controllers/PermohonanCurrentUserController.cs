@@ -116,7 +116,7 @@ namespace PsefApiOData.Controllers
             }
 
             create.PemohonId = pemohon.Id;
-            create.StatusId = 1;
+            create.StatusId = PermohonanStatus.Dibuat.Id;
             _context.Permohonan.Add(create);
 
             try
@@ -136,7 +136,7 @@ namespace PsefApiOData.Controllers
             HistoryPermohonan createHistory = new HistoryPermohonan
             {
                 PermohonanId = create.Id,
-                StatusId = 1,
+                StatusId = PermohonanStatus.Dibuat.Id,
                 UpdatedAt = DateTime.Now,
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
@@ -225,6 +225,55 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Submit an existing Permohonan for the current user.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="data">The requested Permohonan identifier.</param>
+        /// <returns>None.</returns>
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> Ajukan([FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .Include(c => c.Pemohon)
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    c.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.Diajukan.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.Diajukan.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Retrieves all Apotek for the specified current user Permohonan.
         /// </summary>
         /// <remarks>
@@ -289,6 +338,62 @@ namespace PsefApiOData.Controllers
             }
 
             await _context.Apotek.AddRangeAsync(create.Apotek);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Updates list of Apotek for the specified current user Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="update">The list of Apotek to update.</param>
+        /// <returns>None.</returns>
+        /// <response code="204">The list of Apotek was successfully updated.</response>
+        /// <response code="400">The list of Apotek is invalid.</response>
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> UpdateApotek(
+            [FromBody] PermohonanApotek update)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Permohonan permohonan = await _context.Permohonan
+                .FirstOrDefaultAsync(e =>
+                    e.Id == update.PermohonanId &&
+                    e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+
+            if (permohonan == null)
+            {
+                return BadRequest();
+            }
+
+            foreach (Apotek apotek in update.Apotek)
+            {
+                if (!_context.Apotek.Any(e =>
+                    e.Id == apotek.Id &&
+                    e.PermohonanId == update.PermohonanId))
+                {
+                    return BadRequest();
+                }
+            }
+
+            _context.UpdateRange(update.Apotek);
 
             try
             {

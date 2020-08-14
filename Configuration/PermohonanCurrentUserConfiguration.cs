@@ -20,7 +20,6 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<Permohonan> permohonan = builder
                 .EntitySet<Permohonan>(nameof(Permohonan) + ApiInfo.CurrentUser)
                 .EntityType;
-            builder.ComplexType<PermohonanApotek>();
 
             permohonan.Collection
                 .Function(nameof(PermohonanCurrentUserController.ListApotek))
@@ -28,8 +27,11 @@ namespace PsefApiOData.Configuration
                 .Parameter<uint>("permohonanId");
 
             permohonan.Collection
-                .Action(nameof(PermohonanCurrentUserController.CreateApotek))
-                .Returns<int>();
+                .Action(nameof(PermohonanCurrentUserController.Ajukan));
+            permohonan.Collection
+                .Action(nameof(PermohonanCurrentUserController.CreateApotek));
+            permohonan.Collection
+                .Action(nameof(PermohonanCurrentUserController.UpdateApotek));
 
             permohonan.HasKey(p => p.Id);
             permohonan

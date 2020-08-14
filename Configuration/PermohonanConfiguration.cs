@@ -20,10 +20,13 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<Permohonan> permohonan = builder
                 .EntitySet<Permohonan>(nameof(Permohonan))
                 .EntityType;
+            builder.ComplexType<PermohonanApotek>();
+            builder.ComplexType<PermohonanSystemUpdate>();
 
-            permohonan.Collection
-                .Function(ApiInfo.CurrentUser)
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Property(e => e.StatusName).AddedExplicitly = true;
+            permohonan.Property(e => e.PemohonStatusName).AddedExplicitly = true;
+            permohonan.Property(e => e.TypeName).AddedExplicitly = true;
+
             permohonan.Collection
                 .Function(nameof(PermohonanController.TotalCount))
                 .Returns<long>();
