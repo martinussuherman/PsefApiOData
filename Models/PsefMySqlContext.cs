@@ -187,6 +187,13 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.StatusId).HasColumnType("tinyint(3) unsigned");
 
+                entity.Property(e => e.Reason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("'current_timestamp()'");

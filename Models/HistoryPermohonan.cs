@@ -27,6 +27,12 @@ namespace PsefApiOData.Models
         public byte StatusId { get; set; }
 
         /// <summary>
+        /// Gets or sets the History Permohonan reason.
+        /// </summary>
+        /// <value>The History Permohonan's reason.</value>
+        public string Reason { get; set; }
+
+        /// <summary>
         /// Gets or sets the History Permohonan updated date and time.
         /// </summary>
         /// <value>The History Permohonan's updated date and time.</value>
