@@ -608,6 +608,210 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Accept an existing Permohonan by Direktur Pelayanan Farmasi.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Diryanfar*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> DirekturPelayananFarmasiSetujui(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Return an existing Permohonan by Direktur Pelayanan Farmasi.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Diryanfar*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> DirekturPelayananFarmasiKembalikan(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id,
+                Reason = data.Reason,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Accept an existing Permohonan by Direktur Jenderal.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Dirjen*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Dirjen)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> DirekturJenderalSetujui(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DisetujuiDirekturJenderal.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DisetujuiDirekturJenderal.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Return an existing Permohonan by Direktur Jenderal.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Dirjen*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Dirjen)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> DirekturJenderalKembalikan(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DikembalikanDirekturJenderal.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DikembalikanDirekturJenderal.Id,
+                Reason = data.Reason,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Retrieves all Apotek for the specified Permohonan.
         /// </summary>
         /// <remarks>

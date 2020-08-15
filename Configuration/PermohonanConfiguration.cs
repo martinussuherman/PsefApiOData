@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
 using PsefApiOData.Models;
 using PsefApiOData.Controllers;
@@ -39,6 +39,14 @@ namespace PsefApiOData.Configuration
                 .Action(nameof(PermohonanController.KepalaSubDirektoratSetujui));
             permohonan.Collection
                 .Action(nameof(PermohonanController.KepalaSubDirektoratKembalikan));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.DirekturPelayananFarmasiSetujui));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.DirekturPelayananFarmasiKembalikan));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.DirekturJenderalSetujui));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.DirekturJenderalKembalikan));
 
             permohonan.Collection
                 .Function(nameof(PermohonanController.TotalCount))
