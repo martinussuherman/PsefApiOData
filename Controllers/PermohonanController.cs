@@ -812,6 +812,105 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Retrieves all pending Permohonan for Verifikator.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Verifikator*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Verifikator.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Verifikator)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> VerifikatorPending()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.Diajukan.Id ||
+                c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all pending Permohonan for Kepala Seksi.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasi*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Kepala Seksi.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> KepalaSeksiPending()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
+                c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all pending Permohonan for Kepala Sub Direktorat.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasubdit*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Kepala Sub Direktorat.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> KepalaSubDirektoratPending()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
+                c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all pending Permohonan for Direktur Pelayanan Farmasi.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Diryanfar*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Direktur Pelayanan Farmasi.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> DirekturPelayananFarmasiPending()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
+                c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all pending Permohonan for Direktur Jenderal.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Dirjen*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Direktur Jenderal.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Dirjen)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> DirekturJenderalPending()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
+        }
+
+        /// <summary>
         /// Retrieves all Apotek for the specified Permohonan.
         /// </summary>
         /// <remarks>
