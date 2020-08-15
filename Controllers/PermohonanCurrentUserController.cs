@@ -230,7 +230,7 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
-        /// <param name="data">The requested Permohonan identifier.</param>
+        /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
         [HttpPost]
         [Produces(JsonOutput)]
@@ -242,7 +242,9 @@ namespace PsefApiOData.Controllers
                 .Include(c => c.Pemohon)
                 .FirstOrDefaultAsync(c =>
                     c.Id == data.PermohonanId &&
-                    c.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+                    c.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                    (c.StatusId == PermohonanStatus.Dibuat.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanVerifikator.Id));
 
             if (update == null)
             {
