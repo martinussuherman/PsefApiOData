@@ -299,6 +299,315 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Accept an existing Permohonan by Verifikator.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Verifikator*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Verifikator)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> VerifikatorAccept(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.Diajukan.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DisetujuiVerifikator.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DisetujuiVerifikator.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Return an existing Permohonan by Verifikator.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Verifikator*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Verifikator)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> VerifikatorReturn(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.Diajukan.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DikembalikanVerifikator.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DikembalikanVerifikator.Id,
+                Reason = data.Reason,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Accept an existing Permohonan by Kepala Seksi.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasi*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> KepalaSeksiAccept(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DisetujuiKepalaSeksi.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DisetujuiKepalaSeksi.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Return an existing Permohonan by Kepala Seksi.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasi*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> KepalaSeksiReturn(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DikembalikanKepalaSeksi.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DikembalikanKepalaSeksi.Id,
+                Reason = data.Reason,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Accept an existing Permohonan by Kepala Sub Direktorat.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasubdit*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> KepalaSubDirektoratAccept(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DisetujuiKepalaSubDirektorat.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DisetujuiKepalaSubDirektorat.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Return an existing Permohonan by Kepala Sub Direktorat.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasubdit*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> KepalaSubDirektoratReturn(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id));
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.DikembalikanKepalaSubDirektorat.Id;
+
+            HistoryPermohonan submitHistory = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.DikembalikanKepalaSubDirektorat.Id,
+                Reason = data.Reason,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(submitHistory);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Retrieves all Apotek for the specified Permohonan.
         /// </summary>
         /// <remarks>

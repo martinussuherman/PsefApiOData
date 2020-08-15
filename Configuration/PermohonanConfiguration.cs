@@ -28,6 +28,19 @@ namespace PsefApiOData.Configuration
             permohonan.Property(e => e.TypeName).AddedExplicitly = true;
 
             permohonan.Collection
+                .Action(nameof(PermohonanController.VerifikatorAccept));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.VerifikatorReturn));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.KepalaSeksiAccept));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.KepalaSeksiReturn));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.KepalaSubDirektoratAccept));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.KepalaSubDirektoratReturn));
+
+            permohonan.Collection
                 .Function(nameof(PermohonanController.TotalCount))
                 .Returns<long>();
             permohonan.Collection
