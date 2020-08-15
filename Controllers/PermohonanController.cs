@@ -311,7 +311,7 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> VerifikatorAccept(
+        public async Task<IActionResult> VerifikatorSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -362,7 +362,7 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> VerifikatorReturn(
+        public async Task<IActionResult> VerifikatorKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -414,7 +414,7 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> KepalaSeksiAccept(
+        public async Task<IActionResult> KepalaSeksiSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -465,7 +465,7 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> KepalaSeksiReturn(
+        public async Task<IActionResult> KepalaSeksiKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -517,7 +517,7 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> KepalaSubDirektoratAccept(
+        public async Task<IActionResult> KepalaSubDirektoratSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -568,7 +568,7 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> KepalaSubDirektoratReturn(
+        public async Task<IActionResult> KepalaSubDirektoratKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan

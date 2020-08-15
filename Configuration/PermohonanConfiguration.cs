@@ -28,17 +28,17 @@ namespace PsefApiOData.Configuration
             permohonan.Property(e => e.TypeName).AddedExplicitly = true;
 
             permohonan.Collection
-                .Action(nameof(PermohonanController.VerifikatorAccept));
+                .Action(nameof(PermohonanController.VerifikatorSetujui));
             permohonan.Collection
-                .Action(nameof(PermohonanController.VerifikatorReturn));
+                .Action(nameof(PermohonanController.VerifikatorKembalikan));
             permohonan.Collection
-                .Action(nameof(PermohonanController.KepalaSeksiAccept));
+                .Action(nameof(PermohonanController.KepalaSeksiSetujui));
             permohonan.Collection
-                .Action(nameof(PermohonanController.KepalaSeksiReturn));
+                .Action(nameof(PermohonanController.KepalaSeksiKembalikan));
             permohonan.Collection
-                .Action(nameof(PermohonanController.KepalaSubDirektoratAccept));
+                .Action(nameof(PermohonanController.KepalaSubDirektoratSetujui));
             permohonan.Collection
-                .Action(nameof(PermohonanController.KepalaSubDirektoratReturn));
+                .Action(nameof(PermohonanController.KepalaSubDirektoratKembalikan));
 
             permohonan.Collection
                 .Function(nameof(PermohonanController.TotalCount))
