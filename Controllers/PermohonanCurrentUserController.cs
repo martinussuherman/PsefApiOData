@@ -276,6 +276,69 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Retrieves all Permohonan for the current user with status Rumusan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>All available Permohonan for the current user with status Rumusan.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
+        [EnableQuery]
+        public IQueryable<Permohonan> Rumusan()
+        {
+            return _context.Permohonan.Where(e =>
+                e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                (e.StatusId == PermohonanStatus.Dibuat.Id ||
+                e.StatusId == PermohonanStatus.DikembalikanVerifikator.Id));
+        }
+
+        /// <summary>
+        /// Retrieves all Permohonan for the current user with status Progress.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>All available Permohonan for the current user with status Progress.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
+        [EnableQuery]
+        public IQueryable<Permohonan> Progress()
+        {
+            return _context.Permohonan.Where(e =>
+                e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                e.StatusId != PermohonanStatus.Dibuat.Id &&
+                e.StatusId != PermohonanStatus.DikembalikanVerifikator.Id &&
+                e.StatusId != PermohonanStatus.Selesai.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all Permohonan for the current user with status Selesai.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>All available Permohonan for the current user with status Selesai.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
+        [EnableQuery]
+        public IQueryable<Permohonan> Selesai()
+        {
+            return _context.Permohonan.Where(e =>
+                e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                e.StatusId == PermohonanStatus.Selesai.Id);
+        }
+
+        /// <summary>
         /// Retrieves all Apotek for the specified current user Permohonan.
         /// </summary>
         /// <remarks>

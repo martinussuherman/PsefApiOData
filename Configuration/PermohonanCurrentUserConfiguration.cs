@@ -25,6 +25,15 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanCurrentUserController.ListApotek))
                 .ReturnsFromEntitySet<Apotek>(nameof(Apotek))
                 .Parameter<uint>("permohonanId");
+            permohonan.Collection
+                .Function(nameof(PermohonanCurrentUserController.Rumusan))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanCurrentUserController.Progress))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanCurrentUserController.Selesai))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
 
             permohonan.Collection
                 .Action(nameof(PermohonanCurrentUserController.Ajukan));
