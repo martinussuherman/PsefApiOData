@@ -67,6 +67,15 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanController.DirekturJenderalPending))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
+                .Function(nameof(PermohonanController.Rumusan))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanController.Progress))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanController.Selesai))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
                 .Function(nameof(PermohonanController.ListApotek))
                 .ReturnsFromEntitySet<Apotek>(nameof(Apotek))
                 .Parameter<uint>("permohonanId");
