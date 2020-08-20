@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 using PsefApiOData.Controllers;
@@ -21,6 +21,8 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<HistoryPermohonan> history = builder
                 .EntitySet<HistoryPermohonan>(nameof(HistoryPermohonan))
                 .EntityType;
+
+            history.Property(e => e.StatusName).AddedExplicitly = true;
 
             history.Collection
                 .Function(nameof(HistoryPermohonanController.TotalCount))
