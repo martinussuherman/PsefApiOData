@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
@@ -25,18 +25,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the associated Status Permohonan identifier.
         /// </summary>
         /// <value>The associated Status Permohonan identifier.</value>
-        public byte StatusId
-        {
-            get
-            {
-                return _statusId;
-            }
-            set
-            {
-                _statusId = value;
-                Status = PermohonanStatus.List.Find(e => e.Id == value);
-            }
-        }
+        public byte StatusId { get; set; }
 
         /// <summary>
         /// (Read Only) Gets the associated History Permohonan Status name.
@@ -45,11 +34,12 @@ namespace PsefApiOData.Models
         [NotMapped]
         public string StatusName
         {
-            get => Status.Name;
+            get => PermohonanStatus.List.Find(e => e.Id == StatusId).Name;
             set
             {
             }
         }
+
         /// <summary>
         /// Gets or sets the History Permohonan reason.
         /// </summary>
@@ -74,14 +64,5 @@ namespace PsefApiOData.Models
         /// <value>The associated Permohonan.</value>
         [IgnoreDataMember]
         public virtual Permohonan Permohonan { get; set; }
-
-        /// <summary>
-        /// Gets or sets Permohonan Status associated with the History Permohonan.
-        /// </summary>
-        /// <value>The associated Permohonan Status.</value>
-        [NotMapped]
-        public PermohonanStatus Status { get; set; } = PermohonanStatus.Dibuat;
-
-        private byte _statusId;
     }
 }
