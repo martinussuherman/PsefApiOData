@@ -911,6 +911,115 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Retrieves pending Permohonan for Verifikator total count.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Verifikator*
+        /// </remarks>
+        /// <returns>Pending Permohonan for Verifikator total count.</returns>
+        /// <response code="200">Total count of Permohonan retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Verifikator)]
+        [HttpGet]
+        [ODataRoute(nameof(VerifikatorPendingTotal))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> VerifikatorPendingTotal()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.Diajukan.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id)
+                .LongCountAsync();
+        }
+
+        /// <summary>
+        /// Retrieves pending Permohonan for Kepala Seksi total count.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasi*
+        /// </remarks>
+        /// <returns>Pending Permohonan for Kepala Seksi total count.</returns>
+        /// <response code="200">Total count of Permohonan retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [HttpGet]
+        [ODataRoute(nameof(KepalaSeksiPendingTotal))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> KepalaSeksiPendingTotal()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id)
+                .LongCountAsync();
+        }
+
+        /// <summary>
+        /// Retrieves pending Permohonan for Kepala Sub Direktorat total count.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Kasubdit*
+        /// </remarks>
+        /// <returns>Pending Permohonan for Kepala Sub Direktorat total count.</returns>
+        /// <response code="200">Total count of Permohonan retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [HttpGet]
+        [ODataRoute(nameof(KepalaSubDirektoratPendingTotal))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> KepalaSubDirektoratPendingTotal()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id)
+                .LongCountAsync();
+        }
+
+        /// <summary>
+        /// Retrieves pending Permohonan for Direktur Pelayanan Farmasi total count.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Diryanfar*
+        /// </remarks>
+        /// <returns>Pending Permohonan for Direktur Pelayanan Farmasi total count.</returns>
+        /// <response code="200">Total count of Permohonan retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [HttpGet]
+        [ODataRoute(nameof(DirekturPelayananFarmasiPendingTotal))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> DirekturPelayananFarmasiPendingTotal()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id)
+                .LongCountAsync();
+        }
+
+        /// <summary>
+        /// Retrieves pending Permohonan for Direktur Jenderal total count.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Dirjen*
+        /// </remarks>
+        /// <returns>Pending Permohonan for Direktur Jenderal total count.</returns>
+        /// <response code="200">Total count of Permohonan retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Dirjen)]
+        [HttpGet]
+        [ODataRoute(nameof(DirekturJenderalPendingTotal))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> DirekturJenderalPendingTotal()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
+                .LongCountAsync();
+        }
+
+        /// <summary>
         /// Retrieves all Permohonan with status Rumusan.
         /// </summary>
         /// <remarks>

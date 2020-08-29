@@ -52,6 +52,21 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanController.TotalCount))
                 .Returns<long>();
             permohonan.Collection
+                .Function(nameof(PermohonanController.VerifikatorPendingTotal))
+                .Returns<long>();
+            permohonan.Collection
+                .Function(nameof(PermohonanController.KepalaSeksiPendingTotal))
+                .Returns<long>();
+            permohonan.Collection
+                .Function(nameof(PermohonanController.KepalaSubDirektoratPendingTotal))
+                .Returns<long>();
+            permohonan.Collection
+                .Function(nameof(PermohonanController.DirekturPelayananFarmasiPendingTotal))
+                .Returns<long>();
+            permohonan.Collection
+                .Function(nameof(PermohonanController.DirekturJenderalPendingTotal))
+                .Returns<long>();
+            permohonan.Collection
                 .Function(nameof(PermohonanController.VerifikatorPending))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
