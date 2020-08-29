@@ -54,6 +54,18 @@ namespace PsefApiOData.Misc
         }
 
         /// <summary>
+        /// Retrieve role of the user executing the request.
+        /// </summary>
+        /// <param name="user">User info.</param>
+        /// <returns>User role.</returns>
+        internal static string GetUserRole(ClaimsPrincipal user)
+        {
+            return user.Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?
+                .Value;
+        }
+
+        /// <summary>
         /// Read configuration data.
         /// </summary>
         /// <param name="configuration">Application configuration.</param>
