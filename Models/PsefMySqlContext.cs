@@ -384,6 +384,11 @@ namespace PsefApiOData.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.LastUpdate)
+                    .HasColumnType("timestamp")
+                    .HasDefaultValueSql("'current_timestamp()'")
+                    .ValueGeneratedOnAddOrUpdate();
+
                 entity.Property(e => e.PemohonId)
                     .HasColumnType("int(10) unsigned")
                     .HasDefaultValueSql("'NULL'");

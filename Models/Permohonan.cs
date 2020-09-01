@@ -167,6 +167,12 @@ namespace PsefApiOData.Models
         public string DokumenApiUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan last update.
+        /// </summary>
+        /// <value>The Permohonan's last update.</value>
+        public DateTime LastUpdate { get; set; }
+
+        /// <summary>
         /// Gets or sets Pemohon associated with the Permohonan.
         /// </summary>
         /// <value>The associated Pemohon.</value>
