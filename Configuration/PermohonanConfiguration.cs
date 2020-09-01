@@ -1,4 +1,4 @@
-using Microsoft.AspNet.OData.Builder;
+﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
 using PsefApiOData.Models;
 using PsefApiOData.Controllers;
@@ -20,7 +20,6 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<Permohonan> permohonan = builder
                 .EntitySet<Permohonan>(nameof(Permohonan))
                 .EntityType;
-            builder.ComplexType<PermohonanApotek>();
             builder.ComplexType<PermohonanSystemUpdate>();
 
             permohonan.Property(e => e.StatusName).AddedExplicitly = true;
