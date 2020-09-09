@@ -911,6 +911,44 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Retrieves all pending Permohonan for Validator Sertifikat.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Validator*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Validator Sertifikat.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Validator)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> ValidatorSertifikatPending()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all finished Permohonan for Validator Sertifikat.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Validator*
+        /// </remarks>
+        /// <returns>All available finished Permohonan for Validator Sertifikat.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Validator)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> ValidatorSertifikatDone()
+        {
+            return _context.Permohonan.Where(c =>
+                c.StatusId == PermohonanStatus.Selesai.Id);
+        }
+
+        /// <summary>
         /// Retrieves pending Permohonan for Verifikator total count.
         /// </summary>
         /// <remarks>
@@ -1016,6 +1054,27 @@ namespace PsefApiOData.Controllers
             return await _context.Permohonan
                 .Where(c =>
                     c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
+                .LongCountAsync();
+        }
+
+        /// <summary>
+        /// Retrieves pending Permohonan for Validator Sertifikat total count.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Validator*
+        /// </remarks>
+        /// <returns>Pending Permohonan for Validator Sertifikat total count.</returns>
+        /// <response code="200">Total count of Permohonan retrieved.</response>
+        [MultiRoleAuthorize(ApiRole.Validator)]
+        [HttpGet]
+        [ODataRoute(nameof(ValidatorSertifikatPendingTotal))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(long), Status200OK)]
+        public async Task<long> ValidatorSertifikatPendingTotal()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id)
                 .LongCountAsync();
         }
 

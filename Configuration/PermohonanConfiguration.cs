@@ -66,6 +66,9 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanController.DirekturJenderalPendingTotal))
                 .Returns<long>();
             permohonan.Collection
+                .Function(nameof(PermohonanController.ValidatorSertifikatPendingTotal))
+                .Returns<long>();
+            permohonan.Collection
                 .Function(nameof(PermohonanController.VerifikatorPending))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
@@ -79,6 +82,12 @@ namespace PsefApiOData.Configuration
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
                 .Function(nameof(PermohonanController.DirekturJenderalPending))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanController.ValidatorSertifikatPending))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanController.ValidatorSertifikatDone))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
                 .Function(nameof(PermohonanController.Rumusan))
