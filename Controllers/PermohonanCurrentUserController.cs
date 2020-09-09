@@ -115,6 +115,7 @@ namespace PsefApiOData.Controllers
                 return BadRequest();
             }
 
+            create.PermohonanNumber = string.Empty;
             create.PemohonId = pemohon.Id;
             create.StatusId = PermohonanStatus.Dibuat.Id;
             _context.Permohonan.Add(create);
@@ -198,6 +199,7 @@ namespace PsefApiOData.Controllers
             }
 
             var oldId = update.Id;
+            var oldPermohonanNumber = update.PermohonanNumber;
             var oldPemohonId = update.PemohonId;
             delta.Patch(update);
 
@@ -205,6 +207,8 @@ namespace PsefApiOData.Controllers
             {
                 return Unauthorized(update.PemohonId);
             }
+
+            update.PermohonanNumber = oldPermohonanNumber;
 
             try
             {
@@ -251,11 +255,13 @@ namespace PsefApiOData.Controllers
                 return NotFound();
             }
 
-            CounterHelper helper = new CounterHelper(_context);
-            string permohononanNumber = await helper.GetFormNumber(CounterType.Permohonan);
-            
+            if (string.IsNullOrEmpty(update.PermohonanNumber))
+            {
+                CounterHelper helper = new CounterHelper(_context);
+                update.PermohonanNumber = await helper.GetFormNumber(CounterType.Permohonan);
+            }
+
             update.StatusId = PermohonanStatus.Diajukan.Id;
-            update.PermohonanNumber = permohononanNumber;
 
             HistoryPermohonan submitHistory = new HistoryPermohonan
             {
