@@ -31,6 +31,11 @@ namespace PsefApiOData.Misc
         internal const string Dirjen = "Psef.Dirjen";
 
         /// <summary>
+        /// Validator role.
+        /// </summary>
+        internal const string Validator = "Psef.ValidatorSertifikat";
+
+        /// <summary>
         /// Admin role.
         /// </summary>
         internal const string Admin = "Psef.Admin";
