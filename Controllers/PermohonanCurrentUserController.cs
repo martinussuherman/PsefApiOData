@@ -251,7 +251,11 @@ namespace PsefApiOData.Controllers
                 return NotFound();
             }
 
+            CounterHelper helper = new CounterHelper(_context);
+            string permohononanNumber = await helper.GetFormNumber(CounterType.Permohonan);
+            
             update.StatusId = PermohonanStatus.Diajukan.Id;
+            update.PermohonanNumber = permohononanNumber;
 
             HistoryPermohonan submitHistory = new HistoryPermohonan
             {
