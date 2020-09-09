@@ -178,6 +178,70 @@ namespace PsefApiOData.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes list of Apotek for the specified Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="id">Unused, please use 1.</param>
+        /// <param name="delete">The list of Apotek to delete.</param>
+        /// <returns>None.</returns>
+        /// <response code="204">The list of Apotek was successfully deleted.</response>
+        /// <response code="400">The list of Apotek is invalid.</response>
+        [ODataRoute(IdRoute)]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromODataUri] uint id,
+            [FromBody] PermohonanApotek delete)
+        {
+            Permohonan permohonan = string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User))
+                ? await _context.Permohonan
+                    .FirstOrDefaultAsync(e =>
+                        e.Id == delete.PermohonanId &&
+                        e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User))
+                : await _context.Permohonan
+                    .FirstOrDefaultAsync(e =>
+                        e.Id == delete.PermohonanId);
+
+            if (permohonan == null)
+            {
+                return BadRequest();
+            }
+
+            foreach (Apotek apotek in delete.Apotek)
+            {
+                if (!_context.Apotek.Any(e =>
+                    e.Id == apotek.Id &&
+                    e.PermohonanId == delete.PermohonanId))
+                {
+                    return BadRequest();
+                }
+            }
+
+            List<Apotek> removed = new List<Apotek>();
+
+            foreach (Apotek apotek in delete.Apotek)
+            {
+                removed.Add(await _context.Apotek.FindAsync(apotek.Id));
+            }
+
+            _context.Apotek.RemoveRange(removed);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
         private readonly PsefMySqlContext _context;
     }
 }
