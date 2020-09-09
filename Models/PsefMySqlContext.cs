@@ -23,6 +23,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<Apotek> Apotek { get; set; }
 
         /// <summary>
+        /// Counter table
+        /// </summary>
+        /// <value>Counter</value>
+        public virtual DbSet<Counter> Counter { get; set; }
+
+        /// <summary>
         /// Desa/Kelurahan table
         /// </summary>
         /// <value>Desa/Kelurahan</value>
@@ -143,6 +149,46 @@ namespace PsefApiOData.Models
                     .HasForeignKey(d => d.ProvinsiId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_apotek_provinsi");
+            });
+
+            modelBuilder.Entity<Counter>(entity =>
+            {
+                entity.ToTable("counter");
+
+                entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.DisplayFormat)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.DateFormat)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.LastValueDate)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci")
+                    .IsConcurrencyToken();
+
+                entity.Property(e => e.LastValueNumber)
+                    .HasColumnType("int(11)")
+                    .IsConcurrencyToken();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<DesaKelurahan>(entity =>
