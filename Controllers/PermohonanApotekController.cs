@@ -122,14 +122,17 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
+        /// <param name="id">Unused, please use 1.</param>
         /// <param name="update">The list of Apotek to update.</param>
         /// <returns>None.</returns>
         /// <response code="204">The list of Apotek was successfully updated.</response>
         /// <response code="400">The list of Apotek is invalid.</response>
+        [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> Put(
+            [FromODataUri] uint id,
             [FromBody] PermohonanApotek update)
         {
             if (!ModelState.IsValid)
@@ -174,7 +177,6 @@ namespace PsefApiOData.Controllers
 
             return NoContent();
         }
-
 
         private readonly PsefMySqlContext _context;
     }
