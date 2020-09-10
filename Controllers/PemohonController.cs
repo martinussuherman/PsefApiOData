@@ -67,6 +67,7 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Pemohon successfully retrieved.</response>
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
+            ApiRole.Validator,
             ApiRole.Kasi,
             ApiRole.Kasubdit,
             ApiRole.Diryanfar,
@@ -116,6 +117,7 @@ namespace PsefApiOData.Controllers
         /// <response code="404">The Pemohon does not exist.</response>
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
+            ApiRole.Validator,
             ApiRole.Kasi,
             ApiRole.Kasubdit,
             ApiRole.Diryanfar,
