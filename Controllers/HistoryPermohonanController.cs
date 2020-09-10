@@ -8,6 +8,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApiOData.ApiInfo;
@@ -35,10 +36,19 @@ namespace PsefApiOData.Controllers
         /// Retrieves History Permohonan total count.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Verifikator*
         /// </remarks>
         /// <returns>History Permohonan total count.</returns>
         /// <response code="200">Total count of History Permohonan retrieved.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Validator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [HttpGet]
         [ODataRoute(nameof(TotalCount))]
         [Produces(JsonOutput)]
@@ -52,10 +62,19 @@ namespace PsefApiOData.Controllers
         /// Retrieves all History Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Verifikator*
         /// </remarks>
         /// <returns>All available History Permohonan.</returns>
         /// <response code="200">History Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Validator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<HistoryPermohonan>>), Status200OK)]
@@ -69,12 +88,21 @@ namespace PsefApiOData.Controllers
         /// Gets a single History Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Verifikator*
         /// </remarks>
         /// <param name="id">The requested History Permohonan identifier.</param>
         /// <returns>The requested History Permohonan.</returns>
         /// <response code="200">The History Permohonan was successfully retrieved.</response>
         /// <response code="404">The History Permohonan does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Validator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(HistoryPermohonan), Status200OK)]
@@ -90,7 +118,7 @@ namespace PsefApiOData.Controllers
         /// Creates a new History Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="create">The History Permohonan to create.</param>
         /// <returns>The created History Permohonan.</returns>
@@ -98,6 +126,9 @@ namespace PsefApiOData.Controllers
         /// <response code="204">The History Permohonan was successfully created.</response>
         /// <response code="400">The History Permohonan is invalid.</response>
         /// <response code="409">The History Permohonan with supplied id already exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(HistoryPermohonan), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
@@ -133,7 +164,7 @@ namespace PsefApiOData.Controllers
         /// Updates an existing History Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="id">The requested History Permohonan identifier.</param>
         /// <param name="delta">The partial History Permohonan to update.</param>
@@ -143,6 +174,9 @@ namespace PsefApiOData.Controllers
         /// <response code="400">The History Permohonan is invalid.</response>
         /// <response code="404">The History Permohonan does not exist.</response>
         /// <response code="422">The History Permohonan identifier is specified on delta and its value is different from id.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(HistoryPermohonan), Status200OK)]
@@ -190,12 +224,15 @@ namespace PsefApiOData.Controllers
         /// Deletes a History Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="id">The History Permohonan to delete.</param>
         /// <returns>None</returns>
         /// <response code="204">The History Permohonan was successfully deleted.</response>
         /// <response code="404">The History Permohonan does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
@@ -217,7 +254,7 @@ namespace PsefApiOData.Controllers
         /// Updates an existing History Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="id">The requested History Permohonan identifier.</param>
         /// <param name="update">The History Permohonan to update.</param>
@@ -226,6 +263,9 @@ namespace PsefApiOData.Controllers
         /// <response code="204">The History Permohonan was successfully updated.</response>
         /// <response code="400">The History Permohonan is invalid.</response>
         /// <response code="404">The History Permohonan does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(HistoryPermohonan), Status200OK)]
