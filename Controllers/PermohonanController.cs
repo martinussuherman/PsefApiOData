@@ -66,6 +66,7 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Permohonan successfully retrieved.</response>
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
+            ApiRole.Validator,
             ApiRole.Kasi,
             ApiRole.Kasubdit,
             ApiRole.Diryanfar,
@@ -94,6 +95,7 @@ namespace PsefApiOData.Controllers
         /// <response code="404">The Permohonan does not exist.</response>
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
+            ApiRole.Validator,
             ApiRole.Kasi,
             ApiRole.Kasubdit,
             ApiRole.Diryanfar,
@@ -1159,6 +1161,7 @@ namespace PsefApiOData.Controllers
         /// <response code="404">The list of Apotek does not exist.</response>
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
+            ApiRole.Validator,
             ApiRole.Kasi,
             ApiRole.Kasubdit,
             ApiRole.Diryanfar,
@@ -1189,6 +1192,7 @@ namespace PsefApiOData.Controllers
         /// <response code="404">The list of History Permohonan does not exist.</response>
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
+            ApiRole.Validator,
             ApiRole.Kasi,
             ApiRole.Kasubdit,
             ApiRole.Diryanfar,
