@@ -59,6 +59,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<Pemohon> Pemohon { get; set; }
 
         /// <summary>
+        /// Perizinan table
+        /// </summary>
+        /// <value>Perizinan</value>
+        public virtual DbSet<Perizinan> Perizinan { get; set; }
+
+        /// <summary>
         /// Permohonan table
         /// </summary>
         /// <value>Permohonan</value>
@@ -386,12 +392,69 @@ namespace PsefApiOData.Models
                     .HasCollation("utf8_general_ci");
             });
 
+            modelBuilder.Entity<Perizinan>(entity =>
+            {
+                entity.ToTable("perizinan");
+
+                entity.HasIndex(e => e.PermohonanId)
+                    .HasName("FK_perizinan_permohonan");
+
+                entity.HasIndex(e => e.PreviousId)
+                    .HasName("FK_perizinan_perizinan");
+
+                entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ExpiredAt).HasColumnType("date");
+
+                entity.Property(e => e.IssuedAt).HasColumnType("date");
+
+                entity.Property(e => e.PerizinanNumber)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PermohonanId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.PreviousId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.TandaDaftarUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Permohonan)
+                    .WithMany(p => p.Perizinan)
+                    .HasForeignKey(d => d.PermohonanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_perizinan_permohonan");
+
+                entity.HasOne(d => d.Previous)
+                    .WithMany(p => p.InversePrevious)
+                    .HasForeignKey(d => d.PreviousId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_perizinan_perizinan");
+            });
+
             modelBuilder.Entity<Permohonan>(entity =>
             {
                 entity.ToTable("permohonan");
 
                 entity.HasIndex(e => e.PemohonId)
                     .HasName("FK_permohonan_pemohon");
+
+                entity.HasIndex(e => e.PerizinanId)
+                    .HasName("FK_permohonan_perizinan");
+
+                entity.HasIndex(e => e.PreviousPerizinanId)
+                    .HasName("FK_permohonan_perizinan_previous");
 
                 entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
 
@@ -436,6 +499,10 @@ namespace PsefApiOData.Models
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.PemohonId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValueSql("'NULL'");
+
+                entity.Property(e => e.PerizinanId)
                     .HasColumnType("int(10) unsigned")
                     .HasDefaultValueSql("'NULL'");
 
@@ -505,6 +572,18 @@ namespace PsefApiOData.Models
                     .HasForeignKey(d => d.PemohonId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_permohonan_pemohon");
+
+                entity.HasOne(d => d.PerizinanNavigation)
+                    .WithMany(p => p.PermohonanPerizinanNavigation)
+                    .HasForeignKey(d => d.PerizinanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_permohonan_perizinan");
+
+                entity.HasOne(d => d.PreviousPerizinan)
+                    .WithMany(p => p.PermohonanPreviousPerizinan)
+                    .HasForeignKey(d => d.PreviousPerizinanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_permohonan_perizinan_previous");
             });
 
             modelBuilder.Entity<Provinsi>(entity =>

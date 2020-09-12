@@ -17,6 +17,7 @@ namespace PsefApiOData.Models
         {
             Apotek = new HashSet<Apotek>();
             HistoryPermohonan = new HashSet<HistoryPermohonan>();
+            Perizinan = new HashSet<Perizinan>();
         }
 
         /// <summary>
@@ -36,6 +37,12 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The associated previous Perizinan identifier.</value>
         public uint? PreviousPerizinanId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the associated Perizinan identifier.
+        /// </summary>
+        /// <value>The associated Perizinan identifier.</value>
+        public uint? PerizinanId { get; set; }
 
         /// <summary>
         /// Gets or sets the associated Permohonan Status identifier.
@@ -180,6 +187,20 @@ namespace PsefApiOData.Models
         public virtual Pemohon Pemohon { get; set; }
 
         /// <summary>
+        /// Gets or sets Perizinan associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated Perizinan.</value>
+        [IgnoreDataMember]
+        public virtual Perizinan PerizinanNavigation { get; set; }
+
+        /// <summary>
+        /// Gets or sets Previous Perizinan associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated Previous Perizinan.</value>
+        [IgnoreDataMember]
+        public virtual Perizinan PreviousPerizinan { get; set; }
+
+        /// <summary>
         /// Gets or sets list of Apotek associated with the Permohonan.
         /// </summary>
         /// <value>The associated list of Apotek.</value>
@@ -192,5 +213,12 @@ namespace PsefApiOData.Models
         /// <value>The associated list of History Permohonan.</value>
         [IgnoreDataMember]
         public virtual ICollection<HistoryPermohonan> HistoryPermohonan { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Perizinan associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated list of Perizinan.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<Perizinan> Perizinan { get; set; }
     }
 }
