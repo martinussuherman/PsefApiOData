@@ -329,7 +329,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DisetujuiVerifikator.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DisetujuiVerifikator.Id,
@@ -337,7 +337,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -380,7 +380,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DikembalikanVerifikator.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DikembalikanVerifikator.Id,
@@ -389,7 +389,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -400,6 +400,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
+            // TODO : notify Pemohon via email?
             return NoContent();
         }
 
@@ -432,7 +433,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DisetujuiKepalaSeksi.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DisetujuiKepalaSeksi.Id,
@@ -440,7 +441,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -483,7 +484,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DikembalikanKepalaSeksi.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DikembalikanKepalaSeksi.Id,
@@ -492,7 +493,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -535,7 +536,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DisetujuiKepalaSubDirektorat.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DisetujuiKepalaSubDirektorat.Id,
@@ -543,7 +544,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -586,7 +587,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DikembalikanKepalaSubDirektorat.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DikembalikanKepalaSubDirektorat.Id,
@@ -595,7 +596,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -638,7 +639,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id,
@@ -646,7 +647,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -689,7 +690,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id,
@@ -698,7 +699,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -740,7 +741,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DisetujuiDirekturJenderal.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DisetujuiDirekturJenderal.Id,
@@ -748,7 +749,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -790,7 +791,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.DikembalikanDirekturJenderal.Id;
 
-            HistoryPermohonan submitHistory = new HistoryPermohonan
+            HistoryPermohonan history = new HistoryPermohonan
             {
                 PermohonanId = update.Id,
                 StatusId = PermohonanStatus.DikembalikanDirekturJenderal.Id,
@@ -799,7 +800,7 @@ namespace PsefApiOData.Controllers
                 UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
             };
 
-            _context.HistoryPermohonan.Add(submitHistory);
+            _context.HistoryPermohonan.Add(history);
 
             try
             {
@@ -809,6 +810,83 @@ namespace PsefApiOData.Controllers
             {
                 throw;
             }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Finish an existing Permohonan by Validator.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Validator*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Validator)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> ValidatorSelesaikan(
+            [FromBody] PermohonanSystemUpdate data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id);
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = PermohonanStatus.Selesai.Id;
+
+            HistoryPermohonan history = new HistoryPermohonan
+            {
+                PermohonanId = update.Id,
+                StatusId = PermohonanStatus.Selesai.Id,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+
+            _context.HistoryPermohonan.Add(history);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            // TODO : use const/read from setting
+            DateTime maxExpiry = DateTime.Today.AddYears(5);
+            DateTime expiry = maxExpiry.CompareTo(update.StraExpiry) > 0 ? 
+                update.StraExpiry : 
+                maxExpiry;
+
+            // TODO : create tanda daftar pdf file
+
+            Perizinan perizinan = new Perizinan
+            {
+                PermohonanId = update.Id,
+                ExpiredAt = expiry,
+                IssuedAt = DateTime.Today,
+                PreviousId = update.PreviousPerizinanId,
+                TandaDaftarUrl = string.Empty
+            };
+
+            CounterHelper helper = new CounterHelper(_context);
+            perizinan.PerizinanNumber = await helper.GetFormNumber(
+                CounterType.Perizinan, 
+                monthFunc: MonthToRomanNumber);
+
+            _context.Perizinan.Add(perizinan);
+            await _context.SaveChangesAsync();
+            update.PerizinanId = perizinan.Id;
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -1212,6 +1290,11 @@ namespace PsefApiOData.Controllers
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);
+        }
+
+        private string MonthToRomanNumber(DateTime date)
+        {
+            return RomanNumberHelper.ToRomanNumber(date.Month);
         }
 
         private readonly PsefMySqlContext _context;

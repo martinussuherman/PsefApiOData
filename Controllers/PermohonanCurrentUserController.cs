@@ -115,6 +115,8 @@ namespace PsefApiOData.Controllers
                 return BadRequest();
             }
 
+            // TODO : automatically set type as New or Extension based on whether
+            // there is already existing Perizinan (also auto link to that Perizinan)
             create.PermohonanNumber = string.Empty;
             create.PemohonId = pemohon.Id;
             create.StatusId = PermohonanStatus.Dibuat.Id;
@@ -255,7 +257,7 @@ namespace PsefApiOData.Controllers
                 return NotFound();
             }
 
-            if (string.IsNullOrEmpty(update.PermohonanNumber))
+            if (update.StatusId == PermohonanStatus.Dibuat.Id)
             {
                 CounterHelper helper = new CounterHelper(_context);
                 update.PermohonanNumber = await helper.GetFormNumber(CounterType.Permohonan);
