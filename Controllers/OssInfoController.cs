@@ -52,7 +52,7 @@ namespace PsefApiOData.Controllers
             return dummy.Any(e => e.Nib == id);
         }
 
-        private static readonly List<OssInfo> dummy = new List<OssInfo>
+        internal static readonly List<OssInfo> dummy = new List<OssInfo>
         {
             new OssInfo
             {
