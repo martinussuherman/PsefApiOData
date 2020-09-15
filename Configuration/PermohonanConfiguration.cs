@@ -48,6 +48,8 @@ namespace PsefApiOData.Configuration
                 .Action(nameof(PermohonanController.DirekturJenderalKembalikan));
             permohonan.Collection
                 .Action(nameof(PermohonanController.ValidatorSelesaikan));
+            permohonan.Collection
+                .Action(nameof(PermohonanController.ValidatorRegenerateTandaDaftar));
 
             permohonan.Collection
                 .Function(nameof(PermohonanController.TotalCount))
