@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -114,6 +114,7 @@ namespace PsefApiOData
             app
                 .UsePathBase(basePath)
                 .UseHttpsRedirection()
+                .UseStaticFiles()
                 .UseForwardedHeaders(new ForwardedHeadersOptions()
                 {
                     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -157,6 +158,9 @@ namespace PsefApiOData
                             description.GroupName.ToUpperInvariant());
                     }
                 });
+
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
+                Configuration.GetValue<string>("SfKey"));
         }
 
         private void ConfigureSwaggerGen(IServiceCollection services)
