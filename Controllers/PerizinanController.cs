@@ -36,19 +36,10 @@ namespace PsefApiOData.Controllers
         /// Retrieves all Perizinan.
         /// </summary>
         /// <remarks>
-        /// *Min role: Verifikator*
+        /// *Min role: None*
         /// </remarks>
         /// <returns>All available Perizinan.</returns>
         /// <response code="200">Perizinan successfully retrieved.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Verifikator,
-            ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
-            ApiRole.Dirjen,
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Perizinan>>), Status200OK)]
@@ -56,6 +47,12 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public IQueryable<Perizinan> Get()
         {
+            if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
+            {
+                return _context.Perizinan.Where(
+                    e => e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+            }
+
             return _context.Perizinan;
         }
 
@@ -63,21 +60,12 @@ namespace PsefApiOData.Controllers
         /// Gets a single Perizinan.
         /// </summary>
         /// <remarks>
-        /// *Min role: Verifikator*
+        /// *Min role: None*
         /// </remarks>
         /// <param name="id">The requested Perizinan identifier.</param>
         /// <returns>The requested Perizinan.</returns>
         /// <response code="200">The Perizinan was successfully retrieved.</response>
         /// <response code="404">The Perizinan does not exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Verifikator,
-            ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
-            ApiRole.Dirjen,
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Perizinan), Status200OK)]
@@ -86,6 +74,14 @@ namespace PsefApiOData.Controllers
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Perizinan> Get([FromODataUri] uint id)
         {
+            if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
+            {
+                return SingleResult.Create(
+                    _context.Perizinan.Where(
+                        e => e.Id == id &&
+                        e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User)));
+            }
+
             return SingleResult.Create(
                 _context.Perizinan.Where(e => e.Id == id));
         }
