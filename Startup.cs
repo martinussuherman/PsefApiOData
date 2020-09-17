@@ -1,4 +1,4 @@
-using Microsoft.AspNet.OData;
+﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -72,6 +72,7 @@ namespace PsefApiOData
 
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
             services.AddHttpClient<IIdentityApiService, IdentityApiService>();
+            services.AddHttpClient<IOssApiService, OssApiService>();
 
             services.AddDbContextPool<Models.PsefMySqlContext>(options =>
                 options.UseMySql(
