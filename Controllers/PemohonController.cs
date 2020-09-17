@@ -186,6 +186,11 @@ namespace PsefApiOData.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (await _context.Pemohon.FirstOrDefaultAsync(e => e.UserId == create.UserId) != null)
+            {
+                return Conflict(create.UserId);
+            }
+
             _context.Pemohon.Add(create);
 
             try
@@ -196,7 +201,7 @@ namespace PsefApiOData.Controllers
             {
                 if (Exists(create.Id))
                 {
-                    return Conflict();
+                    return Conflict(create.Id);
                 }
 
                 throw;
@@ -390,7 +395,14 @@ namespace PsefApiOData.Controllers
                 return BadRequest(ModelState);
             }
 
-            create.UserId = ApiHelper.GetUserId(HttpContext.User);
+            string userId = ApiHelper.GetUserId(HttpContext.User);
+
+            if (await _context.Pemohon.FirstOrDefaultAsync(e => e.UserId == userId) != null)
+            {
+                return Conflict(userId);
+            }
+
+            create.UserId = userId;
             _context.Pemohon.Add(create);
 
             try
@@ -401,7 +413,7 @@ namespace PsefApiOData.Controllers
             {
                 if (Exists(create.Id))
                 {
-                    return Conflict();
+                    return Conflict(create.Id);
                 }
 
                 throw;
