@@ -48,42 +48,6 @@ namespace PsefApiOData.Models
         public string Nib { get; set; }
 
         /// <summary>
-        /// Gets or sets the Pemohon apoteker name.
-        /// </summary>
-        /// <value>The Pemohon's apoteker name.</value>
-        public string ApotekerName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker email.
-        /// </summary>
-        /// <value>The Pemohon's apoteker email.</value>
-        public string ApotekerEmail { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker phone number.
-        /// </summary>
-        /// <value>The Pemohon's apoteker phone number.</value>
-        public string ApotekerPhone { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker STRA number.
-        /// </summary>
-        /// <value>The Pemohon's apoteker STRA number.</value>
-        public string StraNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker STRA expiry date.
-        /// </summary>
-        /// <value>The Pemohon's apoteker STRA expiry date.</value>
-        public DateTime StraExpiry { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker STRA document url.
-        /// </summary>
-        /// <value>The Pemohon's apoteker STRA document url.</value>
-        public string StraUrl { get; set; }
-
-        /// <summary>
         /// Gets or sets list of Permohonan associated with the Pemohon.
         /// </summary>
         /// <value>The associated list of Permohonan.</value>

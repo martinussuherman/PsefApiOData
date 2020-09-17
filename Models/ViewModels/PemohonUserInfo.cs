@@ -72,56 +72,6 @@ namespace PsefApiOData.Models
         }
 
         /// <summary>
-        /// Gets or sets the Pemohon apoteker name.
-        /// </summary>
-        /// <value>The Pemohon's apoteker name.</value>
-        public string ApotekerName
-        {
-            get => Pemohon.ApotekerName;
-            set => Pemohon.ApotekerName = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker email.
-        /// </summary>
-        /// <value>The Pemohon's apoteker email.</value>
-        public string ApotekerEmail
-        {
-            get => Pemohon.ApotekerEmail;
-            set => Pemohon.ApotekerEmail = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker phone number.
-        /// </summary>
-        /// <value>The Pemohon's apoteker phone number.</value>
-        public string ApotekerPhone
-        {
-            get => Pemohon.ApotekerPhone;
-            set => Pemohon.ApotekerPhone = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker STRA number.
-        /// </summary>
-        /// <value>The Pemohon's apoteker STRA number.</value>
-        public string StraNumber
-        {
-            get => Pemohon.StraNumber;
-            set => Pemohon.StraNumber = value;
-        }
-
-        /// <summary>
-        /// Gets or sets the Pemohon apoteker STRA document url.
-        /// </summary>
-        /// <value>The Pemohon's apoteker STRA document url.</value>
-        public string StraUrl
-        {
-            get => Pemohon.StraUrl;
-            set => Pemohon.StraUrl = value;
-        }
-
-        /// <summary>
         /// Gets or sets the Pemohon name.
         /// </summary>
         /// <value>The Pemohon's name.</value>

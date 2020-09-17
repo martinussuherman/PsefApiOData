@@ -331,27 +331,6 @@ namespace PsefApiOData.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.ApotekerEmail)
-                    .IsRequired()
-                    .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.ApotekerName)
-                    .IsRequired()
-                    .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.ApotekerPhone)
-                    .IsRequired()
-                    .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
                 entity.Property(e => e.Nib)
                     .IsRequired()
                     .HasColumnType("tinytext")
@@ -362,24 +341,6 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.StraExpiry)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("'''0000-00-00'''");
-
-                entity.Property(e => e.StraNumber)
-                    .IsRequired()
-                    .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.StraUrl)
-                    .IsRequired()
-                    .HasColumnType("text")
                     .HasDefaultValueSql("''''''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
