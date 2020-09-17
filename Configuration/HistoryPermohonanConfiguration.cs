@@ -27,6 +27,10 @@ namespace PsefApiOData.Configuration
             history.Collection
                 .Function(nameof(HistoryPermohonanController.TotalCount))
                 .Returns<long>();
+            history.Collection
+                .Function(nameof(HistoryPermohonanController.ByPermohonan))
+                .ReturnsFromEntitySet<HistoryPermohonan>(nameof(HistoryPermohonan))
+                .Parameter<uint>("permohonanId");
 
             history.HasKey(p => p.Id);
             history

@@ -300,6 +300,35 @@ namespace PsefApiOData.Controllers
             return Updated(update);
         }
 
+        /// <summary>
+        /// Retrieves all History Permohonan for the specified Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: Verifikator*
+        /// </remarks>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
+        /// <returns>All available History Permohonan for the specified Permohonan.</returns>
+        /// <response code="200">List of History Permohonan successfully retrieved.</response>
+        /// <response code="404">The list of History Permohonan does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Validator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<HistoryPermohonan>>), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery]
+        public IQueryable<HistoryPermohonan> ByPermohonan(uint permohonanId)
+        {
+            return _context.HistoryPermohonan.Where(e => e.PermohonanId == permohonanId);
+        }
+
         private bool Exists(ulong id)
         {
             return _context.HistoryPermohonan.Any(e => e.Id == id);
