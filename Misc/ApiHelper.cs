@@ -35,6 +35,8 @@ namespace PsefApiOData.Misc
 
         internal static string OssPassword { get; set; }
 
+        internal static int OssCacheHour { get; set; }
+
         /// <summary>
         /// Retrieve id of the user executing the request.
         /// </summary>
@@ -91,6 +93,7 @@ namespace PsefApiOData.Misc
             OssBaseUri = ossConfiguration.GetValue<string>("BaseUri");
             OssUser = ossConfiguration.GetValue<string>("User");
             OssPassword = ossConfiguration.GetValue<string>("Password");
+            OssCacheHour = ossConfiguration.GetValue<int>("CacheHour");
         }
 
         /// <summary>
