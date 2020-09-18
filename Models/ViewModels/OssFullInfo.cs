@@ -273,6 +273,12 @@ namespace PsefApiOData.Models
         public List<OssPemegangSaham> PemegangSaham { get; set; }
 
         /// <summary>
+        /// Gets or sets the list of PenanggungJwb.
+        /// </summary>
+        /// <value>The list of PenanggungJwb.</value>
+        public List<OssPenanggungJawab> PenanggungJwb { get; set; }
+
+        /// <summary>
         /// Gets or sets the NoPengesahan.
         /// </summary>
         /// <value>The NoPengesahan.</value>
@@ -307,6 +313,18 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The TglPengesahanLama.</value>
         public DateTime TglPengesahanLama { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of Legalitas.
+        /// </summary>
+        /// <value>The list of Legalitas.</value>
+        public List<OssLegalitas> Legalitas { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of DataChecklist.
+        /// </summary>
+        /// <value>The list of DataChecklist.</value>
+        public List<OssChecklist> DataChecklist { get; set; }
 
         /// <summary>
         /// Gets or sets the JenisIdUserProses.
