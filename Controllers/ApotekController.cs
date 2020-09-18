@@ -8,6 +8,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApiOData.ApiInfo;
@@ -52,10 +53,13 @@ namespace PsefApiOData.Controllers
         /// Retrieves all Apotek.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <returns>All available Apotek.</returns>
         /// <response code="200">Apotek successfully retrieved.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Apotek>>), Status200OK)]
@@ -82,6 +86,16 @@ namespace PsefApiOData.Controllers
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Apotek> Get([FromODataUri] ulong id)
         {
+            if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
+            {
+                return SingleResult.Create(
+                    _context.Apotek
+                        .Include(e => e.Provinsi)
+                        .Where(e =>
+                            e.Id == id &&
+                            e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User)));
+            }
+
             return SingleResult.Create(
                 _context.Apotek
                     .Include(e => e.Provinsi)
@@ -92,7 +106,7 @@ namespace PsefApiOData.Controllers
         /// Creates a new Apotek.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="create">The Apotek to create.</param>
         /// <returns>The created Apotek.</returns>
@@ -100,6 +114,9 @@ namespace PsefApiOData.Controllers
         /// <response code="204">The Apotek was successfully created.</response>
         /// <response code="400">The Apotek is invalid.</response>
         /// <response code="409">The Apotek with supplied id already exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Apotek), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
@@ -135,7 +152,7 @@ namespace PsefApiOData.Controllers
         /// Updates an existing Apotek.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="id">The requested Apotek identifier.</param>
         /// <param name="delta">The partial Apotek to update.</param>
@@ -145,6 +162,9 @@ namespace PsefApiOData.Controllers
         /// <response code="400">The Apotek is invalid.</response>
         /// <response code="404">The Apotek does not exist.</response>
         /// <response code="422">The Apotek identifier is specified on delta and its value is different from id.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Apotek), Status200OK)]
@@ -192,12 +212,15 @@ namespace PsefApiOData.Controllers
         /// Deletes a Apotek.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Min role: Admin*
         /// </remarks>
         /// <param name="id">The Apotek to delete.</param>
         /// <returns>None</returns>
         /// <response code="204">The Apotek was successfully deleted.</response>
         /// <response code="404">The Apotek does not exist.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status404NotFound)]
