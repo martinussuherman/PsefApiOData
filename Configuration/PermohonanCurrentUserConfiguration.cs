@@ -22,10 +22,6 @@ namespace PsefApiOData.Configuration
                 .EntityType;
 
             permohonan.Collection
-                .Function(nameof(PermohonanCurrentUserController.ListApotek))
-                .ReturnsFromEntitySet<Apotek>(nameof(Apotek))
-                .Parameter<uint>("permohonanId");
-            permohonan.Collection
                 .Function(nameof(PermohonanCurrentUserController.Rumusan))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
@@ -37,10 +33,6 @@ namespace PsefApiOData.Configuration
 
             permohonan.Collection
                 .Action(nameof(PermohonanCurrentUserController.Ajukan));
-            permohonan.Collection
-                .Action(nameof(PermohonanCurrentUserController.CreateApotek));
-            permohonan.Collection
-                .Action(nameof(PermohonanCurrentUserController.UpdateApotek));
 
             permohonan.HasKey(p => p.Id);
             permohonan

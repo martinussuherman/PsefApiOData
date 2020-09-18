@@ -102,14 +102,6 @@ namespace PsefApiOData.Configuration
             permohonan.Collection
                 .Function(nameof(PermohonanController.Selesai))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
-            permohonan.Collection
-                .Function(nameof(PermohonanController.ListApotek))
-                .ReturnsFromEntitySet<Apotek>(nameof(Apotek))
-                .Parameter<uint>("permohonanId");
-            permohonan.Collection
-                .Function(nameof(PermohonanController.ListHistory))
-                .ReturnsFromEntitySet<HistoryPermohonan>(nameof(HistoryPermohonan))
-                .Parameter<uint>("permohonanId");
 
             permohonan.HasKey(p => p.Id);
             permohonan
