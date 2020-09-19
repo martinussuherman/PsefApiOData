@@ -1,12 +1,8 @@
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PsefApiOData.Controllers;
 using PsefApiOData.Models;
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
@@ -23,12 +19,10 @@ namespace PsefApiOData.Misc
         /// <summary>
         /// Tanda Daftar helpers.
         /// </summary>
-        /// <param name="context">Database context.</param>
         /// <param name="environment">Web Host environment.</param>
         /// <param name="httpContext">Http context.</param>
         /// <param name="urlHelper">Url helper.</param>
         public TandaDaftarHelper(
-            PsefMySqlContext context,
             IWebHostEnvironment environment,
             HttpContext httpContext,
             IUrlHelper urlHelper)
@@ -36,16 +30,19 @@ namespace PsefApiOData.Misc
             _environment = environment;
             _httpContext = httpContext;
             _urlHelper = urlHelper;
-            _context = context;
         }
 
         /// <summary>
         /// Generate Tanda Daftar Pdf.
         /// </summary>
+        /// <param name="ossInfo">Oss info.</param>
         /// <param name="permohonan">Permohonan.</param>
         /// <param name="perizinan">Perizinan.</param>
         /// <returns>Pdf url.</returns>
-        public async Task<string> GeneratePdf(Permohonan permohonan, Perizinan perizinan)
+        public string GeneratePdf(
+            OssFullInfo ossInfo,
+            Permohonan permohonan,
+            Perizinan perizinan)
         {
             string fileName = $"{ApiHelper.GetUserId(_httpContext.User)}.pdf";
             string datePath = perizinan.IssuedAt.ToString(
@@ -59,17 +56,9 @@ namespace PsefApiOData.Misc
             PdfPage page = document.Pages.Add();
             PdfGraphics graphics = page.Graphics;
 
-            Pemohon pemohon = await _context.Pemohon
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
-
-            // TODO : read from OSS Api
-            OssInfo ossInfo = OssInfoController.dummy
-                .FirstOrDefault(e => e.Nib == pemohon.Nib);
-
             top = DrawLogo(graphics, top);
             top = DrawHeader(perizinan, graphics, top);
-            top = DrawContent(pemohon, permohonan, perizinan, ossInfo, graphics, top);
+            top = DrawContent(permohonan, perizinan, ossInfo, graphics, top);
 
             top = 440;
             top = DrawSignature(perizinan, page, graphics, top);
@@ -182,10 +171,9 @@ namespace PsefApiOData.Misc
         }
 
         private float DrawContent(
-            Pemohon pemohon,
             Permohonan permohonan,
             Perizinan perizinan,
-            OssInfo ossInfo,
+            OssFullInfo ossInfo,
             PdfGraphics graphics,
             float top)
         {
@@ -335,7 +323,7 @@ namespace PsefApiOData.Misc
                 leftAlign,
                 new RectangleF(rightCol, rightColTop, width, 0));
             rightColTop = DrawString(
-                (ossInfo?.Name) != null ? ossInfo.Name : string.Empty,
+                (ossInfo?.NamaPerseroan) != null ? ossInfo.NamaPerseroan : string.Empty,
                 graphics,
                 contentFont,
                 leftAlign,
@@ -349,7 +337,7 @@ namespace PsefApiOData.Misc
                 leftAlign,
                 new RectangleF(rightCol, rightColTop, width, 0));
             rightColTop = DrawString(
-                (ossInfo?.Address) != null ? ossInfo.Address : string.Empty,
+                (ossInfo?.AlamatPerseroan) != null ? ossInfo.AlamatPerseroan : string.Empty,
                 graphics,
                 contentFont,
                 leftAlign,
@@ -359,9 +347,9 @@ namespace PsefApiOData.Misc
         }
 
         private float DrawSignature(
-            Perizinan perizinan, 
-            PdfPage page, 
-            PdfGraphics graphics, 
+            Perizinan perizinan,
+            PdfPage page,
+            PdfGraphics graphics,
             float top)
         {
             float leftCol = 20;
@@ -477,7 +465,6 @@ namespace PsefApiOData.Misc
             return bounds.Bottom;
         }
 
-        private readonly PsefMySqlContext _context;
         private readonly IWebHostEnvironment _environment;
         private readonly HttpContext _httpContext;
         private readonly IUrlHelper _urlHelper;

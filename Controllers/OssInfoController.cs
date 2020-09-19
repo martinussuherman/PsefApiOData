@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApiOData.ApiInfo;
@@ -22,8 +25,12 @@ namespace PsefApiOData.Controllers
         /// <summary>
         /// OSS Information REST service.
         /// </summary>
-        public OssInfoController()
+        /// <param name="ossApi">OSS Api service.</param>
+        /// <param name="memoryCache">Memory cache.</param>
+        public OssInfoController(IOssApiService ossApi, IMemoryCache memoryCache)
         {
+            _ossApi = ossApi;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -36,48 +43,64 @@ namespace PsefApiOData.Controllers
         /// <returns>The requested OSS Information.</returns>
         /// <response code="200">The OSS Information was successfully retrieved.</response>
         /// <response code="404">The OSS Information does not exist.</response>
-        /// <example>OssInfo('123456789')</example>
+        /// <example>OssInfo('0000000000000')</example>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(OssInfo), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<OssInfo> Get([FromODataUri] string id)
+        public async Task<SingleResult<OssInfo>> Get([FromODataUri] string id)
         {
-            return SingleResult.Create(dummy.Where(e => e.Nib == id).AsQueryable());
+            OssInfoHelper helper = new OssInfoHelper(_ossApi, _memoryCache);
+            OssFullInfo fullInfo = await helper.RetrieveInfo(id);
+
+            OssInfo info = new OssInfo
+            {
+                Nib = fullInfo.Nib,
+                Address = fullInfo.AlamatPerseroan,
+                Name = fullInfo.NamaPerseroan,
+                Npwp = fullInfo.NpwpPerseroan,
+                Director = fullInfo.NamaUserProses
+            };
+
+            List<OssInfo> result = new List<OssInfo>
+            {
+                info
+            };
+
+            return SingleResult.Create(result.AsQueryable());
         }
 
-        private bool Exists(string id)
+        /// <summary>
+        /// Gets a single OSS Full Information.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="id">The requested OSS Full Information identifier.</param>
+        /// <returns>The requested OSS Full Information.</returns>
+        /// <response code="200">The OSS Full Information was successfully retrieved.</response>
+        /// <response code="404">The OSS Full Information does not exist.</response>
+        /// <example>OssFullInfo('0000000000000')</example>
+        [HttpGet]
+        [ODataRoute(nameof(OssFullInfo))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(OssFullInfo), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [ProducesResponseType(Status503ServiceUnavailable)]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
+        public async Task<SingleResult<OssFullInfo>> OssFullInfo([FromQuery] string id)
         {
-            return dummy.Any(e => e.Nib == id);
+            OssInfoHelper helper = new OssInfoHelper(_ossApi, _memoryCache);
+            List<OssFullInfo> list = new List<OssFullInfo>
+            {
+                await helper.RetrieveInfo(id)
+            };
+
+            return SingleResult.Create(list.AsQueryable());
         }
 
-        internal static readonly List<OssInfo> dummy = new List<OssInfo>
-        {
-            new OssInfo
-            {
-                Nib = "123456789",
-                Name = "Dummy OSS",
-                Address = "Alamat dummy",
-                Npwp = "0123456789",
-                Siup = "123456789",
-                Director = "Badu",
-                CapitalSourceType = 0,
-                CompanyType = 0,
-                LegalEntityType = 0
-            },
-            new OssInfo
-            {
-                Nib = "987654321",
-                Name = "OSS Dummy ",
-                Address = "Alamat dummy",
-                Npwp = "0000000000",
-                Siup = "111111111",
-                Director = "Budi",
-                CapitalSourceType = 1,
-                CompanyType = 1,
-                LegalEntityType = 1
-            }
-        };
+        private readonly IOssApiService _ossApi;
+        private readonly IMemoryCache _memoryCache;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
+using PsefApiOData.Controllers;
 using PsefApiOData.Models;
 
 namespace PsefApiOData.Configuration
@@ -19,9 +20,17 @@ namespace PsefApiOData.Configuration
             EntityTypeConfiguration<OssInfo> ossInfo = builder
                 .EntitySet<OssInfo>(nameof(OssInfo))
                 .EntityType;
+            ComplexTypeConfiguration<OssFullInfo> ossFullInfo = builder
+                .ComplexType<OssFullInfo>();
+
+            ossInfo.Collection
+                .Function(nameof(OssInfoController.OssFullInfo))
+                .Returns<OssFullInfo>();
 
             ossInfo.HasKey(p => p.Nib);
             ossInfo
+                .Select();
+            ossFullInfo
                 .Select();
         }
     }

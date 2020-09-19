@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -30,14 +31,20 @@ namespace PsefApiOData.Controllers
         /// <param name="context">Database context.</param>
         /// <param name="delegateService">Api delegation service.</param>
         /// <param name="identityApi">Identity Api service.</param>
+        /// <param name="ossApi">Oss Api service.</param>
+        /// <param name="memoryCache">Memory cache.</param>
         /// <param name="environment">Web Host environment.</param>
         public PermohonanController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
             IIdentityApiService identityApi,
+            IOssApiService ossApi,
+            IMemoryCache memoryCache,
             IWebHostEnvironment environment)
         {
             _identityApi = identityApi;
+            _ossApi = ossApi;
+            _memoryCache = memoryCache;
             _environment = environment;
             _delegateService = delegateService;
             _context = context;
@@ -884,8 +891,14 @@ namespace PsefApiOData.Controllers
                 CounterType.Perizinan,
                 monthFunc: MonthToRomanNumber);
 
-            TandaDaftarHelper helper = new TandaDaftarHelper(_context, _environment, HttpContext, Url);
-            perizinan.TandaDaftarUrl = await helper.GeneratePdf(update, perizinan);
+            Pemohon pemohon = await _context.Pemohon
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
+            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
+            OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
+            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url);
+            perizinan.CompanyName = ossFullInfo.NamaPerseroan;
+            perizinan.TandaDaftarUrl = helper.GeneratePdf(ossFullInfo, update, perizinan);
 
             _context.Perizinan.Add(perizinan);
             await _context.SaveChangesAsync();
@@ -926,8 +939,13 @@ namespace PsefApiOData.Controllers
             Perizinan perizinan = await _context.Perizinan
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PerizinanId);
-            TandaDaftarHelper helper = new TandaDaftarHelper(_context, _environment, HttpContext, Url);
-            string path = await helper.GeneratePdf(permohonan, perizinan);
+            Pemohon pemohon = await _context.Pemohon
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
+            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
+            OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
+            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url);
+            string path = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
 
             return NoContent();
         }
@@ -1281,6 +1299,8 @@ namespace PsefApiOData.Controllers
         private readonly PsefMySqlContext _context;
         private readonly IApiDelegateService _delegateService;
         private readonly IIdentityApiService _identityApi;
+        private readonly IOssApiService _ossApi;
+        private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
     }
 }
