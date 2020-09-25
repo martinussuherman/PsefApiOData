@@ -1286,6 +1286,40 @@ namespace PsefApiOData.Controllers
                 e.StatusId == PermohonanStatus.Selesai.Id);
         }
 
+        /// <summary>
+        /// Retrieves Permohonan layanan total start time.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: Verifikator*
+        /// </remarks>
+        /// <param name="id">The requested Permohonan identifier.</param>
+        /// <returns>The start time for Permohonan layanan total.</returns>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Validator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(DateTime), Status200OK)]
+        public async Task<DateTime> LayananTotalStartTime([FromQuery] uint id)
+        {
+            HistoryPermohonan history = await _context.HistoryPermohonan
+                .Include(c => c.Permohonan)
+                .Where(
+                    c => c.PermohonanId == id &&
+                    c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id &&
+                    c.Permohonan.StatusId >= PermohonanStatus.DisetujuiVerifikator.Id)
+                .OrderByDescending(c => c.UpdatedAt)
+                .FirstOrDefaultAsync();
+
+            return history is null ? DateTime.Now : history.UpdatedAt;
+        }
+
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);

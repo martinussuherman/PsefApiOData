@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PsefApiOData.Models;
 using PsefApiOData.Controllers;
+using System;
 
 namespace PsefApiOData.Configuration
 {
@@ -102,6 +103,9 @@ namespace PsefApiOData.Configuration
             permohonan.Collection
                 .Function(nameof(PermohonanController.Selesai))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanController.LayananTotalStartTime))
+                .Returns<DateTime>();
 
             permohonan.HasKey(p => p.Id);
             permohonan
