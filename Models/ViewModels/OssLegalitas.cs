@@ -42,6 +42,5 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The TeleponNotaris.</value>
         public string TeleponNotaris { get; set; }
-
     }
 }

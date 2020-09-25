@@ -321,6 +321,24 @@ namespace PsefApiOData.Models
         public List<OssLegalitas> Legalitas { get; set; }
 
         /// <summary>
+        /// Gets or sets the list of DataRptka.
+        /// </summary>
+        /// <value>The list of DataRptka.</value>
+        public List<OssRptka> DataRptka { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of DataProyek.
+        /// </summary>
+        /// <value>The list of DataProyek.</value>
+        public List<OssProyek> DataProyek { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of DataDni.
+        /// </summary>
+        /// <value>The list of DataDni.</value>
+        public List<OssDni> DataDni { get; set; }
+
+        /// <summary>
         /// Gets or sets the list of DataChecklist.
         /// </summary>
         /// <value>The list of DataChecklist.</value>
