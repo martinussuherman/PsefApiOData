@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityModel.Client;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -45,6 +44,7 @@ namespace PsefApiOData.Controllers
             _memoryCache = memoryCache;
             _delegateService = delegateService;
             _context = context;
+            _pemohonHelper = new PemohonUserInfoHelper(_context, _delegateService, _identityApi);
         }
 
         /// <summary>
@@ -88,27 +88,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PemohonUserInfo>> Get()
         {
-            TokenResponse tokenResponse = await _delegateService.DelegateAsync(
-                HttpContext.Request.Headers["Authorization"][0]
-                    .Substring("Bearer ".Length));
-
-            List<UserInfo> userInfoList = await _identityApi.CallApiAsync<List<UserInfo>>(
-                tokenResponse,
-                "/BasicUserInfo");
-            List<Pemohon> pemohonList = await _context.Pemohon.ToListAsync();
-            List<PemohonUserInfo> result = new List<PemohonUserInfo>();
-
-            foreach (Pemohon pemohon in pemohonList)
-            {
-                UserInfo userInfo = userInfoList.FirstOrDefault(o => o.UserId == pemohon.UserId);
-
-                result.Add(new PemohonUserInfo
-                {
-                    Pemohon = pemohon,
-                    UserInfo = userInfo
-                });
-            }
-
+            List<PemohonUserInfo> result = await _pemohonHelper.RetrieveList(HttpContext);
             return result.AsQueryable();
         }
 
@@ -140,28 +120,12 @@ namespace PsefApiOData.Controllers
         public async Task<SingleResult<PemohonUserInfo>> Get([FromODataUri] uint id)
         {
             List<PemohonUserInfo> result = new List<PemohonUserInfo>();
+            PemohonUserInfo pemohon = await _pemohonHelper.Retrieve(id, HttpContext);
 
-            Pemohon pemohon = await _context.Pemohon
-                .Where(e => e.Id == id)
-                .FirstOrDefaultAsync();
-
-            if (pemohon == null)
+            if (pemohon != null)
             {
-                return SingleResult.Create(result.AsQueryable());
+                result.Add(pemohon);
             }
-
-            TokenResponse tokenResponse = await _delegateService.DelegateAsync(
-                HttpContext.Request.Headers["Authorization"][0]
-                    .Substring("Bearer ".Length));
-            UserInfo userInfo = await _identityApi.CallApiAsync<UserInfo>(
-                tokenResponse,
-                $"/BasicUserInfo/{pemohon.UserId}");
-
-            result.Add(new PemohonUserInfo()
-            {
-                Pemohon = pemohon,
-                UserInfo = userInfo
-            });
 
             return SingleResult.Create(result.AsQueryable());
         }
@@ -541,6 +505,7 @@ namespace PsefApiOData.Controllers
             return _context.Pemohon.Any(e => e.Id == id);
         }
 
+        private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PsefMySqlContext _context;
         private readonly IApiDelegateService _delegateService;
         private readonly IIdentityApiService _identityApi;
