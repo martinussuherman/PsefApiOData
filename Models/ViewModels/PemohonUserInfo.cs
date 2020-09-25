@@ -72,6 +72,18 @@ namespace PsefApiOData.Models
         }
 
         /// <summary>
+        /// (Read Only) Gets the Pemohon company name.
+        /// </summary>
+        /// <value>The Pemohon's company name.</value>
+        public string CompanyName
+        {
+            get => Pemohon.CompanyName;
+            set
+            {
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the Pemohon name.
         /// </summary>
         /// <value>The Pemohon's name.</value>

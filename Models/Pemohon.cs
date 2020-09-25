@@ -48,6 +48,13 @@ namespace PsefApiOData.Models
         public string Nib { get; set; }
 
         /// <summary>
+        /// Gets or sets the Pemohon company name.
+        /// </summary>
+        /// <value>The Pemohon's company name.</value>
+        [IgnoreDataMember]
+        public string CompanyName { get; set; }
+
+        /// <summary>
         /// Gets or sets list of Permohonan associated with the Pemohon.
         /// </summary>
         /// <value>The associated list of Permohonan.</value>

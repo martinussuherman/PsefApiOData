@@ -9,6 +9,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -30,12 +31,18 @@ namespace PsefApiOData.Controllers
         /// <param name="context">Database context.</param>
         /// <param name="delegateService">Api delegation service.</param>
         /// <param name="identityApi">Identity Api service.</param>
+        /// <param name="ossApi">Oss Api service.</param>
+        /// <param name="memoryCache">Memory cache.</param>
         public PemohonController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
-            IIdentityApiService identityApi)
+            IIdentityApiService identityApi,
+            IOssApiService ossApi,
+            IMemoryCache memoryCache)
         {
             _identityApi = identityApi;
+            _ossApi = ossApi;
+            _memoryCache = memoryCache;
             _delegateService = delegateService;
             _context = context;
         }
@@ -191,6 +198,11 @@ namespace PsefApiOData.Controllers
                 return Conflict(create.UserId);
             }
 
+            if (!await CheckNibAndUpdatePemohon(create))
+            {
+                return InvalidNib();
+            }
+
             _context.Pemohon.Add(create);
 
             try
@@ -251,6 +263,11 @@ namespace PsefApiOData.Controllers
             }
 
             delta.Patch(update);
+
+            if (!await CheckNibAndUpdatePemohon(update))
+            {
+                return InvalidNib();
+            }
 
             try
             {
@@ -331,6 +348,11 @@ namespace PsefApiOData.Controllers
                 return BadRequest();
             }
 
+            if (!await CheckNibAndUpdatePemohon(update))
+            {
+                return InvalidNib();
+            }
+
             _context.Entry(update).State = EntityState.Modified;
 
             try
@@ -402,6 +424,11 @@ namespace PsefApiOData.Controllers
                 return Conflict(userId);
             }
 
+            if (!await CheckNibAndUpdatePemohon(create))
+            {
+                return InvalidNib();
+            }
+
             create.UserId = userId;
             _context.Pemohon.Add(create);
 
@@ -468,6 +495,11 @@ namespace PsefApiOData.Controllers
                 return Unauthorized(currentUserId);
             }
 
+            if (!await CheckNibAndUpdatePemohon(update))
+            {
+                return InvalidNib();
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -486,6 +518,24 @@ namespace PsefApiOData.Controllers
             return Updated(update);
         }
 
+        private async Task<bool> CheckNibAndUpdatePemohon(Pemohon data)
+        {
+            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
+            OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(data.Nib);
+
+            if (string.IsNullOrEmpty(ossFullInfo.Nib))
+            {
+                return false;
+            }
+
+            data.CompanyName = ossFullInfo.NamaPerseroan;
+            return true;
+        }
+        private IActionResult InvalidNib()
+        {
+            ModelState.AddModelError(nameof(Pemohon.Nib), "NIB not found");
+            return BadRequest(ModelState);
+        }
         private bool Exists(uint id)
         {
             return _context.Pemohon.Any(e => e.Id == id);
@@ -494,5 +544,7 @@ namespace PsefApiOData.Controllers
         private readonly PsefMySqlContext _context;
         private readonly IApiDelegateService _delegateService;
         private readonly IIdentityApiService _identityApi;
+        private readonly IOssApiService _ossApi;
+        private readonly IMemoryCache _memoryCache;
     }
 }
