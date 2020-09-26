@@ -44,12 +44,6 @@ namespace PsefApiOData.Models
         public string PerizinanNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the Perizinan company name.
-        /// </summary>
-        /// <value>The Perizinan's company name.</value>
-        public string CompanyName { get; set; }
-
-        /// <summary>
         /// Gets or sets the Perizinan issued date.
         /// </summary>
         /// <value>The Perizinan's issued date.</value>

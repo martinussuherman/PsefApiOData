@@ -897,7 +897,6 @@ namespace PsefApiOData.Controllers
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
             OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
             TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url);
-            perizinan.CompanyName = ossFullInfo.NamaPerseroan;
             perizinan.TandaDaftarUrl = helper.GeneratePdf(ossFullInfo, update, perizinan);
 
             _context.Perizinan.Add(perizinan);

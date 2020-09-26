@@ -383,13 +383,6 @@ namespace PsefApiOData.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.CompanyName)
-                    .IsRequired()
-                    .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
                 entity.Property(e => e.PermohonanId)
                     .HasColumnType("int(10) unsigned")
                     .HasDefaultValueSql("'NULL'");
