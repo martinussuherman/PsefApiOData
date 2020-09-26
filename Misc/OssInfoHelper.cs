@@ -35,6 +35,11 @@ namespace PsefApiOData.Misc
         {
             id = id.Trim('\'');
 
+            if (id.Length != 13)
+            {
+                return _invalidNibInfo;
+            }
+
             if (id == "0000000000000")
             {
                 return _dummyInfo;
@@ -142,6 +147,10 @@ namespace PsefApiOData.Misc
         private static readonly OssFullInfo _connectionErrorInfo = new OssFullInfo
         {
             Keterangan = "Terdapat masalah dalam koneksi ke API OSS."
+        };
+        private static readonly OssFullInfo _invalidNibInfo = new OssFullInfo
+        {
+            Keterangan = "NIB harus 13 karakter."
         };
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
