@@ -38,8 +38,13 @@ namespace PsefApiOData.Misc
                 token.AccessToken);
 
             HttpResponseMessage response = await _httpClient.SendAsync(request);
-            string content = await response.Content.ReadAsStringAsync();
 
+            if (!response.IsSuccessStatusCode)
+            {
+                return default;
+            }
+
+            string content = await response.Content.ReadAsStringAsync();
             T result = JsonConvert.DeserializeObject<T>(content);
 
             return result;
