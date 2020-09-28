@@ -74,26 +74,29 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanController.ValidatorSertifikatPendingTotal))
                 .Returns<long>();
             permohonan.Collection
+                .Function(nameof(PermohonanController.Semua))
+                .Returns<PermohonanPemohon>();
+            permohonan.Collection
                 .Function(nameof(PermohonanController.VerifikatorPending))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.KepalaSeksiPending))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.KepalaSubDirektoratPending))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.DirekturPelayananFarmasiPending))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.DirekturJenderalPending))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.ValidatorSertifikatPending))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.ValidatorSertifikatDone))
-                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+                .Returns<PermohonanPemohon>();
             permohonan.Collection
                 .Function(nameof(PermohonanController.Rumusan))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));

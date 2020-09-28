@@ -48,6 +48,7 @@ namespace PsefApiOData.Controllers
             _environment = environment;
             _delegateService = delegateService;
             _context = context;
+            _pemohonHelper = new PemohonUserInfoHelper(_context, _delegateService, _identityApi);
         }
 
         /// <summary>
@@ -950,6 +951,39 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Retrieves all Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min Role: Verifikator*
+        /// </remarks>
+        /// <returns>All available pending Permohonan for Verifikator.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Verifikator,
+            ApiRole.Validator,
+            ApiRole.Kasi,
+            ApiRole.Kasubdit,
+            ApiRole.Diryanfar,
+            ApiRole.Dirjen,
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
+        [ProducesResponseType(Status403Forbidden)]
+        [EnableQuery]
+        public async Task<IQueryable<PermohonanPemohon>> Semua()
+        {
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId != PermohonanStatus.Dibuat.Id &&
+                    c.StatusId != PermohonanStatus.DikembalikanVerifikator.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
+        }
+
+        /// <summary>
         /// Retrieves all pending Permohonan for Verifikator.
         /// </summary>
         /// <remarks>
@@ -960,13 +994,17 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Verifikator)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> VerifikatorPending()
+        public async Task<IQueryable<PermohonanPemohon>> VerifikatorPending()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.Diajukan.Id ||
-                c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.Diajukan.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -980,13 +1018,17 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Kasi)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> KepalaSeksiPending()
+        public async Task<IQueryable<PermohonanPemohon>> KepalaSeksiPending()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
-                c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -1000,13 +1042,17 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Kasubdit)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> KepalaSubDirektoratPending()
+        public async Task<IQueryable<PermohonanPemohon>> KepalaSubDirektoratPending()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
-                c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -1020,13 +1066,17 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Diryanfar)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> DirekturPelayananFarmasiPending()
+        public async Task<IQueryable<PermohonanPemohon>> DirekturPelayananFarmasiPending()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
-                c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -1040,12 +1090,16 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Dirjen)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> DirekturJenderalPending()
+        public async Task<IQueryable<PermohonanPemohon>> DirekturJenderalPending()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -1059,12 +1113,16 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Validator)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> ValidatorSertifikatPending()
+        public async Task<IQueryable<PermohonanPemohon>> ValidatorSertifikatPending()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -1078,12 +1136,16 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(ApiRole.Validator)]
         [HttpGet]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Permohonan> ValidatorSertifikatDone()
+        public async Task<IQueryable<PermohonanPemohon>> ValidatorSertifikatDone()
         {
-            return _context.Permohonan.Where(c =>
-                c.StatusId == PermohonanStatus.Selesai.Id);
+            List<Permohonan> permohonanList = await _context.Permohonan
+                .Where(c =>
+                    c.StatusId == PermohonanStatus.Selesai.Id)
+                .ToListAsync();
+
+            return (await MergeList(permohonanList)).AsQueryable();
         }
 
         /// <summary>
@@ -1319,16 +1381,72 @@ namespace PsefApiOData.Controllers
             return history is null ? DateTime.Now : history.UpdatedAt;
         }
 
+        internal class HistoryPermohonanTimeData
+        {
+            internal uint Id { get; set; }
+            internal DateTime UpdatedAt { get; set; }
+        }
+
+        private async Task<List<PermohonanPemohon>> MergeList(
+            List<Permohonan> permohonanList,
+            List<HistoryPermohonanTimeData> totalTimeList = null,
+            List<HistoryPermohonanTimeData> userTimeList = null)
+        {
+            List<PemohonUserInfo> pemohonList = await _pemohonHelper.RetrieveList(HttpContext);
+            List<PermohonanPemohon> result = new List<PermohonanPemohon>();
+
+            foreach (Permohonan permohonan in permohonanList)
+            {
+                PemohonUserInfo pemohon = pemohonList
+                    .FirstOrDefault(c => c.Id == permohonan.PemohonId);
+                HistoryPermohonanTimeData totalTimeData = totalTimeList?
+                    .FirstOrDefault(c => c.Id == permohonan.Id);
+                HistoryPermohonanTimeData userTimeData = userTimeList?
+                    .FirstOrDefault(c => c.Id == permohonan.Id);
+                result.Add(Merge(pemohon, permohonan, totalTimeData, userTimeData));
+            }
+
+            return result;
+        }
+        private PermohonanPemohon Merge(
+            PemohonUserInfo pemohon,
+            Permohonan permohonan,
+            HistoryPermohonanTimeData totalTimeData,
+            HistoryPermohonanTimeData userTimeData)
+        {
+            DateTime totalTimeStart = totalTimeData?.UpdatedAt == null ?
+                DateTime.Now :
+                totalTimeData.UpdatedAt;
+            DateTime userTimeStart = userTimeData?.UpdatedAt == null ?
+                DateTime.Now :
+                userTimeData.UpdatedAt;
+
+            return new PermohonanPemohon
+            {
+                PermohonanId = permohonan.Id,
+                PermohonanNumber = permohonan.PermohonanNumber,
+                Domain = permohonan.Domain,
+                StatusName = permohonan.StatusName,
+                TypeName = permohonan.TypeName,
+                LastUpdate = permohonan.LastUpdate,
+                CompanyName = pemohon?.CompanyName,
+                Email = pemohon?.Email,
+                Name = pemohon?.Name,
+                Nib = pemohon?.Nib,
+                TotalDays = DateTime.Now.Subtract(totalTimeStart).Days,
+                UserLevelDays = DateTime.Now.Subtract(userTimeStart).Days
+            };
+        }
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);
         }
-
         private string MonthToRomanNumber(DateTime date)
         {
             return RomanNumberHelper.ToRomanNumber(date.Month);
         }
 
+        private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PsefMySqlContext _context;
         private readonly IApiDelegateService _delegateService;
         private readonly IIdentityApiService _identityApi;
