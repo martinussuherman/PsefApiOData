@@ -138,6 +138,12 @@ namespace PsefApiOData.Models
         public string ApotekerPhone { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan apoteker NIK.
+        /// </summary>
+        /// <value>The Permohonan's apoteker NIK.</value>
+        public string ApotekerNik { get; set; }
+
+        /// <summary>
         /// Gets or sets the Permohonan apoteker STRA number.
         /// </summary>
         /// <value>The Permohonan's apoteker STRA number.</value>
@@ -172,6 +178,12 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The Permohonan's Dokumen Api document url.</value>
         public string DokumenApiUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan Dokumen PSE Kominfo document url.
+        /// </summary>
+        /// <value>The Permohonan's Dokumen PSE Kominfo document url.</value>
+        public string DokumenPseUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the Permohonan last update.
