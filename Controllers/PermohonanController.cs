@@ -1003,8 +1003,20 @@ namespace PsefApiOData.Controllers
                     c.StatusId == PermohonanStatus.Diajukan.Id ||
                     c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id)
                 .ToListAsync();
+            List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
+                .Include(c => c.Permohonan)
+                .Where(c =>
+                    c.Permohonan.StatusId == PermohonanStatus.Diajukan.Id ||
+                    c.Permohonan.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id)
+                .OrderByDescending(c => c.UpdatedAt)
+                .Select(c => new HistoryPermohonanTimeData
+                {
+                    Id = c.PermohonanId,
+                    UpdatedAt = c.UpdatedAt
+                })
+                .ToListAsync();
 
-            return (await MergeList(permohonanList)).AsQueryable();
+            return (await MergeList(permohonanList, timeList)).AsQueryable();
         }
 
         /// <summary>
@@ -1027,8 +1039,20 @@ namespace PsefApiOData.Controllers
                     c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
                     c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id)
                 .ToListAsync();
+            List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
+                .Include(c => c.Permohonan)
+                .Where(c =>
+                    c.Permohonan.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
+                    c.Permohonan.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id)
+                .OrderByDescending(c => c.UpdatedAt)
+                .Select(c => new HistoryPermohonanTimeData
+                {
+                    Id = c.PermohonanId,
+                    UpdatedAt = c.UpdatedAt
+                })
+                .ToListAsync();
 
-            return (await MergeList(permohonanList)).AsQueryable();
+            return (await MergeList(permohonanList, timeList)).AsQueryable();
         }
 
         /// <summary>
@@ -1051,8 +1075,20 @@ namespace PsefApiOData.Controllers
                     c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
                     c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id)
                 .ToListAsync();
+            List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
+                .Include(c => c.Permohonan)
+                .Where(c =>
+                    c.Permohonan.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
+                    c.Permohonan.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id)
+                .OrderByDescending(c => c.UpdatedAt)
+                .Select(c => new HistoryPermohonanTimeData
+                {
+                    Id = c.PermohonanId,
+                    UpdatedAt = c.UpdatedAt
+                })
+                .ToListAsync();
 
-            return (await MergeList(permohonanList)).AsQueryable();
+            return (await MergeList(permohonanList, timeList)).AsQueryable();
         }
 
         /// <summary>
@@ -1075,8 +1111,20 @@ namespace PsefApiOData.Controllers
                     c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
                     c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id)
                 .ToListAsync();
+            List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
+                .Include(c => c.Permohonan)
+                .Where(c =>
+                    c.Permohonan.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
+                    c.Permohonan.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id)
+                .OrderByDescending(c => c.UpdatedAt)
+                .Select(c => new HistoryPermohonanTimeData
+                {
+                    Id = c.PermohonanId,
+                    UpdatedAt = c.UpdatedAt
+                })
+                .ToListAsync();
 
-            return (await MergeList(permohonanList)).AsQueryable();
+            return (await MergeList(permohonanList, timeList)).AsQueryable();
         }
 
         /// <summary>
@@ -1098,8 +1146,19 @@ namespace PsefApiOData.Controllers
                 .Where(c =>
                     c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
                 .ToListAsync();
+            List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
+                .Include(c => c.Permohonan)
+                .Where(c =>
+                    c.Permohonan.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
+                .OrderByDescending(c => c.UpdatedAt)
+                .Select(c => new HistoryPermohonanTimeData
+                {
+                    Id = c.PermohonanId,
+                    UpdatedAt = c.UpdatedAt
+                })
+                .ToListAsync();
 
-            return (await MergeList(permohonanList)).AsQueryable();
+            return (await MergeList(permohonanList, timeList)).AsQueryable();
         }
 
         /// <summary>
@@ -1383,14 +1442,14 @@ namespace PsefApiOData.Controllers
 
         internal class HistoryPermohonanTimeData
         {
-            internal uint Id { get; set; }
+            internal uint? Id { get; set; }
+            internal byte StatusId { get; set; }
             internal DateTime UpdatedAt { get; set; }
         }
 
         private async Task<List<PermohonanPemohon>> MergeList(
             List<Permohonan> permohonanList,
-            List<HistoryPermohonanTimeData> totalTimeList = null,
-            List<HistoryPermohonanTimeData> userTimeList = null)
+            List<HistoryPermohonanTimeData> timeList = null)
         {
             List<PemohonUserInfo> pemohonList = await _pemohonHelper.RetrieveList(HttpContext);
             List<PermohonanPemohon> result = new List<PermohonanPemohon>();
@@ -1399,9 +1458,11 @@ namespace PsefApiOData.Controllers
             {
                 PemohonUserInfo pemohon = pemohonList
                     .FirstOrDefault(c => c.Id == permohonan.PemohonId);
-                HistoryPermohonanTimeData totalTimeData = totalTimeList?
-                    .FirstOrDefault(c => c.Id == permohonan.Id);
-                HistoryPermohonanTimeData userTimeData = userTimeList?
+                HistoryPermohonanTimeData totalTimeData = timeList?
+                    .FirstOrDefault(c =>
+                        c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id &&
+                        c.Id == permohonan.Id);
+                HistoryPermohonanTimeData userTimeData = timeList?
                     .FirstOrDefault(c => c.Id == permohonan.Id);
                 result.Add(Merge(pemohon, permohonan, totalTimeData, userTimeData));
             }
