@@ -1,4 +1,4 @@
-using Microsoft.AspNet.OData;
+﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -150,6 +150,7 @@ namespace PsefApiOData
                 {
                     options.OAuthClientId(Configuration.GetValue<string>("ClientId"));
                     options.OAuthAppName("PsefApiOData Swagger");
+                    options.OAuthUsePkce();
 
                     // build a swagger endpoint for each discovered API version
                     foreach (var description in provider.ApiVersionDescriptions)
@@ -166,10 +167,10 @@ namespace PsefApiOData
 
         private void ConfigureSwaggerGen(IServiceCollection services)
         {
-            var authUrl = new Uri($"{ApiHelper.Authority}/connect/authorize");
-            var implicitFlow = new OpenApiOAuthFlow
+            OpenApiOAuthFlow authCodeFlow = new OpenApiOAuthFlow
             {
-                AuthorizationUrl = authUrl,
+                AuthorizationUrl = new Uri($"{ApiHelper.Authority}/connect/authorize"),
+                TokenUrl = new Uri($"{ApiHelper.Authority}/connect/token"),
                 Scopes = new Dictionary<string, string>
                 {
                     { ApiHelper.Audience, "Api access" }
@@ -195,7 +196,7 @@ namespace PsefApiOData
                         Type = SecuritySchemeType.OAuth2,
                         Flows = new OpenApiOAuthFlows
                         {
-                            Implicit = implicitFlow
+                            AuthorizationCode = authCodeFlow
                         }
                     });
                 options.AddSecurityRequirement(
