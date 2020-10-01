@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -182,6 +182,7 @@ namespace PsefApiOData
             {
                 // add a custom operation filter which sets default values
                 options.OperationFilter<SwaggerDefaultValues>();
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
 
                 // integrate xml comments
                 options.IncludeXmlComments(XmlCommentsFilePath);
