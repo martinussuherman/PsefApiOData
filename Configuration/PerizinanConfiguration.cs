@@ -22,6 +22,10 @@ namespace PsefApiOData.Configuration
                 .EntitySet<Perizinan>(nameof(Perizinan))
                 .EntityType;
 
+            perizinan.Collection
+                .Function(nameof(PerizinanController.HalamanMuka))
+                .Returns<PerizinanHalamanMuka>();
+
             perizinan.HasKey(p => p.Id);
             perizinan
                 .Expand(SelectExpandType.Disabled)

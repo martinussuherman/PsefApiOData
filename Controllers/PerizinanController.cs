@@ -272,6 +272,31 @@ namespace PsefApiOData.Controllers
             return Updated(update);
         }
 
+        /// <summary>
+        /// Retrieves list of Perizinan Halaman Muka information.
+        /// </summary>
+        /// <remarks>
+        /// *Anonymous Access*
+        /// </remarks>
+        /// <returns>All available Perizinan Halaman Muka information.</returns>
+        /// <response code="200">Perizinan Halaman Muka successfully retrieved.</response>
+        [AllowAnonymous]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PerizinanHalamanMuka>>), Status200OK)]
+        public async Task<IEnumerable<PerizinanHalamanMuka>> HalamanMuka()
+        {
+            return await _context.Perizinan
+                .OrderByDescending(c => c.IssuedAt)
+                .Take(20)
+                .Select(c => new PerizinanHalamanMuka
+                {
+                    CompanyName = c.Permohonan.Pemohon.CompanyName,
+                    PerizinanNumber = c.PerizinanNumber
+                })
+                .ToListAsync();
+        }
+
         private bool Exists(uint id)
         {
             return _context.Perizinan.Any(e => e.Id == id);
