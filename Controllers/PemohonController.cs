@@ -424,7 +424,6 @@ namespace PsefApiOData.Controllers
         /// <response code="200">The Pemohon was successfully updated.</response>
         /// <response code="204">The Pemohon was successfully updated.</response>
         /// <response code="400">The Pemohon is invalid.</response>
-        /// <response code="401">Not authorized to modify Pemohon.</response>
         /// <response code="404">The Pemohon does not exist.</response>
         /// <response code="422">The Pemohon identifier is specified on delta and its value is different from id.</response>
         [ODataRoute(CurrentUser)]
@@ -432,7 +431,6 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(Pemohon), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        [ProducesResponseType(Status401Unauthorized)]
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status422UnprocessableEntity)]
         public async Task<IActionResult> PatchCurrentUser([FromBody] Delta<Pemohon> delta)
@@ -456,7 +454,7 @@ namespace PsefApiOData.Controllers
 
             if (update.UserId != currentUserId)
             {
-                return Unauthorized(currentUserId);
+                return BadRequest(currentUserId);
             }
 
             if (!await CheckNibAndUpdatePemohon(update))

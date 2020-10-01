@@ -177,7 +177,6 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(Permohonan), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        [ProducesResponseType(Status401Unauthorized)]
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status422UnprocessableEntity)]
         public async Task<IActionResult> Patch(
@@ -207,7 +206,7 @@ namespace PsefApiOData.Controllers
 
             if (update.PemohonId != oldPemohonId)
             {
-                return Unauthorized(update.PemohonId);
+                return BadRequest(update.PemohonId);
             }
 
             update.PermohonanNumber = oldPermohonanNumber;
