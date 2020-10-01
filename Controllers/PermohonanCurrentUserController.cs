@@ -50,7 +50,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Get()
         {
@@ -297,7 +296,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Rumusan()
         {
@@ -318,7 +316,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Progress()
         {
@@ -340,7 +337,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Selesai()
         {

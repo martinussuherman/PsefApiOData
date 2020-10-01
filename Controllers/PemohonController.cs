@@ -84,7 +84,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<PemohonUserInfo>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public async Task<IQueryable<PemohonUserInfo>> Get()
         {
@@ -114,7 +113,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(PemohonUserInfo), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public async Task<SingleResult<PemohonUserInfo>> Get([FromODataUri] uint id)

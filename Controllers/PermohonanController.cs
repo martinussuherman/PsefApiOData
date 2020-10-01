@@ -88,7 +88,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Get()
         {
@@ -117,7 +116,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Permohonan), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Permohonan> Get([FromODataUri] uint id)
@@ -970,7 +968,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> Semua()
         {
@@ -1351,7 +1348,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Rumusan()
         {
@@ -1374,7 +1370,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Progress()
         {
@@ -1398,7 +1393,6 @@ namespace PsefApiOData.Controllers
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Permohonan> Selesai()
         {

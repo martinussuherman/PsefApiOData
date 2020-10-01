@@ -43,7 +43,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<Perizinan>>), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [EnableQuery]
         public IQueryable<Perizinan> Get()
         {
@@ -69,7 +68,6 @@ namespace PsefApiOData.Controllers
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Perizinan), Status200OK)]
-        [ProducesResponseType(Status403Forbidden)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Perizinan> Get([FromODataUri] uint id)
