@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -60,8 +61,15 @@ namespace PsefApiOData.Misc
                 }
             };
 
+            JsonWebToken token = await _ossApi.Authenticate();
+
+            if (token == null)
+            {
+                return _invalidCredentialInfo;
+            }
+
             JObject response = await _ossApi.CallApiAsync(
-                await _ossApi.Authenticate(),
+                token,
                 "/KEMKES_inqueryNIB",
                 JsonConvert.SerializeObject(content));
 
@@ -143,6 +151,10 @@ namespace PsefApiOData.Misc
                     }
                 }
             }
+        };
+        private static readonly OssFullInfo _invalidCredentialInfo = new OssFullInfo
+        {
+            Keterangan = "Gagal melakukan login ke API OSS."
         };
         private static readonly OssFullInfo _connectionErrorInfo = new OssFullInfo
         {
