@@ -39,7 +39,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the Kapasitas.
         /// </summary>
         /// <value>The Kapasitas.</value>
-        public int Kapasitas { get; set; }
+        public decimal Kapasitas { get; set; }
 
         /// <summary>
         /// Gets or sets the Satuan.

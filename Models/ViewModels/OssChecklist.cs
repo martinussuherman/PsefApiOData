@@ -66,7 +66,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the IdBidangSpesifik.
         /// </summary>
         /// <value>The IdBidangSpesifik.</value>
-        public int IdBidangSpesifik { get; set; }
+        public string IdBidangSpesifik { get; set; }
 
         /// <summary>
         /// Gets or sets the BidangSpesifik.
