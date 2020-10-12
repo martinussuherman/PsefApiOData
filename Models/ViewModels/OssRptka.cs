@@ -66,12 +66,12 @@ namespace PsefApiOData.Models
         /// Gets or sets the list of RptkaNegara.
         /// </summary>
         /// <value>The list of RptkaNegara.</value>
-        public List<OssRptkaJabatan> RptkaNegara { get; set; }
+        public List<OssRptkaNegara> RptkaNegara { get; set; }
 
         /// <summary>
         /// Gets or sets the list of RptkaLokasi.
         /// </summary>
         /// <value>The list of RptkaLokasi.</value>
-        public List<OssRptkaJabatan> RptkaLokasi { get; set; }
+        public List<OssRptkaLokasi> RptkaLokasi { get; set; }
     }
 }

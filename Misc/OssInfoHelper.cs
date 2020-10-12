@@ -141,6 +141,55 @@ namespace PsefApiOData.Misc
             {
                 new OssLegalitas()
             },
+            DataRptka = new OssRptka
+            {
+                RptkaJabatan = new List<OssRptkaJabatan>
+                {
+                    new OssRptkaJabatan
+                    {
+                        RptkaTkiPendamping = new List<OssRptkaTkiPendamping>
+                        {
+                            new OssRptkaTkiPendamping()
+                        }
+                    }
+                },
+                RptkaNegara = new List<OssRptkaNegara>
+                {
+                    new OssRptkaNegara()
+                },
+                RptkaLokasi = new List<OssRptkaLokasi>
+                {
+                    new OssRptkaLokasi()
+                }
+            },
+            DataProyek = new List<OssProyek>
+            {
+                new OssProyek
+                {
+                    DataLokasiProyek = new List<OssProyekLokasi>
+                    {
+                        new OssProyekLokasi
+                        {
+                            DataLokasiProyek = new List<OssProyekLokasiLokasi>
+                            {
+                                new OssProyekLokasiLokasi()
+                            },
+                            DataPosisiProyek = new List<OssProyekPosisi>
+                            {
+                                new OssProyekPosisi()
+                            }
+                        }
+                    },
+                    DataProyekProduk = new List<OssProyekProduk>
+                    {
+                        new OssProyekProduk()
+                    }
+                }
+            },
+            DataDni = new List<OssDni>
+            {
+                new OssDni()
+            },
             DataChecklist = new List<OssChecklist>
             {
                 new OssChecklist

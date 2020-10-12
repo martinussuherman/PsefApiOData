@@ -324,7 +324,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the list of DataRptka.
         /// </summary>
         /// <value>The list of DataRptka.</value>
-        public List<OssRptka> DataRptka { get; set; }
+        public OssRptka DataRptka { get; set; }
 
         /// <summary>
         /// Gets or sets the list of DataProyek.
