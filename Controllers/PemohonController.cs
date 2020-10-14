@@ -39,12 +39,10 @@ namespace PsefApiOData.Controllers
             IOssApiService ossApi,
             IMemoryCache memoryCache)
         {
-            _identityApi = identityApi;
             _ossApi = ossApi;
             _memoryCache = memoryCache;
-            _delegateService = delegateService;
             _context = context;
-            _pemohonHelper = new PemohonUserInfoHelper(_context, _delegateService, _identityApi);
+            _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
 
         /// <summary>
@@ -503,8 +501,6 @@ namespace PsefApiOData.Controllers
 
         private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PsefMySqlContext _context;
-        private readonly IApiDelegateService _delegateService;
-        private readonly IIdentityApiService _identityApi;
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
     }

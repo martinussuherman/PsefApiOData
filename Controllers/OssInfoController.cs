@@ -29,8 +29,7 @@ namespace PsefApiOData.Controllers
         /// <param name="memoryCache">Memory cache.</param>
         public OssInfoController(IOssApiService ossApi, IMemoryCache memoryCache)
         {
-            _ossApi = ossApi;
-            _memoryCache = memoryCache;
+            _helper = new OssInfoHelper(ossApi, memoryCache);
         }
 
         /// <summary>
@@ -42,33 +41,22 @@ namespace PsefApiOData.Controllers
         /// <param name="id">The requested OSS Information identifier.</param>
         /// <returns>The requested OSS Information.</returns>
         /// <response code="200">The OSS Information was successfully retrieved.</response>
-        /// <response code="404">The OSS Information does not exist.</response>
         /// <example>OssInfo('0000000000000')</example>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(OssInfo), Status200OK)]
-        [ProducesResponseType(Status404NotFound)]
-        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public async Task<SingleResult<OssInfo>> Get([FromODataUri] string id)
+        public async Task<ActionResult> Get([FromODataUri] string id)
         {
-            OssInfoHelper helper = new OssInfoHelper(_ossApi, _memoryCache);
-            OssFullInfo fullInfo = await helper.RetrieveInfo(id);
+            OssFullInfo fullInfo = await _helper.RetrieveInfo(id);
 
-            OssInfo info = new OssInfo
+            return Ok(new OssInfo
             {
                 Nib = fullInfo.Nib,
                 Address = fullInfo.AlamatPerseroan,
                 Name = fullInfo.NamaPerseroan,
                 Npwp = fullInfo.NpwpPerseroan,
                 Director = fullInfo.NamaUserProses
-            };
-
-            List<OssInfo> result = new List<OssInfo>
-            {
-                info
-            };
-
-            return SingleResult.Create(result.AsQueryable());
+            });
         }
 
         /// <summary>
@@ -87,20 +75,17 @@ namespace PsefApiOData.Controllers
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(OssFullInfo), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
-        [ProducesResponseType(Status503ServiceUnavailable)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public async Task<SingleResult<OssFullInfo>> OssFullInfo([FromQuery] string id)
         {
-            OssInfoHelper helper = new OssInfoHelper(_ossApi, _memoryCache);
             List<OssFullInfo> list = new List<OssFullInfo>
             {
-                await helper.RetrieveInfo(id)
+                await _helper.RetrieveInfo(id)
             };
 
             return SingleResult.Create(list.AsQueryable());
         }
 
-        private readonly IOssApiService _ossApi;
-        private readonly IMemoryCache _memoryCache;
+        private readonly OssInfoHelper _helper;
     }
 }

@@ -28,8 +28,6 @@ namespace PsefApiOData.Configuration
                 .Returns<OssFullInfo>();
 
             ossInfo.HasKey(p => p.Nib);
-            ossInfo
-                .Select();
             ossFullInfo
                 .Select();
         }
