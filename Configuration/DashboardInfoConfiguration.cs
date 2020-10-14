@@ -21,17 +21,19 @@ namespace PsefApiOData.Configuration
             ComplexTypeConfiguration<DashboardInfo> info = builder
                 .ComplexType<DashboardInfo>();
 
-            builder.Function(nameof(DashboardInfoController.Verifikator))
+            builder.Function(nameof(DashboardInfoController.DashboardPemohon))
                 .Returns<DashboardInfo>();
-            builder.Function(nameof(DashboardInfoController.KepalaSeksi))
+            builder.Function(nameof(DashboardInfoController.DashboardVerifikator))
                 .Returns<DashboardInfo>();
-            builder.Function(nameof(DashboardInfoController.KepalaSubDirektorat))
+            builder.Function(nameof(DashboardInfoController.DashboardKepalaSeksi))
                 .Returns<DashboardInfo>();
-            builder.Function(nameof(DashboardInfoController.DirekturPelayananFarmasi))
+            builder.Function(nameof(DashboardInfoController.DashboardKepalaSubDirektorat))
                 .Returns<DashboardInfo>();
-            builder.Function(nameof(DashboardInfoController.DirekturJenderal))
+            builder.Function(nameof(DashboardInfoController.DashboardDirekturPelayananFarmasi))
                 .Returns<DashboardInfo>();
-            builder.Function(nameof(DashboardInfoController.ValidatorSertifikat))
+            builder.Function(nameof(DashboardInfoController.DashboardDirekturJenderal))
+                .Returns<DashboardInfo>();
+            builder.Function(nameof(DashboardInfoController.DashboardValidatorSertifikat))
                 .Returns<DashboardInfo>();
         }
     }

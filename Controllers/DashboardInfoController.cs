@@ -32,6 +32,30 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Retrieves Pemohon Dashboard Info.
+        /// </summary>
+        /// <remarks>
+        /// *Role: None*
+        /// </remarks>
+        /// <returns>Pemohon Dashboard Info.</returns>
+        /// <response code="200">Pemohon Dashboard Info.</response>
+        [HttpGet]
+        [ODataRoute(nameof(DashboardPemohon))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
+        public async Task<ActionResult> DashboardPemohon()
+        {
+            return Ok(new DashboardInfo
+            {
+                TotalPemohon = 1,
+                TotalPermohonanPending = await TotalPermohonanPemohonPending(),
+                TotalPermohonan = await TotalPermohonanPemohon(),
+                TotalPerizinan = await TotalPerizinanPemohon(),
+                Aktifitas = await Aktifitas()
+            });
+        }
+
+        /// <summary>
         /// Retrieves Verifikator Dashboard Info.
         /// </summary>
         /// <remarks>
@@ -41,10 +65,10 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Verifikator Dashboard Info.</response>
         [MultiRoleAuthorize(ApiRole.Verifikator)]
         [HttpGet]
-        [ODataRoute(nameof(Verifikator))]
+        [ODataRoute(nameof(DashboardVerifikator))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
-        public async Task<ActionResult> Verifikator()
+        public async Task<ActionResult> DashboardVerifikator()
         {
             return Ok(new DashboardInfo
             {
@@ -66,10 +90,10 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Kepala Seksi Dashboard Info.</response>
         [MultiRoleAuthorize(ApiRole.Kasi)]
         [HttpGet]
-        [ODataRoute(nameof(KepalaSeksi))]
+        [ODataRoute(nameof(DashboardKepalaSeksi))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
-        public async Task<ActionResult> KepalaSeksi()
+        public async Task<ActionResult> DashboardKepalaSeksi()
         {
             return Ok(new DashboardInfo
             {
@@ -91,10 +115,10 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Kepala Sub Direktorat Dashboard Info.</response>
         [MultiRoleAuthorize(ApiRole.Kasubdit)]
         [HttpGet]
-        [ODataRoute(nameof(KepalaSubDirektorat))]
+        [ODataRoute(nameof(DashboardKepalaSubDirektorat))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
-        public async Task<ActionResult> KepalaSubDirektorat()
+        public async Task<ActionResult> DashboardKepalaSubDirektorat()
         {
             return Ok(new DashboardInfo
             {
@@ -116,10 +140,10 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Direktur Pelayanan Farmasi Dashboard Info.</response>
         [MultiRoleAuthorize(ApiRole.Diryanfar)]
         [HttpGet]
-        [ODataRoute(nameof(DirekturPelayananFarmasi))]
+        [ODataRoute(nameof(DashboardDirekturPelayananFarmasi))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
-        public async Task<ActionResult> DirekturPelayananFarmasi()
+        public async Task<ActionResult> DashboardDirekturPelayananFarmasi()
         {
             return Ok(new DashboardInfo
             {
@@ -141,10 +165,10 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Direktur Jenderal Dashboard Info.</response>
         [MultiRoleAuthorize(ApiRole.Dirjen)]
         [HttpGet]
-        [ODataRoute(nameof(DirekturJenderal))]
+        [ODataRoute(nameof(DashboardDirekturJenderal))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
-        public async Task<ActionResult> DirekturJenderal()
+        public async Task<ActionResult> DashboardDirekturJenderal()
         {
             return Ok(new DashboardInfo
             {
@@ -166,10 +190,10 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Validator Sertifikat Dashboard Info.</response>
         [MultiRoleAuthorize(ApiRole.Validator)]
         [HttpGet]
-        [ODataRoute(nameof(ValidatorSertifikat))]
+        [ODataRoute(nameof(DashboardValidatorSertifikat))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(DashboardInfo), Status200OK)]
-        public async Task<ActionResult> ValidatorSertifikat()
+        public async Task<ActionResult> DashboardValidatorSertifikat()
         {
             return Ok(new DashboardInfo
             {
@@ -189,9 +213,30 @@ namespace PsefApiOData.Controllers
         {
             return await _context.Permohonan.LongCountAsync();
         }
+        private async Task<long> TotalPermohonanPemohon()
+        {
+            return await _context.Permohonan
+                .Where(c => c.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User))
+                .LongCountAsync();
+        }
+        private async Task<long> TotalPermohonanPemohonPending()
+        {
+            return await _context.Permohonan
+                .Where(c =>
+                    c.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                    (c.StatusId == PermohonanStatus.Dibuat.Id ||
+                    c.StatusId == PermohonanStatus.DikembalikanVerifikator.Id))
+                .LongCountAsync();
+        }
         private async Task<long> TotalPerizinan()
         {
             return await _context.Perizinan.LongCountAsync();
+        }
+        private async Task<long> TotalPerizinanPemohon()
+        {
+            return await _context.Perizinan
+                .Where(c => c.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User))
+                .LongCountAsync();
         }
         private async Task<List<Aktifitas>> Aktifitas()
         {
