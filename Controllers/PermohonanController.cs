@@ -42,13 +42,12 @@ namespace PsefApiOData.Controllers
             IMemoryCache memoryCache,
             IWebHostEnvironment environment)
         {
-            _identityApi = identityApi;
             _ossApi = ossApi;
             _memoryCache = memoryCache;
             _environment = environment;
-            _delegateService = delegateService;
             _context = context;
-            _pemohonHelper = new PemohonUserInfoHelper(_context, _delegateService, _identityApi);
+            _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
+            _helper = new PermohonanHelper(context);
         }
 
         /// <summary>
@@ -326,39 +325,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> VerifikatorSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.Diajukan.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DisetujuiVerifikator.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DisetujuiVerifikator.Id,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Verifikator(),
+                PermohonanStatus.DisetujuiVerifikator);
         }
 
         /// <summary>
@@ -377,41 +347,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> VerifikatorKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.Diajukan.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DikembalikanVerifikator.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DikembalikanVerifikator.Id,
-                Reason = data.Reason,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            // TODO : notify Pemohon via email?
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Verifikator(),
+                PermohonanStatus.DikembalikanVerifikator);
         }
 
         /// <summary>
@@ -430,39 +369,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> KepalaSeksiSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DisetujuiKepalaSeksi.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DisetujuiKepalaSeksi.Id,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Kasi(),
+                PermohonanStatus.DisetujuiKepalaSeksi);
         }
 
         /// <summary>
@@ -481,40 +391,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> KepalaSeksiKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DikembalikanKepalaSeksi.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DikembalikanKepalaSeksi.Id,
-                Reason = data.Reason,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Kasi(),
+                PermohonanStatus.DikembalikanKepalaSeksi);
         }
 
         /// <summary>
@@ -533,39 +413,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> KepalaSubDirektoratSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DisetujuiKepalaSubDirektorat.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DisetujuiKepalaSubDirektorat.Id,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Kasubdit(),
+                PermohonanStatus.DisetujuiKepalaSubDirektorat);
         }
 
         /// <summary>
@@ -584,40 +435,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> KepalaSubDirektoratKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DikembalikanKepalaSubDirektorat.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DikembalikanKepalaSubDirektorat.Id,
-                Reason = data.Reason,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Kasubdit(),
+                PermohonanStatus.DikembalikanKepalaSubDirektorat);
         }
 
         /// <summary>
@@ -636,39 +457,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> DirekturPelayananFarmasiSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Diryanfar(),
+                PermohonanStatus.DisetujuiDirekturPelayananFarmasi);
         }
 
         /// <summary>
@@ -687,40 +479,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> DirekturPelayananFarmasiKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    (c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id));
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id,
-                Reason = data.Reason,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Diryanfar(),
+                PermohonanStatus.DikembalikanDirekturPelayananFarmasi);
         }
 
         /// <summary>
@@ -739,38 +501,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> DirekturJenderalSetujui(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DisetujuiDirekturJenderal.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DisetujuiDirekturJenderal.Id,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Dirjen(),
+                PermohonanStatus.DisetujuiDirekturJenderal);
         }
 
         /// <summary>
@@ -789,39 +523,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> DirekturJenderalKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
-            Permohonan update = await _context.Permohonan
-                .FirstOrDefaultAsync(c =>
-                    c.Id == data.PermohonanId &&
-                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
-
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            update.StatusId = PermohonanStatus.DikembalikanDirekturJenderal.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.DikembalikanDirekturJenderal.Id,
-                Reason = data.Reason,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await ProcessPermohonan(
+                data,
+                _helper.Dirjen(),
+                PermohonanStatus.DikembalikanDirekturJenderal);
         }
 
         /// <summary>
@@ -851,16 +556,7 @@ namespace PsefApiOData.Controllers
             }
 
             update.StatusId = PermohonanStatus.Selesai.Id;
-
-            HistoryPermohonan history = new HistoryPermohonan
-            {
-                PermohonanId = update.Id,
-                StatusId = PermohonanStatus.Selesai.Id,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
-
-            _context.HistoryPermohonan.Add(history);
+            _context.HistoryPermohonan.Add(CreateHistory(update, data));
 
             try
             {
@@ -995,11 +691,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> VerifikatorPending()
         {
-            List<Permohonan> permohonanList = await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.Diajukan.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id)
-                .ToListAsync();
+            List<Permohonan> permohonanList = await _helper.Verifikator().ToListAsync();
             List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
                 .Include(c => c.Permohonan)
                 .Where(c =>
@@ -1031,11 +723,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> KepalaSeksiPending()
         {
-            List<Permohonan> permohonanList = await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id)
-                .ToListAsync();
+            List<Permohonan> permohonanList = await _helper.Kasi().ToListAsync();
             List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
                 .Include(c => c.Permohonan)
                 .Where(c =>
@@ -1067,11 +755,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> KepalaSubDirektoratPending()
         {
-            List<Permohonan> permohonanList = await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id)
-                .ToListAsync();
+            List<Permohonan> permohonanList = await _helper.Kasubdit().ToListAsync();
             List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
                 .Include(c => c.Permohonan)
                 .Where(c =>
@@ -1103,11 +787,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> DirekturPelayananFarmasiPending()
         {
-            List<Permohonan> permohonanList = await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id)
-                .ToListAsync();
+            List<Permohonan> permohonanList = await _helper.Diryanfar().ToListAsync();
             List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
                 .Include(c => c.Permohonan)
                 .Where(c =>
@@ -1139,10 +819,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> DirekturJenderalPending()
         {
-            List<Permohonan> permohonanList = await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
-                .ToListAsync();
+            List<Permohonan> permohonanList = await _helper.Dirjen().ToListAsync();
             List<HistoryPermohonanTimeData> timeList = await _context.HistoryPermohonan
                 .Include(c => c.Permohonan)
                 .Where(c =>
@@ -1173,10 +850,7 @@ namespace PsefApiOData.Controllers
         [EnableQuery]
         public async Task<IQueryable<PermohonanPemohon>> ValidatorSertifikatPending()
         {
-            List<Permohonan> permohonanList = await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id)
-                .ToListAsync();
+            List<Permohonan> permohonanList = await _helper.Validator().ToListAsync();
 
             return (await MergeList(permohonanList)).AsQueryable();
         }
@@ -1219,11 +893,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(long), Status200OK)]
         public async Task<long> VerifikatorPendingTotal()
         {
-            return await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.Diajukan.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSeksi.Id)
-                .LongCountAsync();
+            return await _helper.Verifikator().LongCountAsync();
         }
 
         /// <summary>
@@ -1241,11 +911,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(long), Status200OK)]
         public async Task<long> KepalaSeksiPendingTotal()
         {
-            return await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiVerifikator.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanKepalaSubDirektorat.Id)
-                .LongCountAsync();
+            return await _helper.Kasi().LongCountAsync();
         }
 
         /// <summary>
@@ -1263,11 +929,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(long), Status200OK)]
         public async Task<long> KepalaSubDirektoratPendingTotal()
         {
-            return await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiKepalaSeksi.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturPelayananFarmasi.Id)
-                .LongCountAsync();
+            return await _helper.Kasubdit().LongCountAsync();
         }
 
         /// <summary>
@@ -1285,11 +947,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(long), Status200OK)]
         public async Task<long> DirekturPelayananFarmasiPendingTotal()
         {
-            return await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiKepalaSubDirektorat.Id ||
-                    c.StatusId == PermohonanStatus.DikembalikanDirekturJenderal.Id)
-                .LongCountAsync();
+            return await _helper.Diryanfar().LongCountAsync();
         }
 
         /// <summary>
@@ -1307,10 +965,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(long), Status200OK)]
         public async Task<long> DirekturJenderalPendingTotal()
         {
-            return await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id)
-                .LongCountAsync();
+            return await _helper.Dirjen().LongCountAsync();
         }
 
         /// <summary>
@@ -1328,10 +983,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(typeof(long), Status200OK)]
         public async Task<long> ValidatorSertifikatPendingTotal()
         {
-            return await _context.Permohonan
-                .Where(c =>
-                    c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id)
-                .LongCountAsync();
+            return await _helper.Validator().LongCountAsync();
         }
 
         /// <summary>
@@ -1441,6 +1093,50 @@ namespace PsefApiOData.Controllers
             internal DateTime UpdatedAt { get; set; }
         }
 
+        private async Task<IActionResult> ProcessPermohonan(
+            PermohonanSystemUpdate data,
+            IQueryable<Permohonan> query,
+            PermohonanStatus status,
+            object delegateFunction = null)
+        {
+            Permohonan update = await query
+                .FirstOrDefaultAsync(c => c.Id == data.PermohonanId);
+
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            update.StatusId = status.Id;
+            _context.HistoryPermohonan.Add(CreateHistory(update, data));
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            if (delegateFunction != null)
+            {
+                // call delegate function to do extra processing, ex: send email 
+            }
+
+            return NoContent();
+        }
+        private HistoryPermohonan CreateHistory(Permohonan permohonan, PermohonanSystemUpdate update)
+        {
+            return new HistoryPermohonan
+            {
+                PermohonanId = permohonan.Id,
+                StatusId = permohonan.StatusId,
+                Reason = update.Reason ?? string.Empty,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
+            };
+        }
         private async Task<List<PermohonanPemohon>> MergeList(
             List<Permohonan> permohonanList,
             List<HistoryPermohonanTimeData> timeList = null)
@@ -1502,9 +1198,8 @@ namespace PsefApiOData.Controllers
         }
 
         private readonly PemohonUserInfoHelper _pemohonHelper;
+        private readonly PermohonanHelper _helper;
         private readonly PsefMySqlContext _context;
-        private readonly IApiDelegateService _delegateService;
-        private readonly IIdentityApiService _identityApi;
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
