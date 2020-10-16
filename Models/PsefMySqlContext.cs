@@ -41,6 +41,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<HistoryPermohonan> HistoryPermohonan { get; set; }
 
         /// <summary>
+        /// Homepage Banner table
+        /// </summary>
+        /// <value>Homepage Banner</value>
+        public virtual DbSet<HomepageBanner> HomepageBanner { get; set; }
+
+        /// <summary>
         /// Kabupaten/Kota table
         /// </summary>
         /// <value>Kabupaten/Kota</value>
@@ -262,6 +268,20 @@ namespace PsefApiOData.Models
                     .HasForeignKey(d => d.PermohonanId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_historypermohonan_permohonan");
+            });
+
+            modelBuilder.Entity<HomepageBanner>(entity =>
+            {
+                entity.ToTable("homepagebanner");
+
+                entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<KabupatenKota>(entity =>
