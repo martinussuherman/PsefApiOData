@@ -581,8 +581,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            // TODO : use const/read from setting
-            DateTime maxExpiry = DateTime.Today.AddYears(5);
+            DateTime maxExpiry = DateTime.Today.AddYears(_perizinanYears);
             DateTime expiry = maxExpiry.CompareTo(update.StraExpiry) > 0 ?
                 update.StraExpiry :
                 maxExpiry;
@@ -1201,10 +1200,10 @@ namespace PsefApiOData.Controllers
             HistoryPermohonanTimeData totalTimeData,
             HistoryPermohonanTimeData userTimeData)
         {
-            DateTime totalTimeStart = totalTimeData?.UpdatedAt == null ?
+            DateTime totalStartDate = totalTimeData?.UpdatedAt == null ?
                 DateTime.Now :
                 totalTimeData.UpdatedAt;
-            DateTime userTimeStart = userTimeData?.UpdatedAt == null ?
+            DateTime userStartDate = userTimeData?.UpdatedAt == null ?
                 DateTime.Now :
                 userTimeData.UpdatedAt;
 
@@ -1220,9 +1219,17 @@ namespace PsefApiOData.Controllers
                 Email = pemohon?.Email,
                 Name = pemohon?.Name,
                 Nib = pemohon?.Nib,
-                TotalDays = DateTime.Now.Subtract(totalTimeStart).Days,
-                UserLevelDays = DateTime.Now.Subtract(userTimeStart).Days
+                TotalDays = GetWorkingDays(totalStartDate, DateTime.Today),
+                UserLevelDays = GetWorkingDays(userStartDate, DateTime.Today)
             };
+        }
+        private int GetWorkingDays(DateTime startDate, DateTime endDate)
+        {
+            int dayDifference = endDate.Subtract(startDate).Days;
+            return Enumerable
+                .Range(1, dayDifference)
+                .Select(x => startDate.AddDays(x))
+                .Count(x => x.DayOfWeek != DayOfWeek.Saturday && x.DayOfWeek != DayOfWeek.Sunday);
         }
         private bool Exists(uint id)
         {
@@ -1239,6 +1246,7 @@ namespace PsefApiOData.Controllers
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
+        private const int _perizinanYears = 5;
         private const int _maxPermohonanDiajukan = 3;
     }
 }
