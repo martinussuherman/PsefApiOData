@@ -107,6 +107,9 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanController.Selesai))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
+                .Function(nameof(PermohonanController.Ditolak))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
                 .Function(nameof(PermohonanController.LayananTotalStartTime))
                 .Returns<DateTime>();
 
