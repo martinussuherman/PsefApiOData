@@ -345,6 +345,25 @@ namespace PsefApiOData.Controllers
                 e.StatusId == PermohonanStatus.Selesai.Id);
         }
 
+        /// <summary>
+        /// Retrieves all Permohonan for the current user with status Ditolak.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>All available Permohonan for the current user with status Ditolak.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> Ditolak()
+        {
+            return _context.Permohonan.Where(e =>
+                e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                e.StatusId == PermohonanStatus.Ditolak.Id);
+        }
+
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);

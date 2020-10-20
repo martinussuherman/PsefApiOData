@@ -347,6 +347,20 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> VerifikatorKembalikan(
             [FromBody] PermohonanSystemUpdate data)
         {
+            int diajukanCount = await _context.HistoryPermohonan
+                .Where(c =>
+                    c.PermohonanId == data.PermohonanId &&
+                    c.StatusId == PermohonanStatus.Diajukan.Id)
+                .CountAsync();
+
+            if (diajukanCount == _maxPermohonanDiajukan)
+            {
+                return await ProcessPermohonan(
+                    data,
+                    _helper.Verifikator(),
+                    PermohonanStatus.Ditolak);
+            }
+
             return await ProcessPermohonan(
                 data,
                 _helper.Verifikator(),
@@ -1028,7 +1042,8 @@ namespace PsefApiOData.Controllers
             return _context.Permohonan.Where(e =>
                 e.StatusId != PermohonanStatus.Dibuat.Id &&
                 e.StatusId != PermohonanStatus.DikembalikanVerifikator.Id &&
-                e.StatusId != PermohonanStatus.Selesai.Id);
+                e.StatusId != PermohonanStatus.Selesai.Id &&
+                e.StatusId != PermohonanStatus.Ditolak.Id);
         }
 
         /// <summary>
@@ -1050,6 +1065,27 @@ namespace PsefApiOData.Controllers
         {
             return _context.Permohonan.Where(e =>
                 e.StatusId == PermohonanStatus.Selesai.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all Permohonan with status Ditolak.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: Admin*
+        /// </remarks>
+        /// <returns>All available Permohonan with status Ditolak.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> Ditolak()
+        {
+            return _context.Permohonan.Where(e =>
+                e.StatusId == PermohonanStatus.Ditolak.Id);
         }
 
         /// <summary>
@@ -1203,5 +1239,6 @@ namespace PsefApiOData.Controllers
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
+        private const int _maxPermohonanDiajukan = 3;
     }
 }

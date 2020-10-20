@@ -169,6 +169,17 @@ namespace PsefApiOData.Models
         };
 
         /// <summary>
+        /// Permohonan Status Ditolak.
+        /// </summary>
+        /// <value>Permohonan Status Ditolak.</value>
+        public static PermohonanStatus Ditolak => new PermohonanStatus
+        {
+            Id = 14,
+            Name = "Ditolak",
+            PemohonDisplayedName = "Ditolak"
+        };
+
+        /// <summary>
         /// Gets list of predefined Permohonan Status.
         /// </summary>
         /// <value></value>
@@ -186,7 +197,8 @@ namespace PsefApiOData.Models
             DikembalikanDirekturPelayananFarmasi,
             DisetujuiDirekturJenderal,
             DikembalikanDirekturJenderal,
-            Selesai
+            Selesai,
+            Ditolak
         };
     }
 }
