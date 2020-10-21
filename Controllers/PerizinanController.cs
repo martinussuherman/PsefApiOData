@@ -290,7 +290,8 @@ namespace PsefApiOData.Controllers
                 .Select(c => new PerizinanHalamanMuka
                 {
                     CompanyName = c.Permohonan.Pemohon.CompanyName,
-                    PerizinanNumber = c.PerizinanNumber
+                    PerizinanNumber = c.PerizinanNumber,
+                    IssuedAt = c.IssuedAt
                 })
                 .ToListAsync();
         }

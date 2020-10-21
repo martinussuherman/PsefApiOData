@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace PsefApiOData.Models
@@ -18,5 +19,11 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The Perizinan's company name.</value>
         public string CompanyName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Perizinan issued date.
+        /// </summary>
+        /// <value>The Perizinan's issued date.</value>
+        public DateTime IssuedAt { get; set; }
     }
 }
