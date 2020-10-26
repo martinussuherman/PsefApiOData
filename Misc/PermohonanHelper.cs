@@ -56,6 +56,31 @@ namespace PsefApiOData.Misc
                     c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id);
         }
 
+        public IQueryable<Permohonan> NonRumusan()
+        {
+            return _context.Permohonan
+                .Where(c =>
+                    c.StatusId != PermohonanStatus.Dibuat.Id &&
+                    c.StatusId != PermohonanStatus.DikembalikanVerifikator.Id);
+        }
+
+        public IQueryable<Permohonan> DalamProses()
+        {
+            return _context.Permohonan
+                .Where(c =>
+                    c.StatusId != PermohonanStatus.Dibuat.Id &&
+                    c.StatusId != PermohonanStatus.DikembalikanVerifikator.Id &&
+                    c.StatusId != PermohonanStatus.Selesai.Id &&
+                    c.StatusId != PermohonanStatus.Ditolak.Id);
+        }
+
+        public IQueryable<Permohonan> Ditolak()
+        {
+            return _context.Permohonan
+                .Where(c =>
+                    c.StatusId != PermohonanStatus.Ditolak.Id);
+        }
+
         private readonly PsefMySqlContext _context;
     }
 }

@@ -75,6 +75,8 @@ namespace PsefApiOData.Controllers
                 TotalPemohon = await TotalPemohon(),
                 TotalPermohonanPending = await _helper.Verifikator().LongCountAsync(),
                 TotalPermohonan = await TotalPermohonan(),
+                TotalPermohonanDalamProses = await TotalPermohonanDalamProses(),
+                TotalPermohonanDitolak = await TotalPermohonanDitolak(),
                 TotalPerizinan = await TotalPerizinan(),
                 Aktifitas = await Aktifitas()
             });
@@ -100,6 +102,8 @@ namespace PsefApiOData.Controllers
                 TotalPemohon = await TotalPemohon(),
                 TotalPermohonanPending = await _helper.Kasi().LongCountAsync(),
                 TotalPermohonan = await TotalPermohonan(),
+                TotalPermohonanDalamProses = await TotalPermohonanDalamProses(),
+                TotalPermohonanDitolak = await TotalPermohonanDitolak(),
                 TotalPerizinan = await TotalPerizinan(),
                 Aktifitas = await Aktifitas()
             });
@@ -125,6 +129,8 @@ namespace PsefApiOData.Controllers
                 TotalPemohon = await TotalPemohon(),
                 TotalPermohonanPending = await _helper.Kasubdit().LongCountAsync(),
                 TotalPermohonan = await TotalPermohonan(),
+                TotalPermohonanDalamProses = await TotalPermohonanDalamProses(),
+                TotalPermohonanDitolak = await TotalPermohonanDitolak(),
                 TotalPerizinan = await TotalPerizinan(),
                 Aktifitas = await Aktifitas()
             });
@@ -150,6 +156,8 @@ namespace PsefApiOData.Controllers
                 TotalPemohon = await TotalPemohon(),
                 TotalPermohonanPending = await _helper.Diryanfar().LongCountAsync(),
                 TotalPermohonan = await TotalPermohonan(),
+                TotalPermohonanDalamProses = await TotalPermohonanDalamProses(),
+                TotalPermohonanDitolak = await TotalPermohonanDitolak(),
                 TotalPerizinan = await TotalPerizinan(),
                 Aktifitas = await Aktifitas()
             });
@@ -175,6 +183,8 @@ namespace PsefApiOData.Controllers
                 TotalPemohon = await TotalPemohon(),
                 TotalPermohonanPending = await _helper.Dirjen().LongCountAsync(),
                 TotalPermohonan = await TotalPermohonan(),
+                TotalPermohonanDalamProses = await TotalPermohonanDalamProses(),
+                TotalPermohonanDitolak = await TotalPermohonanDitolak(),
                 TotalPerizinan = await TotalPerizinan(),
                 Aktifitas = await Aktifitas()
             });
@@ -200,6 +210,8 @@ namespace PsefApiOData.Controllers
                 TotalPemohon = await TotalPemohon(),
                 TotalPermohonanPending = await _helper.Validator().LongCountAsync(),
                 TotalPermohonan = await TotalPermohonan(),
+                TotalPermohonanDalamProses = await TotalPermohonanDalamProses(),
+                TotalPermohonanDitolak = await TotalPermohonanDitolak(),
                 TotalPerizinan = await TotalPerizinan(),
                 Aktifitas = await Aktifitas()
             });
@@ -211,7 +223,15 @@ namespace PsefApiOData.Controllers
         }
         private async Task<long> TotalPermohonan()
         {
-            return await _context.Permohonan.LongCountAsync();
+            return await _helper.NonRumusan().LongCountAsync();
+        }
+        private async Task<long> TotalPermohonanDalamProses()
+        {
+            return await _helper.DalamProses().LongCountAsync();
+        }
+        private async Task<long> TotalPermohonanDitolak()
+        {
+            return await _helper.Ditolak().LongCountAsync();
         }
         private async Task<long> TotalPermohonanPemohon()
         {

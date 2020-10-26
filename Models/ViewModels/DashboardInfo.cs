@@ -26,6 +26,18 @@ namespace PsefApiOData.Models
         public long TotalPermohonan { get; set; }
 
         /// <summary>
+        /// Gets or sets the Dashboard Information total permohonan dalam proses.
+        /// </summary>
+        /// <value>The Dashboard Information's total permohonan dalam proses.</value>
+        public long TotalPermohonanDalamProses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Dashboard Information total permohonan ditolak.
+        /// </summary>
+        /// <value>The Dashboard Information's total permohonan ditolak.</value>
+        public long TotalPermohonanDitolak { get; set; }
+
+        /// <summary>
         /// Gets or sets the Dashboard Information total perizinan.
         /// </summary>
         /// <value>The Dashboard Information's total perizinan.</value>
