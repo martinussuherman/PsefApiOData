@@ -714,6 +714,7 @@ namespace PsefApiOData.Controllers
                 .Select(c => new HistoryPermohonanTimeData
                 {
                     Id = c.PermohonanId,
+                    StatusId = c.StatusId,
                     UpdatedAt = c.UpdatedAt
                 })
                 .ToListAsync();
@@ -746,6 +747,7 @@ namespace PsefApiOData.Controllers
                 .Select(c => new HistoryPermohonanTimeData
                 {
                     Id = c.PermohonanId,
+                    StatusId = c.StatusId,
                     UpdatedAt = c.UpdatedAt
                 })
                 .ToListAsync();
@@ -778,6 +780,7 @@ namespace PsefApiOData.Controllers
                 .Select(c => new HistoryPermohonanTimeData
                 {
                     Id = c.PermohonanId,
+                    StatusId = c.StatusId,
                     UpdatedAt = c.UpdatedAt
                 })
                 .ToListAsync();
@@ -810,6 +813,7 @@ namespace PsefApiOData.Controllers
                 .Select(c => new HistoryPermohonanTimeData
                 {
                     Id = c.PermohonanId,
+                    StatusId = c.StatusId,
                     UpdatedAt = c.UpdatedAt
                 })
                 .ToListAsync();
@@ -841,6 +845,7 @@ namespace PsefApiOData.Controllers
                 .Select(c => new HistoryPermohonanTimeData
                 {
                     Id = c.PermohonanId,
+                    StatusId = c.StatusId,
                     UpdatedAt = c.UpdatedAt
                 })
                 .ToListAsync();
@@ -1223,6 +1228,7 @@ namespace PsefApiOData.Controllers
                 UserLevelDays = GetWorkingDays(userStartDate, DateTime.Today)
             };
         }
+        // https://stackoverflow.com/questions/1617049/calculate-the-number-of-business-days-between-two-dates
         private int GetWorkingDays(DateTime startDate, DateTime endDate)
         {
             int dayDifference = endDate.Subtract(startDate).Days;
