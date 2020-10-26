@@ -78,7 +78,7 @@ namespace PsefApiOData.Misc
         {
             return _context.Permohonan
                 .Where(c =>
-                    c.StatusId != PermohonanStatus.Ditolak.Id);
+                    c.StatusId == PermohonanStatus.Ditolak.Id);
         }
 
         private readonly PsefMySqlContext _context;
