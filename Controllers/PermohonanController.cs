@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
+using WorkDaysCalculator;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApiOData.ApiInfo;
 
@@ -1224,18 +1225,9 @@ namespace PsefApiOData.Controllers
                 Email = pemohon?.Email,
                 Name = pemohon?.Name,
                 Nib = pemohon?.Nib,
-                TotalDays = GetWorkingDays(totalStartDate, DateTime.Today),
-                UserLevelDays = GetWorkingDays(userStartDate, DateTime.Today)
+                TotalDays = _calculator.GetWorkingDays(totalStartDate, DateTime.Today),
+                UserLevelDays = _calculator.GetWorkingDays(userStartDate, DateTime.Today)
             };
-        }
-        // https://stackoverflow.com/questions/1617049/calculate-the-number-of-business-days-between-two-dates
-        private int GetWorkingDays(DateTime startDate, DateTime endDate)
-        {
-            int dayDifference = endDate.Subtract(startDate).Days;
-            return Enumerable
-                .Range(1, dayDifference)
-                .Select(x => startDate.AddDays(x))
-                .Count(x => x.DayOfWeek != DayOfWeek.Saturday && x.DayOfWeek != DayOfWeek.Sunday);
         }
         private bool Exists(uint id)
         {
@@ -1246,6 +1238,7 @@ namespace PsefApiOData.Controllers
             return RomanNumberHelper.ToRomanNumber(date.Month);
         }
 
+        private readonly static Calculator _calculator = new Calculator();
         private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PermohonanHelper _helper;
         private readonly PsefMySqlContext _context;
