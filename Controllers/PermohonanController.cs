@@ -1207,11 +1207,11 @@ namespace PsefApiOData.Controllers
             HistoryPermohonanTimeData userTimeData)
         {
             DateTime totalStartDate = totalTimeData?.UpdatedAt == null ?
-                DateTime.Now :
-                totalTimeData.UpdatedAt;
+                DateTime.Today :
+                totalTimeData.UpdatedAt.Date;
             DateTime userStartDate = userTimeData?.UpdatedAt == null ?
-                DateTime.Now :
-                userTimeData.UpdatedAt;
+                DateTime.Today :
+                userTimeData.UpdatedAt.Date;
 
             return new PermohonanPemohon
             {
