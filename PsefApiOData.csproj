@@ -21,10 +21,7 @@
   <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
   <PackageReference Include="Syncfusion.Licensing" Version="17.3.0.34" />
   <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="17.3.0.34" />
+  <PackageReference Include="WorkDaysCalculator" Version="1.0.5-beta" />
  </ItemGroup>
  
- <ItemGroup>
-  <ProjectReference Include="..\WorkDaysCalculator\src\WorkDaysCalculator.csproj" />
- </ItemGroup>
-
 </Project>
