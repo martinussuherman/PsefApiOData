@@ -70,6 +70,7 @@ namespace PsefApiOData
             ConfigureOData(services);
             ConfigureSwaggerGen(services);
 
+            services.AddTransient<FileOperation>();
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
             services.AddHttpClient<IIdentityApiService, IdentityApiService>();
             services.AddHttpClient<IOssApiService, OssApiService>();
