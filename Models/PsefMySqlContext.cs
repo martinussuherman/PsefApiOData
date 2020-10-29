@@ -47,6 +47,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<HomepageBanner> HomepageBanner { get; set; }
 
         /// <summary>
+        /// Homepage News table
+        /// </summary>
+        /// <value>Homepage News</value>
+        public virtual DbSet<HomepageNews> HomepageNews { get; set; }
+
+        /// <summary>
         /// Kabupaten/Kota table
         /// </summary>
         /// <value>Kabupaten/Kota</value>
@@ -277,6 +283,45 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
 
                 entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<HomepageNews>(entity =>
+            {
+                entity.ToTable("homepagenews");
+
+                entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ImageUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.LinkUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PublishedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("'current_timestamp()'");
+
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnType("text")
                     .HasDefaultValueSql("''''''")
