@@ -11,24 +11,42 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PsefApiOData.Misc
 {
+    /// <summary>
+    /// File operation helpers.
+    /// </summary>
     public class FileOperation
     {
+        /// <summary>
+        /// File operation helpers.
+        /// </summary>
+        /// <param name="environment">Webhost environment.</param>
         public FileOperation(IWebHostEnvironment environment)
         {
             _environment = environment;
             _validation = new FileAndPathHelper();
         }
 
+        /// <summary>
+        /// Upload file.
+        /// </summary>
+        /// <param name="urlHelper">Url helper.</param>
+        /// <param name="file">Uploaded file.</param>
+        /// <param name="pathSegment">File path segment relative to wwwroot.</param>
+        /// <param name="permittedExtensions">Permitted file extensions.</param>
+        /// <param name="maxSizeBytes">Max file size in bytes.</param>
+        /// <returns>File url on success, or bad request on fail.</returns>
         public async Task<IActionResult> UploadFile(
             IUrlHelper urlHelper,
             IFormFile file,
             string[] pathSegment,
-            string[] permittedExtensions)
+            string[] permittedExtensions,
+            int maxSizeBytes)
         {
             string uploaded = await CopyUploadedFile(
                 file,
                 pathSegment,
-                permittedExtensions);
+                permittedExtensions,
+                maxSizeBytes);
 
             if (string.IsNullOrEmpty(uploaded))
             {
@@ -40,6 +58,13 @@ namespace PsefApiOData.Misc
                 urlHelper.Content($"~/{string.Join('/', pathSegment)}/{uploaded}"));
         }
 
+        /// <summary>
+        /// Delete file.
+        /// </summary>
+        /// <param name="validateUrl">Url validation function.</param>
+        /// <param name="request">Http request.</param>
+        /// <param name="relativeUrl">Relative url of file to delete.</param>
+        /// <returns></returns>
         public IActionResult DeleteFile(
             Func<string, bool> validateUrl,
             HttpRequest request,
@@ -72,9 +97,11 @@ namespace PsefApiOData.Misc
         private async Task<string> CopyUploadedFile(
             IFormFile file,
             string[] pathSegment,
-            string[] allowedExtensions)
+            string[] allowedExtensions,
+            int maxSizeBytes)
         {
-            if (!_validation.ValidateFileNameAndLength(file) ||
+            if (!_validation.ValidateFileName(file) ||
+                !_validation.ValidateFileSize(file, maxSizeBytes) ||
                 !_validation.ValidateFileExtension(file, allowedExtensions))
             {
                 return string.Empty;

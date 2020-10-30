@@ -7,11 +7,14 @@ namespace PsefApiOData.Misc
 {
     internal class FileAndPathHelper
     {
-        public bool ValidateFileNameAndLength(IFormFile file)
+        public bool ValidateFileName(IFormFile file)
         {
-            return file != null &&
-                !string.IsNullOrWhiteSpace(file.FileName) &&
-                file.Length != 0;
+            return file != null && !string.IsNullOrWhiteSpace(file.FileName);
+        }
+
+        public bool ValidateFileSize(IFormFile file, int maxSizeBytes)
+        {
+            return file.Length != 0 && file.Length <= maxSizeBytes;
         }
 
         public bool ValidateFileExtension(IFormFile file, string[] allowedExtensions)

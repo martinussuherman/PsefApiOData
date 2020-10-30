@@ -45,7 +45,12 @@ namespace PsefApiOData.Controllers
                 DateTimeFormatInfo.InvariantInfo);
             string[] pathSegment = { "upload", "user", userId, currentDate };
 
-            return await _operation.UploadFile(Url, file, pathSegment, _userPermittedExtensions);
+            return await _operation.UploadFile(
+                Url,
+                file,
+                pathSegment,
+                _userPermittedExtensions,
+                _maxFileSize);
         }
 
         /// <summary>
@@ -60,7 +65,12 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> UploadBanner(IFormFile file)
         {
             string[] pathSegment = { "upload", "banner" };
-            return await _operation.UploadFile(Url, file, pathSegment, _imagePermittedExtensions);
+            return await _operation.UploadFile(
+                Url,
+                file,
+                pathSegment,
+                _imagePermittedExtensions,
+                _maxFileSize);
         }
 
         /// <summary>
@@ -75,11 +85,17 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> UploadNewsImage(IFormFile file)
         {
             string[] pathSegment = { "upload", "news" };
-            return await _operation.UploadFile(Url, file, pathSegment, _imagePermittedExtensions);
+            return await _operation.UploadFile(
+                Url,
+                file,
+                pathSegment,
+                _imagePermittedExtensions,
+                _maxFileSize);
         }
 
         private readonly FileOperation _operation;
         private readonly string[] _userPermittedExtensions = { ".pdf" };
         private readonly string[] _imagePermittedExtensions = { ".gif", ".jpg", ".jpeg", ".png" };
+        private const int _maxFileSize = 1100000;
     }
 }
