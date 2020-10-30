@@ -37,6 +37,7 @@ namespace PsefApiOData.Controllers
         [ODataRoute(nameof(UploadUserFile))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(string), Status200OK)]
+        [ProducesResponseType(typeof(string), Status400BadRequest)]
         public async Task<IActionResult> UploadUserFile(IFormFile file)
         {
             string userId = ApiHelper.GetUserId(HttpContext.User);
@@ -58,10 +59,14 @@ namespace PsefApiOData.Controllers
         /// </summary>
         /// <param name="file">Banner image file</param>
         /// <returns>The banner file relative path.</returns>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [HttpPost]
         [ODataRoute(nameof(UploadBanner))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(string), Status200OK)]
+        [ProducesResponseType(typeof(string), Status400BadRequest)]
         public async Task<IActionResult> UploadBanner(IFormFile file)
         {
             string[] pathSegment = { "upload", "banner" };
@@ -78,10 +83,14 @@ namespace PsefApiOData.Controllers
         /// </summary>
         /// <param name="file">News image file</param>
         /// <returns>The news file relative path.</returns>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
         [HttpPost]
         [ODataRoute(nameof(UploadNewsImage))]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(string), Status200OK)]
+        [ProducesResponseType(typeof(string), Status400BadRequest)]
         public async Task<IActionResult> UploadNewsImage(IFormFile file)
         {
             string[] pathSegment = { "upload", "news" };

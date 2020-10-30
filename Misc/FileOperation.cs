@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -42,15 +41,15 @@ namespace PsefApiOData.Misc
             string[] permittedExtensions,
             int maxSizeBytes)
         {
-            string uploaded = await CopyUploadedFile(
+            ValidateResult uploaded = await CopyUploadedFile(
                 file,
                 pathSegment,
                 permittedExtensions,
                 maxSizeBytes);
 
-            if (string.IsNullOrEmpty(uploaded))
+            if (!uploaded.IsValid)
             {
-                return new BadRequestResult();
+                return new BadRequestObjectResult(uploaded.Message);
             }
 
             return new CreatedResult(
@@ -94,17 +93,37 @@ namespace PsefApiOData.Misc
             return new OkObjectResult(cleanedUrl);
         }
 
-        private async Task<string> CopyUploadedFile(
+        private async Task<ValidateResult> CopyUploadedFile(
             IFormFile file,
             string[] pathSegment,
             string[] allowedExtensions,
             int maxSizeBytes)
         {
-            if (!_validation.ValidateFileName(file) ||
-                !_validation.ValidateFileSize(file, maxSizeBytes) ||
-                !_validation.ValidateFileExtension(file, allowedExtensions))
+            if (!_validation.ValidateFileName(file))
             {
-                return string.Empty;
+                return new ValidateResult
+                {
+                    IsValid = false,
+                    Message = "Nama file tidak sah."
+                };
+            }
+
+            if (!_validation.ValidateFileSize(file, maxSizeBytes))
+            {
+                return new ValidateResult
+                {
+                    IsValid = false,
+                    Message = $"Ukuran file harus > 0 dan < {maxSizeBytes} bytes."
+                };
+            }
+
+            if (!_validation.ValidateFileExtension(file, allowedExtensions))
+            {
+                return new ValidateResult
+                {
+                    IsValid = false,
+                    Message = $"Ekstension file yang diperbolehkan: {string.Join(", ", allowedExtensions)}"
+                };
             }
 
             string folderPath = Path.Combine(pathSegment.Prepend(_environment.WebRootPath).ToArray());
@@ -121,7 +140,17 @@ namespace PsefApiOData.Misc
                 await file.CopyToAsync(stream);
             }
 
-            return WebUtility.HtmlEncode(file.FileName);
+            return new ValidateResult
+            {
+                IsValid = true,
+                Message = WebUtility.HtmlEncode(file.FileName)
+            };
+        }
+
+        private class ValidateResult
+        {
+            public bool IsValid { get; set; }
+            public string Message { get; set; }
         }
 
         private readonly IWebHostEnvironment _environment;
