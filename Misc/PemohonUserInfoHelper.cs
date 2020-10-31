@@ -59,6 +59,19 @@ namespace PsefApiOData.Misc
         }
 
         /// <summary>
+        /// Retrieve Pemohon with User Information for current user
+        /// </summary>
+        /// <param name="httpContext">Http context</param>
+        /// <returns>Pemohon with User Information.</returns>
+        public async Task<PemohonUserInfo> RetrieveCurrentUser(HttpContext httpContext)
+        {
+            Pemohon pemohon = await _context.Pemohon
+                .FirstOrDefaultAsync(e => e.UserId == ApiHelper.GetUserId(httpContext.User));
+
+            return await Retrieve(pemohon, httpContext);
+        }
+
+        /// <summary>
         /// Retrieve Pemohon with User Information
         /// </summary>
         /// <param name="id">Pemohon identifier</param>
@@ -70,6 +83,17 @@ namespace PsefApiOData.Misc
                 .Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
 
+            return await Retrieve(pemohon, httpContext);
+        }
+
+        /// <summary>
+        /// Retrieve Pemohon with User Information
+        /// </summary>
+        /// <param name="pemohon">Pemohon data.</param>
+        /// <param name="httpContext">Http context</param>
+        /// <returns>Pemohon with User Information.</returns>
+        public async Task<PemohonUserInfo> Retrieve(Pemohon pemohon, HttpContext httpContext)
+        {
             if (pemohon == null)
             {
                 return null;

@@ -25,7 +25,7 @@ namespace PsefApiOData.Configuration
 
             pemohon.Collection
                 .Function(ApiInfo.CurrentUser)
-                .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
+                .Returns<PemohonUserInfo>();
             pemohon.Collection
                 .Function(nameof(PemohonController.TotalCount))
                 .Returns<long>();
