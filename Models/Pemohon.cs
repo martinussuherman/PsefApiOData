@@ -55,6 +55,13 @@ namespace PsefApiOData.Models
         public string CompanyName { get; set; }
 
         /// <summary>
+        /// Gets or sets the Pemohon penanggung jawab.
+        /// </summary>
+        /// <value>The Pemohon's penanggung jawab.</value>
+        [IgnoreDataMember]
+        public string PenanggungJawab { get; set; }
+
+        /// <summary>
         /// Gets or sets list of Permohonan associated with the Pemohon.
         /// </summary>
         /// <value>The associated list of Permohonan.</value>

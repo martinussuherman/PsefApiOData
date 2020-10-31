@@ -111,7 +111,31 @@ namespace PsefApiOData.Misc
         {
             ContractResolver = new UnderscorePropertyNamesContractResolver()
         };
-
+        private static readonly OssPemegangSaham _pemegangSaham = new OssPemegangSaham
+        {
+            NamaPemegangSaham = "Badu",
+            AlamatPemegangSaham = "Jl. Kemana Saja No. 987",
+            NpwpPemegangSaham = "987654320123000",
+            EmailPemegangSaham = "badu@fiktif.com",
+            FaxPemegangSaham = "021-56781234"
+        };
+        private static readonly OssPenanggungJawab _penanggungJawab = new OssPenanggungJawab
+        {
+            AlamatPenanggungJwb = "Jl. Kemana Saja No. 987",
+            BlokPenanggungJwb = "A",
+            DaerahIdPenanggungJwb = "",
+            EmailPenanggungJwb = "badu@fiktif.com",
+            FlagAsing = "N",
+            FlagPajakPenanggungJwb = "",
+            JabatanPenanggungJwb = "Direktur",
+            JalanPenanggungJwb = "Jl. Kemana Saja",
+            JnsIdentitasPenanggungJwb = "KTP",
+            KebangsaanPenanggungJwb = "WNI",
+            KelurahanPenanggungJwb = "Kelurahan X",
+            KetPajakPenanggungJwb = "",
+            KodePosPenanggungJwb = "12345",
+            NamaPenanggungJwb = "Badu"
+        };
         private static readonly OssFullInfo _dummyInfo = new OssFullInfo
         {
             Keterangan = "***Data dummy untuk test***",
@@ -125,17 +149,11 @@ namespace PsefApiOData.Misc
             NomorTelponPerseroan = "021-56789012",
             PemegangSaham = new List<OssPemegangSaham>
             {
-                new OssPemegangSaham
-                {
-                    NamaPemegangSaham = "Badu",
-                    AlamatPemegangSaham = "Jl. Kemana Saja No. 987",
-                    NpwpPemegangSaham = "987654320123000",
-                    EmailPemegangSaham = "badu@fiktif.com"
-                }
+                _pemegangSaham
             },
             PenanggungJwb = new List<OssPenanggungJawab>
             {
-                new OssPenanggungJawab()
+                _penanggungJawab
             },
             Legalitas = new List<OssLegalitas>
             {

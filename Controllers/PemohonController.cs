@@ -486,7 +486,23 @@ namespace PsefApiOData.Controllers
                 return false;
             }
 
+            string nama = string.Empty;
+            OssPenanggungJawab penanggungJawab = ossFullInfo.PenanggungJwb
+                .FirstOrDefault(c => c.JabatanPenanggungJwb.ToUpperInvariant() == "DIREKTUR UTAMA");
+
+            if (penanggungJawab == null)
+            {
+                penanggungJawab = ossFullInfo.PenanggungJwb
+                    .FirstOrDefault();
+            }
+
+            if (penanggungJawab != null && penanggungJawab.NamaPenanggungJwb != null)
+            {
+                nama = penanggungJawab.NamaPenanggungJwb;
+            }
+
             data.CompanyName = ossFullInfo.NamaPerseroan;
+            data.PenanggungJawab = nama;
             return true;
         }
         private IActionResult InvalidNib()
