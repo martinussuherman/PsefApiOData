@@ -50,10 +50,16 @@ namespace PsefApiOData.Models
         public string Nib { get; set; }
 
         /// <summary>
-        /// (Read Only) Gets the Pemohon company name.
+        /// Gets or sets the Pemohon company name.
         /// </summary>
         /// <value>The Pemohon's company name.</value>
         public string CompanyName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Pemohon penanggung jawab.
+        /// </summary>
+        /// <value>The Pemohon's penanggung jawab.</value>
+        public string PenanggungJawab { get; set; }
 
         /// <summary>
         /// Gets or sets the Pemohon name.

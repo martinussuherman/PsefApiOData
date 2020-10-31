@@ -1222,6 +1222,7 @@ namespace PsefApiOData.Controllers
                 TypeName = permohonan.TypeName,
                 LastUpdate = permohonan.LastUpdate,
                 CompanyName = pemohon?.CompanyName,
+                PenanggungJawab = pemohon?.PenanggungJawab,
                 Email = pemohon?.Email,
                 Name = pemohon?.Name,
                 Nib = pemohon?.Nib,

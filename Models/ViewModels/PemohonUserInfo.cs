@@ -84,6 +84,18 @@ namespace PsefApiOData.Models
         }
 
         /// <summary>
+        /// (Read Only) Gets the Pemohon penanggung jawab.
+        /// </summary>
+        /// <value>The Pemohon's penanggung jawab.</value>
+        public string PenanggungJawab
+        {
+            get => Pemohon.PenanggungJawab;
+            set
+            {
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the Pemohon name.
         /// </summary>
         /// <value>The Pemohon's name.</value>
