@@ -36,10 +36,11 @@ namespace PsefApiOData.Controllers
         /// Retrieves all Homepage Banner.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Anonymous Access*
         /// </remarks>
         /// <returns>All available Homepage Banner.</returns>
         /// <response code="200">Homepage Banner successfully retrieved.</response>
+        [AllowAnonymous]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<HomepageBanner>>), Status200OK)]

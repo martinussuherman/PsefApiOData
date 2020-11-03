@@ -36,10 +36,11 @@ namespace PsefApiOData.Controllers
         /// Retrieves all Homepage News.
         /// </summary>
         /// <remarks>
-        /// *Min role: None*
+        /// *Anonymous Access*
         /// </remarks>
         /// <returns>All available Homepage News.</returns>
         /// <response code="200">Homepage News successfully retrieved.</response>
+        [AllowAnonymous]
         [ODataRoute]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<HomepageNews>>), Status200OK)]
