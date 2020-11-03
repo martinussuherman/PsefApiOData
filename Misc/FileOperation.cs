@@ -54,7 +54,7 @@ namespace PsefApiOData.Misc
 
             return new CreatedResult(
                 string.Empty,
-                urlHelper.Content($"~/{string.Join('/', pathSegment)}/{uploaded}"));
+                urlHelper.Content($"~/{string.Join('/', pathSegment)}/{uploaded.Message}"));
         }
 
         /// <summary>
