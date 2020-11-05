@@ -105,6 +105,6 @@ namespace PsefApiOData.Controllers
         private readonly FileOperation _operation;
         private readonly string[] _userPermittedExtensions = { ".pdf" };
         private readonly string[] _imagePermittedExtensions = { ".gif", ".jpg", ".jpeg", ".png" };
-        private const int _maxFileSize = 1100000;
+        private const int _maxFileSize = 5300000;
     }
 }
