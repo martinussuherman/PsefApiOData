@@ -24,8 +24,11 @@ namespace PsefApiOData.Configuration
                 .ComplexType<PemohonUserInfo>();
 
             pemohon.Collection
-                .Function(ApiInfo.CurrentUser)
+                .Function(nameof(PemohonController.CurrentUserInfo))
                 .Returns<PemohonUserInfo>();
+            pemohon.Collection
+                .Function(ApiInfo.CurrentUser)
+                .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
             pemohon.Collection
                 .Function(nameof(PemohonController.TotalCount))
                 .Returns<long>();

@@ -341,12 +341,12 @@ namespace PsefApiOData.Controllers
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
-        [ODataRoute(CurrentUser)]
+        [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(PemohonUserInfo), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public async Task<SingleResult<PemohonUserInfo>> GetCurrentUser()
+        public async Task<SingleResult<PemohonUserInfo>> CurrentUserInfo()
         {
             List<PemohonUserInfo> result = new List<PemohonUserInfo>();
             PemohonUserInfo pemohon = await _pemohonHelper.RetrieveCurrentUser(HttpContext);
@@ -357,6 +357,26 @@ namespace PsefApiOData.Controllers
             }
 
             return SingleResult.Create(result.AsQueryable());
+        }
+
+        /// <summary>
+        /// Gets a single Pemohon for the current user.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>The requested Pemohon.</returns>
+        /// <response code="200">The Pemohon was successfully retrieved.</response>
+        /// <response code="404">The Pemohon does not exist.</response>
+        [ODataRoute(CurrentUser)]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
+        public SingleResult<Pemohon> GetCurrentUser()
+        {
+            return SingleResult.Create(
+                _context.Pemohon.Where(e => e.UserId == ApiHelper.GetUserId(HttpContext.User)));
         }
 
         /// <summary>
