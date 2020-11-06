@@ -66,7 +66,7 @@ namespace PsefApiOData.Models
         {
             Id = 4,
             Name = "Dikembalikan oleh Verifikator",
-            PemohonDisplayedName = "Rumusan"
+            PemohonDisplayedName = "Dikembalikan"
         };
 
         /// <summary>

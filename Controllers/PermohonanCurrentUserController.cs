@@ -301,8 +301,26 @@ namespace PsefApiOData.Controllers
         {
             return _context.Permohonan.Where(e =>
                 e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
-                (e.StatusId == PermohonanStatus.Dibuat.Id ||
-                e.StatusId == PermohonanStatus.DikembalikanVerifikator.Id));
+                e.StatusId == PermohonanStatus.Dibuat.Id);
+        }
+
+        /// <summary>
+        /// Retrieves all Permohonan for the current user with status Dikembalikan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <returns>All available Permohonan for the current user with status Dikembalikan.</returns>
+        /// <response code="200">Permohonan successfully retrieved.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<Permohonan>>), Status200OK)]
+        [EnableQuery]
+        public IQueryable<Permohonan> Dikembalikan()
+        {
+            return _context.Permohonan.Where(e =>
+                e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                e.StatusId == PermohonanStatus.DikembalikanVerifikator.Id);
         }
 
         /// <summary>

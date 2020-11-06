@@ -25,6 +25,9 @@ namespace PsefApiOData.Configuration
                 .Function(nameof(PermohonanCurrentUserController.Rumusan))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
+                .Function(nameof(PermohonanCurrentUserController.Dikembalikan))
+                .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
                 .Function(nameof(PermohonanCurrentUserController.Progress))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
             permohonan.Collection
