@@ -17,7 +17,9 @@ namespace PsefApiOData.Models
         {
             Apotek = new HashSet<Apotek>();
             HistoryPermohonan = new HashSet<HistoryPermohonan>();
+            Klinik = new HashSet<Klinik>();
             Perizinan = new HashSet<Perizinan>();
+            RumahSakit = new HashSet<RumahSakit>();
         }
 
         /// <summary>
@@ -186,6 +188,30 @@ namespace PsefApiOData.Models
         public string DokumenPseUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan SPPL document url.
+        /// </summary>
+        /// <value>The Permohonan's SPPL document url.</value>
+        public string SpplUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan Izin Lokasi document url.
+        /// </summary>
+        /// <value>The Permohonan's Izin Lokasi document url.</value>
+        public string IzinLokasiUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan IMB document url.
+        /// </summary>
+        /// <value>The Permohonan's IMB document url.</value>
+        public string ImbUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan Pembayaran PNBP document url.
+        /// </summary>
+        /// <value>The Permohonan's Pembayaran PNBP document url.</value>
+        public string PembayaranPnbpUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the Permohonan last update.
         /// </summary>
         /// <value>The Permohonan's last update.</value>
@@ -227,10 +253,24 @@ namespace PsefApiOData.Models
         public virtual ICollection<HistoryPermohonan> HistoryPermohonan { get; set; }
 
         /// <summary>
+        /// Gets or sets list of Klinik associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated list of Klinik.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<Klinik> Klinik { get; set; }
+
+        /// <summary>
         /// Gets or sets list of Perizinan associated with the Permohonan.
         /// </summary>
         /// <value>The associated list of Perizinan.</value>
         [IgnoreDataMember]
         public virtual ICollection<Perizinan> Perizinan { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Rumah Sakit associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated list of Rumah Sakit.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<RumahSakit> RumahSakit { get; set; }
     }
 }

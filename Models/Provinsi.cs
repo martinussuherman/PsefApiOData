@@ -15,6 +15,8 @@ namespace PsefApiOData.Models
         {
             Apotek = new HashSet<Apotek>();
             KabupatenKota = new HashSet<KabupatenKota>();
+            Klinik = new HashSet<Klinik>();
+            RumahSakit = new HashSet<RumahSakit>();
         }
 
         /// <summary>
@@ -42,5 +44,19 @@ namespace PsefApiOData.Models
         /// <value>The associated list of Kabupaten/Kota.</value>
         [IgnoreDataMember]
         public virtual ICollection<KabupatenKota> KabupatenKota { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Klinik associated with the Provinsi.
+        /// </summary>
+        /// <value>The associated list of Klinik.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<Klinik> Klinik { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Rumah Sakit associated with the Provinsi.
+        /// </summary>
+        /// <value>The associated list of Rumah Sakit.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<RumahSakit> RumahSakit { get; set; }
     }
 }
