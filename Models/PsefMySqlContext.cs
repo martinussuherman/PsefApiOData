@@ -405,7 +405,7 @@ namespace PsefApiOData.Models
                 entity.HasIndex(e => e.ProvinsiId)
                     .HasName("FK_klinik_provinsi");
 
-                entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+                entity.Property(e => e.Id).HasColumnType("bigint(20) unsigned");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
