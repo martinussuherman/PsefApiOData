@@ -288,7 +288,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the TglPengesahan.
         /// </summary>
         /// <value>The TglPengesahan.</value>
-        public DateTime TglPengesahan { get; set; }
+        public DateTime? TglPengesahan { get; set; }
 
         /// <summary>
         /// Gets or sets the NoAktaLama.
@@ -300,7 +300,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the TglAktaLama.
         /// </summary>
         /// <value>The TglAktaLama.</value>
-        public DateTime TglAktaLama { get; set; }
+        public DateTime? TglAktaLama { get; set; }
 
         /// <summary>
         /// Gets or sets the NoPengesahanLama.
@@ -312,7 +312,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the TglPengesahanLama.
         /// </summary>
         /// <value>The TglPengesahanLama.</value>
-        public DateTime TglPengesahanLama { get; set; }
+        public DateTime? TglPengesahanLama { get; set; }
 
         /// <summary>
         /// Gets or sets the list of Legalitas.

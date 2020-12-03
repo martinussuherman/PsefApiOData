@@ -23,7 +23,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the TglLegal.
         /// </summary>
         /// <value>The TglLegal.</value>
-        public DateTime TglLegal { get; set; }
+        public DateTime? TglLegal { get; set; }
 
         /// <summary>
         /// Gets or sets the AlamatNotaris.
