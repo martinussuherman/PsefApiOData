@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
 
 namespace PsefApiOData.Misc
 {
@@ -11,12 +9,6 @@ namespace PsefApiOData.Misc
     /// </summary>
     internal class ApiHelper
     {
-        /// <summary>
-        /// OpenApiSecurityRequirement for OpenApiOperation
-        /// </summary>
-        /// <value>OpenApiSecurityRequirement</value>
-        internal static IList<OpenApiSecurityRequirement> Requirements { get; set; }
-
         internal static string Authority { get; set; }
 
         internal static string Audience { get; set; }
@@ -94,33 +86,6 @@ namespace PsefApiOData.Misc
             OssUser = ossConfiguration.GetValue<string>("User");
             OssPassword = ossConfiguration.GetValue<string>("Password");
             OssCacheHour = ossConfiguration.GetValue<int>("CacheHour");
-        }
-
-        /// <summary>
-        /// Initialize OpenApiSecurityRequirement for OpenApiOperation
-        /// </summary>
-        internal static void InitializeRequirements()
-        {
-            Requirements = new List<OpenApiSecurityRequirement>
-            {
-                new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = ApiInfo.SchemeOauth2
-                            }
-                        },
-                        new List<string>
-                        {
-                            Audience
-                        }
-                    }
-                }
-            };
         }
     }
 }

@@ -66,7 +66,6 @@ namespace PsefApiOData
             });
 
             ApiHelper.ReadConfiguration(Configuration);
-            ApiHelper.InitializeRequirements();
             ConfigureOData(services);
             ConfigureSwaggerGen(services);
 
@@ -237,12 +236,6 @@ namespace PsefApiOData
 
                 // configure query options (which cannot otherwise be configured by OData conventions)
                 // options.QueryOptions.Controller<V2.PeopleController>()
-                //                     .Action( c => c.Get( default ) )
-                //                         .Allow( Skip | Count )
-                //                         .AllowTop( 100 )
-                //                         .AllowOrderBy( "firstName", "lastName" );
-
-                // options.QueryOptions.Controller<V3.PeopleController>()
                 //                     .Action( c => c.Get( default ) )
                 //                         .Allow( Skip | Count )
                 //                         .AllowTop( 100 )
