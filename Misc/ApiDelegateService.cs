@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Microsoft.Extensions.Options;
 
 namespace PsefApiOData.Misc
 {
@@ -13,9 +14,11 @@ namespace PsefApiOData.Misc
         /// Api delegation service.
         /// </summary>
         /// <param name="httpClient">Http client to connect to IdentityServer.</param>
-        public ApiDelegateService(HttpClient httpClient)
+        /// <param name="options">Api security configuration options.</param>
+        public ApiDelegateService(HttpClient httpClient, IOptions<ApiSecurityOptions> options)
         {
             _httpClient = httpClient;
+            _options = options;
         }
 
         /// <summary>
@@ -28,7 +31,7 @@ namespace PsefApiOData.Misc
             var disco = await _httpClient.GetDiscoveryDocumentAsync(
                 new DiscoveryDocumentRequest
                 {
-                    Address = ApiHelper.Authority,
+                    Address = _options.Value.Authority,
                     Policy =
                     {
                         ValidateIssuerName = false,
@@ -55,5 +58,6 @@ namespace PsefApiOData.Misc
         }
 
         private readonly HttpClient _httpClient;
+        private readonly IOptions<ApiSecurityOptions> _options;
     }
 }

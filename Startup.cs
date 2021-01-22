@@ -132,6 +132,7 @@ namespace PsefApiOData
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
 
+            services.Configure<ApiSecurityOptions>(Configuration.GetSection(ApiSecurityOptions.OptionsName));
             services.AddTransient<FileOperation>();
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
             services.AddHttpClient<IIdentityApiService, IdentityApiService>();

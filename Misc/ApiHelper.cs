@@ -9,10 +9,6 @@ namespace PsefApiOData.Misc
     /// </summary>
     internal class ApiHelper
     {
-        internal static string Authority { get; set; }
-
-        internal static string Audience { get; set; }
-
         internal static string DelegationBaseUri { get; set; }
 
         internal static string DelegationClientId { get; set; }
@@ -71,10 +67,6 @@ namespace PsefApiOData.Misc
         /// <param name="configuration">Application configuration.</param>
         internal static void ReadConfiguration(IConfiguration configuration)
         {
-            IConfigurationSection bearerConfiguration = configuration.GetSection("Bearer");
-            Authority = bearerConfiguration.GetValue<string>("Authority");
-            Audience = bearerConfiguration.GetValue<string>("Audience");
-
             IConfigurationSection delegationConfiguration = configuration.GetSection("Delegation");
             DelegationBaseUri = delegationConfiguration.GetValue<string>("BaseUri");
             DelegationClientId = delegationConfiguration.GetValue<string>("ClientId");
