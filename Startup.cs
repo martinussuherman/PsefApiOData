@@ -221,25 +221,6 @@ namespace PsefApiOData
                 options.AddSecurityDefinition(
                     ApiInfo.SchemeOauth2,
                     ConfigureSecurityDefinitionScheme(apiSecurityOptions));
-
-                options.AddSecurityRequirement(
-                    new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = ApiInfo.SchemeOauth2
-                                }
-                            },
-                            new[]
-                            {
-                                apiSecurityOptions.Audience
-                            }
-                        }
-                    });
             });
         }
         private void ConfigureOData(IServiceCollection services)
