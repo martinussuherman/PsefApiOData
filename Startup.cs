@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
 using PsefApiOData.Misc;
+using PsefApiOData.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -49,54 +50,25 @@ namespace PsefApiOData
         /// <param name="services">The collection of services to configure the application with.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            // the sample application always uses the latest version, but you may want an explicit version such as Version_2_2
-            // note: Endpoint Routing is enabled by default; however, it is unsupported by OData and MUST be false
+            // the sample application always uses the latest version, 
+            // but you may want an explicit version such as Version_2_2
+            // note: Endpoint Routing is enabled by default; however, 
+            // it is unsupported by OData and MUST be false
             services
                 .AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(Latest);
 
-            services.AddApiVersioning(options =>
-            {
-                options.ReportApiVersions = true;
-                options.AssumeDefaultVersionWhenUnspecified = true;
-
-                // note: this is optional, but it will take away versioning by query string
-                // the default behavior is a composite reader
-                options.ApiVersionReader = new UrlSegmentApiVersionReader();
-            });
-
+            // TODO : remove, use DI based config
             ApiHelper.ReadConfiguration(Configuration);
+
+            ConfigureMisc(services);
+            ConfigureDatabase(services);
+            ConfigureCors(services);
             ConfigureOData(services);
-            ConfigureSwaggerGen(services);
 
-            services.AddTransient<FileOperation>();
-            services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
-            services.AddHttpClient<IIdentityApiService, IdentityApiService>();
-            services.AddHttpClient<IOssApiService, OssApiService>();
-
-            services.AddDbContextPool<Models.PsefMySqlContext>(options =>
-                options.UseMySql(
-                    Configuration.GetConnectionString("MySql"),
-                    sqlOptions =>
-                    {
-                        sqlOptions.EnableRetryOnFailure(
-                            10,
-                            System.TimeSpan.FromSeconds(30),
-                            null);
-                    }),
-                16);
-
-            // https://identityserver4.readthedocs.io/en/latest/topics/apis.html
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    // base-address of your identityserver
-                    options.Authority = ApiHelper.Authority;
-
-                    // if you are using API resources, you can specify the name here
-                    options.Audience = ApiHelper.Audience;
-                });
+            ApiSecurityOptions apiSecurityOptions = ReadApiSecurityOptions();
+            ConfigureSwagger(services, apiSecurityOptions);
+            ConfigureAuth(services, apiSecurityOptions);
         }
 
         /// <summary>
@@ -120,33 +92,87 @@ namespace PsefApiOData
                 {
                     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
                 })
+                .UseCors()
                 .UseAuthentication()
-                .UseAuthorization()
-                .UseMvc(routeBuilder =>
-                {
-                    // global odata query options
-                    routeBuilder.Count();
-                    // the following will not work as expected
-                    // BUG: https://github.com/OData/WebApi/issues/1837
-                    // routeBuilder.SetDefaultODataOptions( new ODataOptions() { UrlKeyDelimiter = Parentheses } );
-                    routeBuilder
-                        .ServiceProvider
-                        .GetRequiredService<ODataOptions>()
-                        .UrlKeyDelimiter = Parentheses;
+                .UseAuthorization();
 
-                    // register routes with and without the api version constraint
-                    var models = modelBuilder.GetEdmModels();
-                    routeBuilder.MapVersionedODataRoutes(
-                        "explicit",
-                        "api/v{version:apiVersion}",
-                        models);
-                    // routeBuilder.MapVersionedODataRoutes(
-                    //     "implicit",
-                    //     "api",
-                    //     models);
-                })
-                .UseSwagger()
-                .UseSwaggerUI(options =>
+            ConfigureMvc(app, modelBuilder);
+            ConfigureSwaggerUI(app, provider, basePath);
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
+                Configuration.GetValue<string>("SfKey"));
+        }
+
+        private void ConfigureDatabase(IServiceCollection services)
+        {
+            services.AddDbContextPool<PsefMySqlContext>(
+                options => options.UseMySql(
+                    Configuration.GetConnectionString("MySql"),
+                    sqlOptions => sqlOptions.EnableRetryOnFailure(10, TimeSpan.FromSeconds(30), null)),
+                16);
+        }
+        private ApiSecurityOptions ReadApiSecurityOptions()
+        {
+            IConfigurationSection options = Configuration.GetSection(ApiSecurityOptions.OptionsName);
+
+            return new ApiSecurityOptions
+            {
+                Audience = options.GetValue<string>(nameof(ApiSecurityOptions.Audience)),
+                Authority = options.GetValue<string>(nameof(ApiSecurityOptions.Authority))
+            };
+        }
+        private void ConfigureMisc(IServiceCollection services)
+        {
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+
+                // note: this is optional, but it will take away versioning by query string
+                // the default behavior is a composite reader
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            });
+
+            services.AddTransient<FileOperation>();
+            services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
+            services.AddHttpClient<IIdentityApiService, IdentityApiService>();
+            services.AddHttpClient<IOssApiService, OssApiService>();
+        }
+        private void ConfigureMvc(IApplicationBuilder app, VersionedODataModelBuilder modelBuilder)
+        {
+            var models = modelBuilder.GetEdmModels();
+
+            app.UseMvc(routeBuilder =>
+            {
+                // global odata query options
+                routeBuilder.Count();
+
+                // the following will not work as expected
+                // BUG: https://github.com/OData/WebApi/issues/1837
+                // routeBuilder.SetDefaultODataOptions( 
+                //     new ODataOptions() { UrlKeyDelimiter = Parentheses } );
+
+                routeBuilder
+                    .ServiceProvider
+                    .GetRequiredService<ODataOptions>()
+                    .UrlKeyDelimiter = Parentheses;
+
+                // register routes with and without the api version constraint
+                routeBuilder.MapVersionedODataRoutes(
+                    "explicit",
+                    "api/v{version:apiVersion}",
+                    models);
+
+                // routeBuilder.MapVersionedODataRoutes("implicit", "api", models);
+            });
+        }
+        private void ConfigureSwaggerUI(
+            IApplicationBuilder app,
+            IApiVersionDescriptionProvider provider,
+            string basePath)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                options =>
                 {
                     options.OAuthClientId(Configuration.GetValue<string>("ClientId"));
                     options.OAuthAppName("PsefApiOData Swagger");
@@ -160,23 +186,25 @@ namespace PsefApiOData
                             description.GroupName.ToUpperInvariant());
                     }
                 });
-
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
-                Configuration.GetValue<string>("SfKey"));
         }
-
-        private void ConfigureSwaggerGen(IServiceCollection services)
+        private static void ConfigureCors(IServiceCollection services)
         {
-            OpenApiOAuthFlow authCodeFlow = new OpenApiOAuthFlow
+            services.AddCors(options =>
             {
-                AuthorizationUrl = new Uri($"{ApiHelper.Authority}/connect/authorize"),
-                TokenUrl = new Uri($"{ApiHelper.Authority}/connect/token"),
-                Scopes = new Dictionary<string, string>
-                {
-                    { ApiHelper.Audience, "Api access" }
-                }
-            };
-
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins(
+                            "http://localhost:*",
+                            "https://localhost:*",
+                            "https://*.kemkes.go.id");
+                    });
+            });
+        }
+        private void ConfigureSwagger(
+            IServiceCollection services,
+            ApiSecurityOptions apiSecurityOptions)
+        {
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             services.AddSwaggerGen(options =>
@@ -191,14 +219,8 @@ namespace PsefApiOData
                 // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
                 options.AddSecurityDefinition(
                     ApiInfo.SchemeOauth2,
-                    new OpenApiSecurityScheme
-                    {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows
-                        {
-                            AuthorizationCode = authCodeFlow
-                        }
-                    });
+                    ConfigureSecurityDefinitionScheme(apiSecurityOptions));
+
                 options.AddSecurityRequirement(
                     new OpenApiSecurityRequirement
                     {
@@ -213,13 +235,12 @@ namespace PsefApiOData
                             },
                             new[]
                             {
-                                ApiHelper.Audience
+                                apiSecurityOptions.Audience
                             }
                         }
                     });
             });
         }
-
         private void ConfigureOData(IServiceCollection services)
         {
             services.AddOData().EnableApiVersioning();
@@ -241,6 +262,44 @@ namespace PsefApiOData
                 //                         .AllowTop( 100 )
                 //                         .AllowOrderBy( "firstName", "lastName" );
             });
+        }
+        private static void ConfigureAuth(
+            IServiceCollection services,
+            ApiSecurityOptions apiSecurityOptions)
+        {
+            // https://identityserver4.readthedocs.io/en/latest/topics/apis.html
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    // base-address of your identityserver
+                    options.Authority = apiSecurityOptions.Authority;
+
+                    // if you are using API resources, you can specify the name here
+                    options.Audience = apiSecurityOptions.Audience;
+                });
+        }
+        private static OpenApiSecurityScheme ConfigureSecurityDefinitionScheme(
+            ApiSecurityOptions apiSecurityOptions)
+        {
+            OpenApiOAuthFlow authCodeFlow = new OpenApiOAuthFlow
+            {
+                AuthorizationUrl = new Uri($"{apiSecurityOptions.Authority}/connect/authorize"),
+                TokenUrl = new Uri($"{apiSecurityOptions.Authority}/connect/token"),
+                Scopes = new Dictionary<string, string>
+                {
+                    { apiSecurityOptions.Audience, "Api access" }
+                }
+            };
+
+            return new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    AuthorizationCode = authCodeFlow
+                }
+            };
         }
 
         private static string XmlCommentsFilePath
