@@ -1,5 +1,4 @@
-﻿
-namespace PsefApiOData.Models
+﻿namespace PsefApiOData.Models
 {
     /// <summary>
     /// Represents a Homepage Banner.
