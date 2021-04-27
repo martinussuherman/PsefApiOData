@@ -122,6 +122,12 @@ namespace PsefApiOData.Models
         public string ProviderName { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan tenaga ahli name.
+        /// </summary>
+        /// <value>The Permohonan's tenaga ahli name.</value>
+        public string TenagaAhliName { get; set; }
+
+        /// <summary>
         /// Gets or sets the Permohonan apoteker name.
         /// </summary>
         /// <value>The Permohonan's apoteker name.</value>
@@ -186,6 +192,18 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The Permohonan's Dokumen PSE Kominfo document url.</value>
         public string DokumenPseUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan izin usaha document url.
+        /// </summary>
+        /// <value>The Permohonan's izin usaha document url.</value>
+        public string IzinUsahaUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan komitmen kerjasama apotek document url.
+        /// </summary>
+        /// <value>The Permohonan's komitmen kerjasama apotek document url.</value>
+        public string KomitmenKerjasamaApotekUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the Permohonan SPPL document url.
