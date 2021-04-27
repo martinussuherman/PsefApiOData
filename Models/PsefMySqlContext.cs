@@ -644,6 +644,20 @@ namespace PsefApiOData.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.IzinUsahaUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.KomitmenKerjasamaApotekUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.LastUpdate)
                     .HasColumnType("timestamp")
                     .HasDefaultValueSql("'current_timestamp()'")
@@ -726,6 +740,13 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.SystemName)
                     .IsRequired()
                     .HasColumnType("text")
+                    .HasDefaultValueSql("''''''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TenagaAhliName)
+                    .IsRequired()
+                    .HasColumnType("tinytext")
                     .HasDefaultValueSql("''''''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
