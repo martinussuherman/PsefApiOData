@@ -140,10 +140,10 @@ namespace PsefApiOData.Misc
         {
             Keterangan = "***Data dummy untuk test***",
             Nib = "0000000000000",
-            NamaPerseroan = "PT. Angin Ribut",
-            AlamatPerseroan = "Jl. Buntu Nan Sempit No. 123",
+            NamaPerseroan = "PT. Maju Jaya Farmatek",
+            AlamatPerseroan = "Jl. Sejahtera Selalu No. 123",
             RtRwPerseroan = "00/00",
-            KelurahanPerseroan = "Kelurahan Fiktif",
+            KelurahanPerseroan = "Kelurahan",
             KodePosPerseroan = "12345",
             NpwpPerseroan = "123456780123000",
             NomorTelponPerseroan = "021-56789012",
