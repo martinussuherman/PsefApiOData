@@ -429,7 +429,7 @@ namespace PsefApiOData.Misc
                 leftAlign,
                 new RectangleF(leftCol, top, indentSize.Width, 0));
             top = DrawString(
-                $"Tanda Daftar Penyelenggara Sistem Elektronik Farmasi (Psef) Berlaku Sejak Tanggal Diterbitkan Sampai Dengan {expired}",
+                $"Tanda Daftar Penyelenggara Sistem Elektronik Farmasi (PSEF) Berlaku Sejak Tanggal Diterbitkan Sampai Dengan {expired}",
                 graphics,
                 labelFont,
                 justified,
