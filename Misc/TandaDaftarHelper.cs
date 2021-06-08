@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PsefApiOData.Models;
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
@@ -22,14 +23,17 @@ namespace PsefApiOData.Misc
         /// <param name="environment">Web Host environment.</param>
         /// <param name="httpContext">Http context.</param>
         /// <param name="urlHelper">Url helper.</param>
+        /// <param name="options">Electronic signature options.</param>
         public TandaDaftarHelper(
             IWebHostEnvironment environment,
             HttpContext httpContext,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IOptions<ElectronicSignatureOptions> options)
         {
             _environment = environment;
             _httpContext = httpContext;
             _urlHelper = urlHelper;
+            _options = options;
         }
 
         /// <summary>
@@ -468,5 +472,6 @@ namespace PsefApiOData.Misc
         private readonly IWebHostEnvironment _environment;
         private readonly HttpContext _httpContext;
         private readonly IUrlHelper _urlHelper;
+        private readonly IOptions<ElectronicSignatureOptions> _options;
     }
 }
