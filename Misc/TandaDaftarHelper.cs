@@ -373,7 +373,7 @@ namespace PsefApiOData.Misc
             barcode.Draw(page, new PointF(leftCol, top + 10));
 
             top = DrawString(
-                $"A.N. MENTERI KESEHATAN\nDIREKTUR JENDERAL\nKEFARMASIAN DAN ALAT KESEHATAN\n\n\nTTD\n\n\n{_options.Value.NamaDirjen}",
+                $"A.N. MENTERI KESEHATAN\n{_options.Value.Position}\n\n\nTTD\n\n\n{_options.Value.Name}",
                 graphics,
                 new PdfStandardFont(PdfFontFamily.Helvetica, 11),
                 leftAlign,
