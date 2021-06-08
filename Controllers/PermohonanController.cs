@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using WorkDaysCalculator;
@@ -35,17 +36,20 @@ namespace PsefApiOData.Controllers
         /// <param name="ossApi">Oss Api service.</param>
         /// <param name="memoryCache">Memory cache.</param>
         /// <param name="environment">Web Host environment.</param>
+        /// <param name="options">Electronic signature options.</param>
         public PermohonanController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
             IIdentityApiService identityApi,
             IOssApiService ossApi,
             IMemoryCache memoryCache,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            IOptions<ElectronicSignatureOptions> options)
         {
             _ossApi = ossApi;
             _memoryCache = memoryCache;
             _environment = environment;
+            _options = options;
             _context = context;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
             _helper = new PermohonanHelper(context);
@@ -605,7 +609,7 @@ namespace PsefApiOData.Controllers
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
             OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
-            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url);
+            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url, _options);
             perizinan.TandaDaftarUrl = helper.GeneratePdf(ossFullInfo, update, perizinan);
 
             _context.Perizinan.Add(perizinan);
@@ -652,7 +656,7 @@ namespace PsefApiOData.Controllers
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
             OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
-            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url);
+            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url, _options);
             string path = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
 
             return NoContent();
@@ -1246,6 +1250,7 @@ namespace PsefApiOData.Controllers
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
+        private readonly IOptions<ElectronicSignatureOptions> _options;
         private const int _perizinanYears = 5;
         private const int _maxPermohonanDiajukan = 3;
     }
