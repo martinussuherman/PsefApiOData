@@ -11,9 +11,15 @@ namespace PsefApiOData.Misc
         public const string OptionsName = "Signature";
 
         /// <summary>
-        /// Gets or sets the Dirjen name.
+        /// Gets or sets the signer name.
         /// </summary>
-        /// <value>The Dirjen name.</value>
-        public string NamaDirjen { get; set; }
+        /// <value>The signer name.</value>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signer position.
+        /// </summary>
+        /// <value>The signer position.</value>
+        public string Position { get; set; }
     }
 }
