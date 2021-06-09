@@ -134,6 +134,7 @@ namespace PsefApiOData
 
             services.Configure<ApiSecurityOptions>(Configuration.GetSection(ApiSecurityOptions.OptionsName));
             services.Configure<ElectronicSignatureOptions>(Configuration.GetSection(ElectronicSignatureOptions.OptionsName));
+            services.Configure<OssApiOptions>(Configuration.GetSection(OssApiOptions.OptionsName));
             services.AddTransient<FileOperation>();
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
             services.AddHttpClient<IIdentityApiService, IdentityApiService>();
