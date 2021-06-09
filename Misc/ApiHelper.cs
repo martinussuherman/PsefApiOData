@@ -17,14 +17,6 @@ namespace PsefApiOData.Misc
 
         internal static string DelegationScope { get; set; }
 
-        internal static string OssBaseUri { get; set; }
-
-        internal static string OssUser { get; set; }
-
-        internal static string OssPassword { get; set; }
-
-        internal static int OssCacheHour { get; set; }
-
         /// <summary>
         /// Retrieve id of the user executing the request.
         /// </summary>
@@ -72,12 +64,6 @@ namespace PsefApiOData.Misc
             DelegationClientId = delegationConfiguration.GetValue<string>("ClientId");
             DelegationClientSecret = delegationConfiguration.GetValue<string>("ClientSecret");
             DelegationScope = delegationConfiguration.GetValue<string>("Scope");
-
-            IConfigurationSection ossConfiguration = configuration.GetSection("OssApi");
-            OssBaseUri = ossConfiguration.GetValue<string>("BaseUri");
-            OssUser = ossConfiguration.GetValue<string>("User");
-            OssPassword = ossConfiguration.GetValue<string>("Password");
-            OssCacheHour = ossConfiguration.GetValue<int>("CacheHour");
         }
     }
 }
