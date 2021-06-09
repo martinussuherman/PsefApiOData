@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -32,15 +33,18 @@ namespace PsefApiOData.Controllers
         /// <param name="identityApi">Identity Api service.</param>
         /// <param name="ossApi">Oss Api service.</param>
         /// <param name="memoryCache">Memory cache.</param>
+        /// <param name="options">OSS API configuration options.</param>
         public PemohonController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
             IIdentityApiService identityApi,
             IOssApiService ossApi,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            IOptions<OssApiOptions> options)
         {
             _ossApi = ossApi;
             _memoryCache = memoryCache;
+            _options = options;
             _context = context;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
@@ -505,7 +509,7 @@ namespace PsefApiOData.Controllers
 
         private async Task<bool> CheckNibAndUpdatePemohon(Pemohon data)
         {
-            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache);
+            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _options);
             OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(data.Nib);
 
             if (string.IsNullOrEmpty(ossFullInfo.Nib))
@@ -546,5 +550,6 @@ namespace PsefApiOData.Controllers
         private readonly PsefMySqlContext _context;
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
+        private readonly IOptions<OssApiOptions> _options;
     }
 }
