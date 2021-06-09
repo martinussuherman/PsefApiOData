@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,10 +22,15 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <param name="ossApi">OSS Api service.</param>
         /// <param name="memoryCache">Memory cache.</param>
-        public OssInfoHelper(IOssApiService ossApi, IMemoryCache memoryCache)
+        /// <param name="options">OSS API configuration options.</param>
+        public OssInfoHelper(
+            IOssApiService ossApi,
+            IMemoryCache memoryCache,
+            IOptions<OssApiOptions> options)
         {
             _ossApi = ossApi;
             _memoryCache = memoryCache;
+            _options = options;
         }
 
         /// <summary>
@@ -92,7 +98,7 @@ namespace PsefApiOData.Misc
                 .ToObject<OssFullInfo>(JsonSerializer.CreateDefault(_snakeSettings));
 
             MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(new TimeSpan(ApiHelper.OssCacheHour, 0, 0));
+                .SetAbsoluteExpiration(new TimeSpan(_options.Value.OssCacheHour, 0, 0));
 
             _memoryCache.Set(nameof(OssFullInfo) + id, apiData, cacheEntryOptions);
 
@@ -233,5 +239,6 @@ namespace PsefApiOData.Misc
         };
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
+        private readonly IOptions<OssApiOptions> _options;
     }
 }
