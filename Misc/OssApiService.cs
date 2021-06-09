@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Options;
 
 namespace PsefApiOData.Misc
 {
@@ -21,9 +22,14 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <param name="httpClient">Http client to connect to OSS API.</param>
         /// <param name="memoryCache">Memory cache.</param>
-        public OssApiService(HttpClient httpClient, IMemoryCache memoryCache)
+        /// <param name="options">OSS API configuration options.</param>
+        public OssApiService(
+            HttpClient httpClient,
+            IMemoryCache memoryCache,
+            IOptions<OssApiOptions> options)
         {
             _memoryCache = memoryCache;
+            _options = options;
             _httpClient = httpClient;
         }
 
@@ -42,8 +48,8 @@ namespace PsefApiOData.Misc
 
             LoginInfo loginInfo = new LoginInfo
             {
-                Username = ApiHelper.OssUser,
-                Password = ApiHelper.OssPassword
+                Username = _options.Value.OssUser,
+                Password = _options.Value.OssPassword
             };
 
             string data = JsonConvert.SerializeObject(
@@ -54,7 +60,7 @@ namespace PsefApiOData.Misc
                 });
 
             HttpResponseMessage response = await _httpClient.PostAsync(
-                $"{ApiHelper.OssBaseUri}/consumer/login",
+                $"{_options.Value.OssBaseUri}/consumer/login",
                 new StringContent(data, Encoding.UTF8, ApiInfo.JsonOutput));
 
             if (!response.IsSuccessStatusCode)
@@ -84,7 +90,7 @@ namespace PsefApiOData.Misc
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
-                $"{ApiHelper.OssBaseUri}{uri}");
+                $"{_options.Value.OssBaseUri}{uri}");
 
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.EncodedToken);
             request.Content = new StringContent(content, Encoding.UTF8, ApiInfo.JsonOutput);
@@ -112,5 +118,6 @@ namespace PsefApiOData.Misc
 
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _memoryCache;
+        private readonly IOptions<OssApiOptions> _options;
     }
 }
