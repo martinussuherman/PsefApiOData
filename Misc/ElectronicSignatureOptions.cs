@@ -21,5 +21,35 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <value>The signer position.</value>
         public string Position { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signer NIK.
+        /// </summary>
+        /// <value>The signer NIK.</value>
+        public string Nik { get; set; }
+
+        /// <summary>
+        /// Gets or sets the signer passphrase.
+        /// </summary>
+        /// <value>The signer passphrase.</value>
+        public string Passphrase { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API username.
+        /// </summary>
+        /// <value>The API username.</value>
+        public string Username { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API password.
+        /// </summary>
+        /// <value>The API password.</value>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API base uri.
+        /// </summary>
+        /// <value>The API base uri.</value>
+        public string BaseUri { get; set; }
     }
 }
