@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PsefApiOData.Models;
+using PsefApiOData.Models.ViewModels;
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
@@ -41,17 +42,22 @@ namespace PsefApiOData.Misc
         /// <param name="ossInfo">Oss info.</param>
         /// <param name="permohonan">Permohonan.</param>
         /// <param name="perizinan">Perizinan.</param>
-        /// <returns>Pdf url.</returns>
-        public string GeneratePdf(
+        /// <returns>A GeneratePdfResult that contains information about generated pdf.</returns>
+        public GeneratePdfResult GeneratePdf(
             OssFullInfo ossInfo,
             Permohonan permohonan,
             Perizinan perizinan)
         {
-            string fileName = $"{ApiHelper.GetUserId(_httpContext.User)}.pdf";
-            string datePath = perizinan.IssuedAt.ToString(
-                "yyyy-MM-dd",
-                DateTimeFormatInfo.InvariantInfo);
-            string filePath = PrepareFileAndFolder(datePath, fileName);
+            GeneratePdfResult result = new GeneratePdfResult
+            {
+                FileName = $"{ApiHelper.GetUserId(_httpContext.User)}.pdf",
+                DatePath = perizinan.IssuedAt.ToString(
+                    "yyyy-MM-dd",
+                    DateTimeFormatInfo.InvariantInfo)
+            };
+
+            result.FullPath = _urlHelper.Content($"~/{result.DatePath}/{result.FileName}");
+            string filePath = PrepareFileAndFolder(result.DatePath, result.FileName);
             PdfDocument document = new PdfDocument();
             float top = 0;
 
@@ -75,7 +81,7 @@ namespace PsefApiOData.Misc
             document.Save(fileStream);
             document.Close(true);
 
-            return _urlHelper.Content($"~/{datePath}/{fileName}");
+            return result;
         }
 
         private string PrepareFileAndFolder(string datePath, string fileName)
