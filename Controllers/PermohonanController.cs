@@ -31,9 +31,10 @@ namespace PsefApiOData.Controllers
         /// Permohonan REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
-        /// <param name="delegateService">Api delegation service.</param>
-        /// <param name="identityApi">Identity Api service.</param>
-        /// <param name="ossApi">Oss Api service.</param>
+        /// <param name="delegateService">API delegation service.</param>
+        /// <param name="identityApi">Identity API service.</param>
+        /// <param name="ossApi">Oss API service.</param>
+        /// <param name="signatureService">Electronic Signature API service.</param>
         /// <param name="memoryCache">Memory cache.</param>
         /// <param name="environment">Web Host environment.</param>
         /// <param name="signatureOptions">Electronic signature options.</param>
@@ -43,12 +44,14 @@ namespace PsefApiOData.Controllers
             IApiDelegateService delegateService,
             IIdentityApiService identityApi,
             IOssApiService ossApi,
+            ElectronicSignatureService signatureService,
             IMemoryCache memoryCache,
             IWebHostEnvironment environment,
             IOptions<ElectronicSignatureOptions> signatureOptions,
             IOptions<OssApiOptions> ossOptions)
         {
             _ossApi = ossApi;
+            _signatureService = signatureService;
             _memoryCache = memoryCache;
             _environment = environment;
             _signatureOptions = signatureOptions;
@@ -1251,6 +1254,7 @@ namespace PsefApiOData.Controllers
         private readonly PermohonanHelper _helper;
         private readonly PsefMySqlContext _context;
         private readonly IOssApiService _ossApi;
+        private readonly ElectronicSignatureService _signatureService;
         private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
