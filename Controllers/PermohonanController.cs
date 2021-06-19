@@ -618,7 +618,8 @@ namespace PsefApiOData.Controllers
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
             OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
             TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions);
-            perizinan.TandaDaftarUrl = helper.GeneratePdf(ossFullInfo, update, perizinan);
+            string path = await GenerateAndSignPdfAsync(helper, ossFullInfo, update, perizinan);
+            perizinan.TandaDaftarUrl = path;
 
             _context.Perizinan.Add(perizinan);
             await _context.SaveChangesAsync();
@@ -665,7 +666,7 @@ namespace PsefApiOData.Controllers
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
             OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
             TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions);
-            string path = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
+            await GenerateAndSignPdfAsync(helper, ossFullInfo, permohonan, perizinan);
 
             return NoContent();
         }
