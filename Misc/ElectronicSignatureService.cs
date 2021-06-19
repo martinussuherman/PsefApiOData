@@ -34,7 +34,7 @@ namespace PsefApiOData.Misc
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
-                $"{_options.Value.BaseUri}/sign/pdf");
+                $"{_options.Value.BaseUri}/api/sign/pdf");
 
             request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.Username,
                 _options.Value.Password);
