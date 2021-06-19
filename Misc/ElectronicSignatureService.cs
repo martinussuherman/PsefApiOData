@@ -36,10 +36,8 @@ namespace PsefApiOData.Misc
                 HttpMethod.Post,
                 $"{_options.Value.BaseUri}/sign/pdf");
 
-            byte[] encoded = Encoding.UTF8.GetBytes($"{_options.Value.Username}:{_options.Value.Password}");
-            request.Headers.Authorization = new AuthenticationHeaderValue(
-                "Basic",
-                System.Convert.ToBase64String(encoded));
+            request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.Username,
+                _options.Value.Password);
 
             var formData = new MultipartFormDataContent();
             FileStream readStream = File.OpenRead(filePath);
