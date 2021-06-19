@@ -79,6 +79,7 @@ namespace PsefApiOData.Misc
                 FileAccess.ReadWrite);
 
             document.Save(fileStream);
+            fileStream.Close();
             document.Close(true);
 
             return result;
