@@ -41,7 +41,9 @@ namespace PsefApiOData.Misc
 
             var formData = new MultipartFormDataContent();
             FileStream readStream = File.OpenRead(filePath);
-            formData.Add(new StreamContent(readStream), "file", "file");
+            StreamContent streamContent = new StreamContent(readStream);
+            streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+            formData.Add(streamContent, "file", "tanda-daftar-psef.pdf");
             formData.Add(new StringContent(_options.Value.Nik), "nik");
             formData.Add(new StringContent(_options.Value.Passphrase), "passphrase");
             formData.Add(new StringContent("invisible"), "tampilan");
