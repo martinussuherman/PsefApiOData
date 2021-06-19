@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
+using PsefApiOData.Models.ViewModels;
 using WorkDaysCalculator;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 using static PsefApiOData.ApiInfo;
@@ -1247,6 +1249,17 @@ namespace PsefApiOData.Controllers
         private string MonthToRomanNumber(DateTime date)
         {
             return RomanNumberHelper.ToRomanNumber(date.Month);
+        }
+        private async Task<string> GenerateAndSignPdfAsync(
+            TandaDaftarHelper helper,
+            OssFullInfo ossFullInfo,
+            Permohonan permohonan,
+            Perizinan perizinan)
+        {
+            GeneratePdfResult info = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
+            string folderPath = Path.Combine(_environment.WebRootPath, info.DatePath, info.FileName);
+            await _signatureService.SignPdfAsync(folderPath);
+            return info.FullPath;
         }
 
         private readonly static Calculator _calculator = new Calculator();
