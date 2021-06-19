@@ -139,6 +139,7 @@ namespace PsefApiOData
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
             services.AddHttpClient<IIdentityApiService, IdentityApiService>();
             services.AddHttpClient<IOssApiService, OssApiService>();
+            services.AddHttpClient<ElectronicSignatureService>();
         }
         private void ConfigureMvc(IApplicationBuilder app, VersionedODataModelBuilder modelBuilder)
         {
