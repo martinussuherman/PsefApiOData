@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using PsefApiOData.Models;
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
-using Syncfusion.Pdf.Barcode;
 using Syncfusion.Pdf.Graphics;
 
 namespace PsefApiOData.Misc
@@ -363,14 +362,6 @@ namespace PsefApiOData.Misc
             {
                 Alignment = PdfTextAlignment.Left
             };
-            PdfQRBarcode barcode = new PdfQRBarcode
-            {
-                ErrorCorrectionLevel = PdfErrorCorrectionLevel.High,
-                XDimension = 3,
-                Text = perizinan.PerizinanNumber
-            };
-
-            barcode.Draw(page, new PointF(leftCol, top + 10));
 
             top = DrawString(
                 $"A.N. MENTERI KESEHATAN\n{_options.Value.Position}\n\n\nTTD\n\n\n{_options.Value.Name}",
