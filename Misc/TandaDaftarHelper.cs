@@ -64,7 +64,7 @@ namespace PsefApiOData.Misc
             top = DrawContent(permohonan, perizinan, ossInfo, graphics, top);
 
             top = 440;
-            top = DrawSignature(perizinan, page, graphics, top);
+            top = DrawSignature(graphics, top);
             top = DrawFooter(perizinan, graphics, top);
 
             FileStream fileStream = new FileStream(
@@ -350,12 +350,9 @@ namespace PsefApiOData.Misc
         }
 
         private float DrawSignature(
-            Perizinan perizinan,
-            PdfPage page,
             PdfGraphics graphics,
             float top)
         {
-            float leftCol = 20;
             float rightCol = (graphics.ClientSize.Width / 2) - 30;
             float width = (graphics.ClientSize.Width / 2) + 20;
             PdfStringFormat leftAlign = new PdfStringFormat
