@@ -55,12 +55,12 @@ namespace PsefApiOData.Misc
                 request,
                 HttpCompletionOption.ResponseHeadersRead);
 
+            readStream.Close();
+
             if (!response.IsSuccessStatusCode)
             {
                 return;
             }
-
-            readStream.Close();
 
             FileStream writeStream = File.OpenWrite(filePath);
             await response.Content.CopyToAsync(writeStream);
