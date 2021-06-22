@@ -72,6 +72,7 @@ namespace PsefApiOData.Misc
             top = 440;
             top = DrawSignature(graphics, top);
             top = DrawFooter(perizinan, graphics, top);
+            top = DrawBsreInfo(graphics, top);
 
             FileStream fileStream = new FileStream(
                 filePath,
@@ -114,7 +115,7 @@ namespace PsefApiOData.Misc
                     PdfGraphicsUnit.Inch,
                     PdfGraphicsUnit.Point),
                 converter.ConvertUnits(
-                    11,
+                    13f,
                     PdfGraphicsUnit.Inch,
                     PdfGraphicsUnit.Point));
 
@@ -448,6 +449,73 @@ namespace PsefApiOData.Misc
                 new RectangleF(indentCol, top, indentWidth, 0));
 
             return top;
+        }
+
+        private float DrawBsreInfo(PdfGraphics graphics, float top)
+        {
+            top += 20;
+            PdfPen pen = new PdfPen(Color.Black, 2);
+            graphics.DrawLine(pen, 5, top, graphics.ClientSize.Width, top);
+
+            top += 10;
+            PdfBitmap logo = new PdfBitmap(new FileStream(
+                "logo-bsre.png",
+                FileMode.Open,
+                FileAccess.Read));
+            float drawWidth = logo.Width / 2.2f;
+            float drawHeight = logo.Height / 2.2f;
+
+            graphics.DrawImage(
+                logo,
+                graphics.ClientSize.Width - 20 - drawWidth,
+                top,
+                drawWidth,
+                drawHeight);
+
+            float leftCol = 5;
+            float width = graphics.ClientSize.Width - 50 - drawWidth;
+            PdfStandardFont labelFont = new PdfStandardFont(PdfFontFamily.Helvetica, 9);
+            PdfStringFormat leftAlign = new PdfStringFormat
+            {
+                Alignment = PdfTextAlignment.Left
+            };
+            PdfStringFormat justified = new PdfStringFormat
+            {
+                Alignment = PdfTextAlignment.Justify
+            };
+
+            SizeF indentSize = labelFont.MeasureString("2.");
+            float indentCol = leftCol + indentSize.Width + 2;
+            float indentWidth = width - indentCol;
+
+            DrawString(
+                "1.",
+                graphics,
+                labelFont,
+                leftAlign,
+                new RectangleF(leftCol, top, indentSize.Width, 0));
+            top = DrawString(
+                "Undang-undang Nomor 11 Tahun 2008 Pasal 5 Ayat 1 \"Informasi elektronik dan/atau dokumen elektronik dan/atau hasil cetaknya merupakan alat bukti hukum yang sah\"",
+                graphics,
+                labelFont,
+                justified,
+                new RectangleF(indentCol, top, indentWidth, 0));
+
+            top += 4;
+            DrawString(
+                "2.",
+                graphics,
+                labelFont,
+                leftAlign,
+                new RectangleF(leftCol, top, indentSize.Width, 0));
+            top = DrawString(
+                "Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik yang diterbitkan oleh Balai Sertifikasi Elektronik (BSrE)",
+                graphics,
+                labelFont,
+                justified,
+                new RectangleF(indentCol, top, indentWidth, 0));
+
+            return top + drawHeight;
         }
 
         private float DrawString(
