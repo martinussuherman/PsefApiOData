@@ -1,7 +1,6 @@
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
@@ -46,9 +45,14 @@ namespace PsefApiOData.Misc
             formData.Add(streamContent, "file", "tanda-daftar-psef.pdf");
             formData.Add(new StringContent(_options.Value.Nik), "nik");
             formData.Add(new StringContent(_options.Value.Passphrase), "passphrase");
-            formData.Add(new StringContent("invisible"), "tampilan");
-            formData.Add(new StringContent("1"), "page");
-
+            formData.Add(new StringContent("visible"), "tampilan");
+            formData.Add(new StringContent("pertama"), "halaman");
+            formData.Add(new StringContent("false"), "image");
+            formData.Add(new StringContent("https://psef.kemkes.go.id"), "linkQR");
+            formData.Add(new StringContent("200"), "width");
+            formData.Add(new StringContent("200"), "height");
+            formData.Add(new StringContent("100"), "xAxis");
+            formData.Add(new StringContent("550"), "yAxis");
             request.Content = formData;
 
             HttpResponseMessage response = await _httpClient.SendAsync(
