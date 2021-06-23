@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using PsefApiOData.Models;
 
 namespace PsefApiOData.Misc
 {
@@ -27,9 +28,9 @@ namespace PsefApiOData.Misc
         /// <summary>
         /// Sign PDF file with E-Signature API.
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        public async Task SignPdfAsync(string filePath)
+        /// <param name="filePath">Path of PDF file to sign.</param>
+        /// <returns>An ElectronicSignatureResult from e-signature API server</returns>
+        public async Task<ElectronicSignatureResult> SignPdfAsync(string filePath)
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
@@ -63,12 +64,24 @@ namespace PsefApiOData.Misc
 
             if (!response.IsSuccessStatusCode)
             {
-                return;
+                return new ElectronicSignatureResult
+                {
+                    IsSuccess = false,
+                    StatusCode = response.StatusCode,
+                    FailureContent = await response.Content.ReadAsStringAsync()
+                };
             }
 
             FileStream writeStream = File.OpenWrite(filePath);
             await response.Content.CopyToAsync(writeStream);
             writeStream.Close();
+
+            return new ElectronicSignatureResult
+            {
+                IsSuccess = true,
+                StatusCode = response.StatusCode,
+                FailureContent = string.Empty
+            };
         }
 
         private readonly HttpClient _httpClient;
