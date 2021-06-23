@@ -4,6 +4,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PsefApiOData.Models;
+using Serilog;
+using Serilog.Core;
 
 namespace PsefApiOData.Misc
 {
@@ -67,19 +69,31 @@ namespace PsefApiOData.Misc
 
             readStream.Close();
 
+            Logger log = new LoggerConfiguration()
+                .WriteTo
+                .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             if (!response.IsSuccessStatusCode)
             {
-                return new ElectronicSignatureResult
+                ElectronicSignatureResult errorResult = new ElectronicSignatureResult
                 {
                     IsSuccess = false,
                     StatusCode = response.StatusCode,
                     FailureContent = await response.Content.ReadAsStringAsync()
                 };
+
+                log.Error(
+                    "Proses e-signature gagal!!!\nStatus: {@Status}\nServer Response: {@Response}",
+                    errorResult.StatusCode,
+                    errorResult.FailureContent);
+                return errorResult;
             }
 
             FileStream writeStream = File.OpenWrite(filePath);
             await response.Content.CopyToAsync(writeStream);
             writeStream.Close();
+            log.Information("Proses e-signature berhasil untuk file: {@FilePath}", filePath);
 
             return new ElectronicSignatureResult
             {
