@@ -29,8 +29,13 @@ namespace PsefApiOData.Misc
         /// Sign PDF file with E-Signature API.
         /// </summary>
         /// <param name="filePath">Path of PDF file to sign.</param>
+        /// <param name="nik">Signer NIK.</param>
+        /// <param name="passphrase">Signer passphrase.</param>
         /// <returns>An ElectronicSignatureResult from e-signature API server</returns>
-        public async Task<ElectronicSignatureResult> SignPdfAsync(string filePath)
+        public async Task<ElectronicSignatureResult> SignPdfAsync(
+            string filePath,
+            string nik,
+            string passphrase)
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
@@ -44,8 +49,8 @@ namespace PsefApiOData.Misc
             StreamContent streamContent = new StreamContent(readStream);
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             formData.Add(streamContent, "file", "tanda-daftar-psef.pdf");
-            formData.Add(new StringContent(_options.Value.Nik), "nik");
-            formData.Add(new StringContent(_options.Value.Passphrase), "passphrase");
+            formData.Add(new StringContent(nik), "nik");
+            formData.Add(new StringContent(passphrase), "passphrase");
             formData.Add(new StringContent("visible"), "tampilan");
             formData.Add(new StringContent("pertama"), "halaman");
             formData.Add(new StringContent("false"), "image");
