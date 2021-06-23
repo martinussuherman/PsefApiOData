@@ -570,7 +570,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> ValidatorSelesaikan(
-            [FromBody] PermohonanSystemUpdate data)
+            [FromBody] GenerateTandaDaftarData data)
         {
             Permohonan update = await _context.Permohonan
                 .FirstOrDefaultAsync(c =>
@@ -616,9 +616,13 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
-            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions);
-            string path = await GenerateAndSignPdfAsync(helper, ossFullInfo, update, perizinan);
+            string path = await GenerateAndSignPdfAsync(
+                new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
+                await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                update,
+                perizinan,
+                data.Nik,
+                data.Passphrase);
             perizinan.TandaDaftarUrl = path;
 
             _context.Perizinan.Add(perizinan);
@@ -644,7 +648,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> ValidatorRegenerateTandaDaftar(
-            [FromBody] PermohonanSystemUpdate data)
+            [FromBody] GenerateTandaDaftarData data)
         {
             Permohonan permohonan = await _context.Permohonan
                 .AsNoTracking()
@@ -664,9 +668,13 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
-            TandaDaftarHelper helper = new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions);
-            await GenerateAndSignPdfAsync(helper, ossFullInfo, permohonan, perizinan);
+            await GenerateAndSignPdfAsync(
+                new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
+                await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                permohonan,
+                perizinan,
+                data.Nik,
+                data.Passphrase);
 
             return NoContent();
         }
@@ -1255,11 +1263,13 @@ namespace PsefApiOData.Controllers
             TandaDaftarHelper helper,
             OssFullInfo ossFullInfo,
             Permohonan permohonan,
-            Perizinan perizinan)
+            Perizinan perizinan,
+            string nik,
+            string passphrase)
         {
             GeneratePdfResult info = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
             string folderPath = Path.Combine(_environment.WebRootPath, info.DatePath, info.FileName);
-            await _signatureService.SignPdfAsync(folderPath);
+            await _signatureService.SignPdfAsync(folderPath, nik, passphrase);
             return info.FullPath;
         }
 
