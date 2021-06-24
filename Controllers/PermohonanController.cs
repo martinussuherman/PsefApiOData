@@ -616,14 +616,14 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            string path = await GenerateAndSignPdfAsync(
+            var result = await GenerateAndSignPdfAsync(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
                 update,
                 perizinan,
                 data.Nik,
                 data.Passphrase);
-            perizinan.TandaDaftarUrl = path;
+            perizinan.TandaDaftarUrl = result.FullPath;
 
             _context.Perizinan.Add(perizinan);
             await _context.SaveChangesAsync();
@@ -1259,7 +1259,7 @@ namespace PsefApiOData.Controllers
         {
             return RomanNumberHelper.ToRomanNumber(date.Month);
         }
-        private async Task<string> GenerateAndSignPdfAsync(
+        private async Task<GeneratePdfResult> GenerateAndSignPdfAsync(
             TandaDaftarHelper helper,
             OssFullInfo ossFullInfo,
             Permohonan permohonan,
@@ -1267,10 +1267,10 @@ namespace PsefApiOData.Controllers
             string nik,
             string passphrase)
         {
-            GeneratePdfResult info = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
-            string folderPath = Path.Combine(_environment.WebRootPath, info.DatePath, info.FileName);
-            await _signatureService.SignPdfAsync(folderPath, nik, passphrase);
-            return info.FullPath;
+            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
+            string folderPath = Path.Combine(_environment.WebRootPath, result.DatePath, result.FileName);
+            result.SignResult = await _signatureService.SignPdfAsync(folderPath, nik, passphrase);
+            return result;
         }
 
         private readonly static Calculator _calculator = new Calculator();
