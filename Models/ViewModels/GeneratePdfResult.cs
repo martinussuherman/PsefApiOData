@@ -24,9 +24,9 @@ namespace PsefApiOData.Models.ViewModels
         public string FullPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the Generate Pdf Result QR Code top position.
+        /// Gets or sets the electronic signature result.
         /// </summary>
-        /// <value>The Generate Pdf Result's QR Code top position.</value>
-        public float QrCodeTop { get; set; }
+        /// <value>The electronic signature result.</value>
+        public ElectronicSignatureResult SignResult { get; set; }
     }
 }
