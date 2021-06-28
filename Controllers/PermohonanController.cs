@@ -680,13 +680,18 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            await GenerateAndSignPdfAsync(
+            var result = await GenerateAndSignPdfAsync(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
                 permohonan,
                 perizinan,
                 data.Nik,
                 data.Passphrase);
+
+            if (!result.SignResult.IsSuccess)
+            {
+                return BadRequest(result.SignResult);
+            }
 
             return NoContent();
         }
