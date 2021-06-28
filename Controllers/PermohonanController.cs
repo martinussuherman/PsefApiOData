@@ -614,7 +614,15 @@ namespace PsefApiOData.Controllers
             perizinan.TandaDaftarUrl = result.FullPath;
 
             _context.Perizinan.Add(perizinan);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
 
             update.PerizinanId = perizinan.Id;
             update.StatusId = PermohonanStatus.Selesai.Id;
