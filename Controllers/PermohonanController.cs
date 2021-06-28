@@ -582,18 +582,6 @@ namespace PsefApiOData.Controllers
                 return NotFound();
             }
 
-            update.StatusId = PermohonanStatus.Selesai.Id;
-            _context.HistoryPermohonan.Add(CreateHistory(update, data));
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
             DateTime maxExpiry = DateTime.Today.AddYears(_perizinanYears);
             DateTime expiry = maxExpiry.CompareTo(update.StraExpiry) > 0 ?
                 update.StraExpiry :
@@ -629,7 +617,17 @@ namespace PsefApiOData.Controllers
             await _context.SaveChangesAsync();
 
             update.PerizinanId = perizinan.Id;
-            await _context.SaveChangesAsync();
+            update.StatusId = PermohonanStatus.Selesai.Id;
+            _context.HistoryPermohonan.Add(CreateHistory(update, data));
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
 
             return NoContent();
         }
