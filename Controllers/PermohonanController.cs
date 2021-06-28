@@ -611,6 +611,12 @@ namespace PsefApiOData.Controllers
                 perizinan,
                 data.Nik,
                 data.Passphrase);
+
+            if (!result.SignResult.IsSuccess)
+            {
+                return BadRequest(result.SignResult);
+            }
+
             perizinan.TandaDaftarUrl = result.FullPath;
 
             _context.Perizinan.Add(perizinan);
