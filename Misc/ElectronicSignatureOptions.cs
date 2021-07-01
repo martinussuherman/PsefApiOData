@@ -39,5 +39,11 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <value>The API base uri.</value>
         public string BaseUri { get; set; }
+
+       /// <summary>
+        /// Gets or sets the signer NIK.
+        /// </summary>
+        /// <value>The signer NIK.</value>
+        public string Nik { get; set; }
     }
 }
