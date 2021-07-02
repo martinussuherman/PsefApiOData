@@ -1262,6 +1262,7 @@ namespace PsefApiOData.Controllers
                 maxExpiry;
             Perizinan perizinan;
 
+            // PerizinanId == null -> never generated before, PerizinanId != null -> regenerated
             if (update.PerizinanId == null)
             {
                 perizinan = new Perizinan
@@ -1296,10 +1297,23 @@ namespace PsefApiOData.Controllers
                 data.Nik,
                 data.Passphrase);
 
-            perizinan.ExpiredAt = expiry;
-            perizinan.IssuedAt = DateTime.Today;
             perizinan.TandaDaftarUrl = result.FullPath;
-            _context.Perizinan.Add(perizinan);
+
+            if (update.PerizinanId == null)
+            {
+                _context.Perizinan.Add(perizinan);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            update.PerizinanId = perizinan.Id;
 
             try
             {
@@ -1315,7 +1329,8 @@ namespace PsefApiOData.Controllers
                 return BadRequest(result.SignResult);
             }
 
-            update.PerizinanId = perizinan.Id;
+            perizinan.ExpiredAt = expiry;
+            perizinan.IssuedAt = DateTime.Today;
             update.StatusId = PermohonanStatus.Selesai.Id;
             _context.HistoryPermohonan.Add(CreateHistory(update, data));
 
