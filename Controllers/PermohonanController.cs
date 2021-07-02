@@ -557,6 +557,30 @@ namespace PsefApiOData.Controllers
         }
 
         /// <summary>
+        /// Finish an existing Permohonan by Direktur Jenderal.
+        /// </summary>
+        /// <remarks>
+        /// *Role: Dirjen*
+        /// </remarks>
+        /// <param name="data">Permohonan by system update data.</param>
+        /// <returns>None.</returns>
+        [MultiRoleAuthorize(ApiRole.Dirjen)]
+        [HttpPost]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(Status204NoContent)]
+        [ProducesResponseType(Status400BadRequest)]
+        public async Task<IActionResult> DirekturJenderalSelesaikan(
+            [FromBody] GenerateTandaDaftarData data)
+        {
+            Permohonan update = await _context.Permohonan
+                .FirstOrDefaultAsync(c =>
+                    c.Id == data.PermohonanId &&
+                    c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
+
+            return await SelesaikanPermohonan(data, update);
+        }
+
+        /// <summary>
         /// Finish an existing Permohonan by Validator.
         /// </summary>
         /// <remarks>
