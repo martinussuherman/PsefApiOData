@@ -1289,6 +1289,89 @@ namespace PsefApiOData.Controllers
             result.SignResult = await _signatureService.SignPdfAsync(folderPath, nik, passphrase);
             return result;
         }
+        private async Task<IActionResult> SelesaikanPermohonan(
+            GenerateTandaDaftarData data,
+            Permohonan update)
+        {
+            if (update == null)
+            {
+                return NotFound();
+            }
+
+            DateTime maxExpiry = DateTime.Today.AddYears(_perizinanYears);
+            DateTime expiry = maxExpiry.CompareTo(update.StraExpiry) > 0 ?
+                update.StraExpiry :
+                maxExpiry;
+            Perizinan perizinan;
+
+            if (update.PerizinanId == null)
+            {
+                perizinan = new Perizinan
+                {
+                    PermohonanId = update.Id,
+                    ExpiredAt = _invalidPerizinan,
+                    IssuedAt = _invalidPerizinan,
+                    PreviousId = update.PreviousPerizinanId
+                };
+
+                CounterHelper counterHelper = new CounterHelper(_context);
+                perizinan.PerizinanNumber = await counterHelper.GetFormNumber(
+                    CounterType.Perizinan,
+                    monthFunc: MonthToRomanNumber);
+            }
+            else
+            {
+                perizinan = await _context.Perizinan
+                    .Where(c => c.PermohonanId == update.Id)
+                    .FirstOrDefaultAsync();
+            }
+
+            Pemohon pemohon = await _context.Pemohon
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
+            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
+            GeneratePdfResult result = await GenerateAndSignPdfAsync(
+                new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
+                await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                update,
+                perizinan,
+                data.Nik,
+                data.Passphrase);
+
+            perizinan.ExpiredAt = expiry;
+            perizinan.IssuedAt = DateTime.Today;
+            perizinan.TandaDaftarUrl = result.FullPath;
+            _context.Perizinan.Add(perizinan);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            if (!result.SignResult.IsSuccess)
+            {
+                return BadRequest(result.SignResult);
+            }
+
+            update.PerizinanId = perizinan.Id;
+            update.StatusId = PermohonanStatus.Selesai.Id;
+            _context.HistoryPermohonan.Add(CreateHistory(update, data));
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
 
         private readonly static Calculator _calculator = new Calculator();
         private readonly PemohonUserInfoHelper _pemohonHelper;
@@ -1300,6 +1383,7 @@ namespace PsefApiOData.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
         private readonly IOptions<OssApiOptions> _ossOptions;
+        private readonly DateTime _invalidPerizinan = new DateTime(1901, 1, 1);
         private const int _perizinanYears = 5;
         private const int _maxPermohonanDiajukan = 3;
     }
