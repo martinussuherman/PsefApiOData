@@ -601,73 +601,7 @@ namespace PsefApiOData.Controllers
                     c.Id == data.PermohonanId &&
                     c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id);
 
-            if (update == null)
-            {
-                return NotFound();
-            }
-
-            DateTime maxExpiry = DateTime.Today.AddYears(_perizinanYears);
-            DateTime expiry = maxExpiry.CompareTo(update.StraExpiry) > 0 ?
-                update.StraExpiry :
-                maxExpiry;
-
-            Perizinan perizinan = new Perizinan
-            {
-                PermohonanId = update.Id,
-                ExpiredAt = expiry,
-                IssuedAt = DateTime.Today,
-                PreviousId = update.PreviousPerizinanId
-            };
-
-            CounterHelper counterHelper = new CounterHelper(_context);
-            perizinan.PerizinanNumber = await counterHelper.GetFormNumber(
-                CounterType.Perizinan,
-                monthFunc: MonthToRomanNumber);
-
-            Pemohon pemohon = await _context.Pemohon
-                .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
-            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            var result = await GenerateAndSignPdfAsync(
-                new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
-                await ossInfoHelper.RetrieveInfo(pemohon.Nib),
-                update,
-                perizinan,
-                data.Nik,
-                data.Passphrase);
-
-            if (!result.SignResult.IsSuccess)
-            {
-                return BadRequest(result.SignResult);
-            }
-
-            perizinan.TandaDaftarUrl = result.FullPath;
-
-            _context.Perizinan.Add(perizinan);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            update.PerizinanId = perizinan.Id;
-            update.StatusId = PermohonanStatus.Selesai.Id;
-            _context.HistoryPermohonan.Add(CreateHistory(update, data));
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            return NoContent();
+            return await SelesaikanPermohonan(data, update);
         }
 
         /// <summary>
