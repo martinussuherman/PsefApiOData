@@ -48,11 +48,12 @@ namespace PsefApiOData.Controllers
         {
             if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
             {
-                return _context.Perizinan.Where(
-                    e => e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+                return _context.Perizinan.Where(e =>
+                    e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                    e.IssuedAt != _invalidPerizinan);
             }
 
-            return _context.Perizinan;
+            return _context.Perizinan.Where(e => e.IssuedAt != _invalidPerizinan);
         }
 
         /// <summary>
@@ -75,13 +76,16 @@ namespace PsefApiOData.Controllers
             if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
             {
                 return SingleResult.Create(
-                    _context.Perizinan.Where(
-                        e => e.Id == id &&
-                        e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User)));
+                    _context.Perizinan.Where(e =>
+                        e.Id == id &&
+                        e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                        e.IssuedAt != _invalidPerizinan));
             }
 
             return SingleResult.Create(
-                _context.Perizinan.Where(e => e.Id == id));
+                _context.Perizinan.Where(e =>
+                    e.Id == id &&
+                    e.IssuedAt != _invalidPerizinan));
         }
 
         /// <summary>
@@ -285,6 +289,7 @@ namespace PsefApiOData.Controllers
         public async Task<IEnumerable<PerizinanHalamanMuka>> HalamanMuka()
         {
             return await _context.Perizinan
+                .Where(c => c.IssuedAt != _invalidPerizinan)
                 .OrderByDescending(c => c.IssuedAt)
                 .Take(20)
                 .Select(c => new PerizinanHalamanMuka
@@ -301,6 +306,7 @@ namespace PsefApiOData.Controllers
             return _context.Perizinan.Any(e => e.Id == id);
         }
 
+        private readonly DateTime _invalidPerizinan = new DateTime(1901, 1, 1);
         private readonly PsefMySqlContext _context;
     }
 }
