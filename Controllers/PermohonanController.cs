@@ -1306,6 +1306,10 @@ namespace PsefApiOData.Controllers
             {
                 _context.Perizinan.Add(perizinan);
             }
+            else
+            {
+                _context.Entry(perizinan).State = EntityState.Modified;
+            }
 
             try
             {
@@ -1317,6 +1321,7 @@ namespace PsefApiOData.Controllers
             }
 
             update.PerizinanId = perizinan.Id;
+            _context.Entry(update).State = EntityState.Modified;
 
             try
             {
@@ -1335,6 +1340,8 @@ namespace PsefApiOData.Controllers
             perizinan.ExpiredAt = expiry;
             perizinan.IssuedAt = DateTime.Today;
             update.StatusId = PermohonanStatus.Selesai.Id;
+            _context.Entry(perizinan).State = EntityState.Modified;
+            _context.Entry(update).State = EntityState.Modified;
             _context.HistoryPermohonan.Add(CreateHistory(update, data));
 
             try
