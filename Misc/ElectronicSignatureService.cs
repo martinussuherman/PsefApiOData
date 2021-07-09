@@ -1,4 +1,5 @@
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -39,68 +40,86 @@ namespace PsefApiOData.Misc
             string nik,
             string passphrase)
         {
-            HttpRequestMessage request = new HttpRequestMessage(
-                HttpMethod.Post,
-                $"{_options.Value.BaseUri}/api/sign/pdf");
-
-            request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.Username,
-                _options.Value.Password);
-
-            var formData = new MultipartFormDataContent();
-            FileStream readStream = File.OpenRead(filePath);
-            StreamContent streamContent = new StreamContent(readStream);
-            streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
-            formData.Add(streamContent, "file", "tanda-daftar-psef.pdf");
-            formData.Add(new StringContent(nik), "nik");
-            formData.Add(new StringContent(passphrase), "passphrase");
-            formData.Add(new StringContent("visible"), "tampilan");
-            formData.Add(new StringContent("pertama"), "halaman");
-            formData.Add(new StringContent("false"), "image");
-            formData.Add(new StringContent("https://psef.kemkes.go.id"), "linkQR");
-            formData.Add(new StringContent("200"), "width");
-            formData.Add(new StringContent("200"), "height");
-            formData.Add(new StringContent("100"), "xAxis");
-            formData.Add(new StringContent("550"), "yAxis");
-            request.Content = formData;
-
-            HttpResponseMessage response = await _httpClient.SendAsync(
-                request,
-                HttpCompletionOption.ResponseHeadersRead);
-
-            readStream.Close();
-
-            Logger log = new LoggerConfiguration()
-                .WriteTo
-                .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                ElectronicSignatureResult errorResult = new ElectronicSignatureResult
+                HttpRequestMessage request = new HttpRequestMessage(
+                    HttpMethod.Post,
+                    $"{_options.Value.BaseUri}/api/sign/pdf");
+
+                request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.Username,
+                    _options.Value.Password);
+
+                var formData = new MultipartFormDataContent();
+                FileStream readStream = File.OpenRead(filePath);
+                StreamContent streamContent = new StreamContent(readStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+                formData.Add(streamContent, "file", "tanda-daftar-psef.pdf");
+                formData.Add(new StringContent(nik), "nik");
+                formData.Add(new StringContent(passphrase), "passphrase");
+                formData.Add(new StringContent("visible"), "tampilan");
+                formData.Add(new StringContent("pertama"), "halaman");
+                formData.Add(new StringContent("false"), "image");
+                formData.Add(new StringContent("https://psef.kemkes.go.id"), "linkQR");
+                formData.Add(new StringContent("200"), "width");
+                formData.Add(new StringContent("200"), "height");
+                formData.Add(new StringContent("100"), "xAxis");
+                formData.Add(new StringContent("550"), "yAxis");
+                request.Content = formData;
+
+                HttpResponseMessage response = await _httpClient.SendAsync(
+                    request,
+                    HttpCompletionOption.ResponseHeadersRead);
+
+                readStream.Close();
+
+                Logger log = new LoggerConfiguration()
+                    .WriteTo
+                    .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ElectronicSignatureResult errorResult = new ElectronicSignatureResult
+                    {
+                        IsSuccess = false,
+                        StatusCode = response.StatusCode,
+                        FailureContent = await response.Content.ReadAsStringAsync()
+                    };
+
+                    log.Error(
+                        "Proses e-signature gagal!!!\nStatus: {@Status}\nServer Response: {@Response}",
+                        errorResult.StatusCode,
+                        errorResult.FailureContent);
+                    return errorResult;
+                }
+
+                FileStream writeStream = File.OpenWrite(filePath);
+                await response.Content.CopyToAsync(writeStream);
+                writeStream.Close();
+                log.Information("Proses e-signature berhasil untuk file: {@FilePath}", filePath);
+
+                return new ElectronicSignatureResult
+                {
+                    IsSuccess = true,
+                    StatusCode = response.StatusCode,
+                    FailureContent = string.Empty
+                };
+            }
+            catch (HttpRequestException e)
+            {
+                Logger log = new LoggerConfiguration()
+                    .WriteTo
+                    .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
+                log.Error("Proses e-signature gagal!!!\nMessage: {@Message}", e.Message);
+
+                return new ElectronicSignatureResult
                 {
                     IsSuccess = false,
-                    StatusCode = response.StatusCode,
-                    FailureContent = await response.Content.ReadAsStringAsync()
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    FailureContent = e.Message
                 };
-
-                log.Error(
-                    "Proses e-signature gagal!!!\nStatus: {@Status}\nServer Response: {@Response}",
-                    errorResult.StatusCode,
-                    errorResult.FailureContent);
-                return errorResult;
             }
-
-            FileStream writeStream = File.OpenWrite(filePath);
-            await response.Content.CopyToAsync(writeStream);
-            writeStream.Close();
-            log.Information("Proses e-signature berhasil untuk file: {@FilePath}", filePath);
-
-            return new ElectronicSignatureResult
-            {
-                IsSuccess = true,
-                StatusCode = response.StatusCode,
-                FailureContent = string.Empty
-            };
         }
 
         private readonly HttpClient _httpClient;
