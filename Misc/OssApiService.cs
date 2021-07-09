@@ -48,8 +48,8 @@ namespace PsefApiOData.Misc
 
             LoginInfo loginInfo = new LoginInfo
             {
-                Username = _options.Value.OssUser,
-                Password = _options.Value.OssPassword
+                Username = _options.Value.User,
+                Password = _options.Value.Password
             };
 
             string data = JsonConvert.SerializeObject(
@@ -60,7 +60,7 @@ namespace PsefApiOData.Misc
                 });
 
             HttpResponseMessage response = await _httpClient.PostAsync(
-                $"{_options.Value.OssBaseUri}/consumer/login",
+                $"{_options.Value.BaseUri}/consumer/login",
                 new StringContent(data, Encoding.UTF8, ApiInfo.JsonOutput));
 
             if (!response.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace PsefApiOData.Misc
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
-                $"{_options.Value.OssBaseUri}{uri}");
+                $"{_options.Value.BaseUri}{uri}");
 
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.EncodedToken);
             request.Content = new StringContent(content, Encoding.UTF8, ApiInfo.JsonOutput);

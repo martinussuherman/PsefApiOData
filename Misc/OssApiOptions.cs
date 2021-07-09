@@ -14,24 +14,24 @@ namespace PsefApiOData.Misc
         /// Gets or sets the OSS base uri.
         /// </summary>
         /// <value>The OSS base uri.</value>
-        public string OssBaseUri { get; set; }
+        public string BaseUri { get; set; }
 
         /// <summary>
         /// Gets or sets the OSS user.
         /// </summary>
         /// <value>The OSS user.</value>
-        public string OssUser { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// Gets or sets the OSS password.
         /// </summary>
         /// <value>The OSS password.</value>
-        public string OssPassword { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// Gets or sets the OSS cache time in hour.
         /// </summary>
         /// <value>The OSS cache time in hour.</value>
-        public int OssCacheHour { get; set; }
+        public int CacheHour { get; set; }
     }
 }

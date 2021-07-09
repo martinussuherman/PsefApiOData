@@ -98,7 +98,7 @@ namespace PsefApiOData.Misc
                 .ToObject<OssFullInfo>(JsonSerializer.CreateDefault(_snakeSettings));
 
             MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(new TimeSpan(_options.Value.OssCacheHour, 0, 0));
+                .SetAbsoluteExpiration(new TimeSpan(_options.Value.CacheHour, 0, 0));
 
             _memoryCache.Set(nameof(OssFullInfo) + id, apiData, cacheEntryOptions);
 
