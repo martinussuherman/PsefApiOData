@@ -412,7 +412,7 @@ namespace PsefApiOData.Misc
                 leftAlign,
                 new RectangleF(leftCol, top, indentSize.Width, 0));
             top = DrawString(
-                "Tanda Daftar Penyelenggara Sistem Elektronik Farmasi (PSEF) Merupakan Dokumen Pemenuhan Komitmen Dalam Izin Operasional/Komersial Penyelenggara Sistem Elektronik Farmasi (PSEF)",
+                "Tanda Daftar Penyelenggara Sistem Elektronik Farmasi (PSEF) Merupakan Dokumen Sertifikasi Usaha Penyelenggara Sistem Elektronik Farmasi (PSEF)",
                 graphics,
                 labelFont,
                 justified,
