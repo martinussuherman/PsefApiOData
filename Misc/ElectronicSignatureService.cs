@@ -73,10 +73,7 @@ namespace PsefApiOData.Misc
 
                 readStream.Close();
 
-                Logger log = new LoggerConfiguration()
-                    .WriteTo
-                    .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
-                    .CreateLogger();
+                Logger log = CreateLogger();
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -109,10 +106,7 @@ namespace PsefApiOData.Misc
             }
             catch (HttpRequestException e)
             {
-                Logger log = new LoggerConfiguration()
-                    .WriteTo
-                    .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
-                    .CreateLogger();
+                Logger log = CreateLogger();
                 log.Error("Proses e-signature gagal!!!\nMessage: {@Message}", e.Message);
                 readStream.Close();
                 File.Delete(filePath);
@@ -124,6 +118,13 @@ namespace PsefApiOData.Misc
                     FailureContent = e.Message
                 };
             }
+        }
+        private Logger CreateLogger()
+        {
+            return new LoggerConfiguration()
+                .WriteTo
+                .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
         }
 
         private readonly HttpClient _httpClient;
