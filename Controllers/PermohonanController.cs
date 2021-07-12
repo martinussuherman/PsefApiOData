@@ -1275,9 +1275,7 @@ namespace PsefApiOData.Controllers
                 };
 
                 CounterHelper counterHelper = new CounterHelper(_context);
-                perizinan.PerizinanNumber = await counterHelper.GetFormNumber(
-                    CounterType.Perizinan,
-                    monthFunc: MonthToRomanNumber);
+                perizinan.PerizinanNumber = await counterHelper.GetFormNumber(CounterType.Perizinan);
             }
             else
             {
