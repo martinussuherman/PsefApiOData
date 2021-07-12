@@ -90,6 +90,11 @@ namespace PsefApiOData.Misc
             {
                 return new OssFullInfo
                 {
+                    Nib = string.Empty,
+                    NamaPerseroan = string.Empty,
+                    AlamatPerseroan = string.Empty,
+                    NpwpPerseroan = string.Empty,
+                    NamaUserProses = string.Empty,
                     Keterangan = response["responinqueryNIB"]["keterangan"].ToObject<string>()
                 };
             }
