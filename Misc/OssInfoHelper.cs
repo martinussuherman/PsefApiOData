@@ -230,6 +230,94 @@ namespace PsefApiOData.Misc
                 }
             }
         };
+        private static readonly OssFullInfo _dummyInfoB = new OssFullInfo
+        {
+            Keterangan = "***Data dummy untuk test***",
+            Nib = "8120000123456",
+            NamaPerseroan = "PT. Maju Jaya Farmatek",
+            AlamatPerseroan = "Jl. Sejahtera Selalu No. 123",
+            RtRwPerseroan = "00/00",
+            KelurahanPerseroan = "Kelurahan",
+            KodePosPerseroan = "12345",
+            NpwpPerseroan = "123456780123000",
+            NomorTelponPerseroan = "021-56789012",
+            PemegangSaham = new List<OssPemegangSaham>
+            {
+                _pemegangSaham
+            },
+            PenanggungJwb = new List<OssPenanggungJawab>
+            {
+                _penanggungJawab
+            },
+            Legalitas = new List<OssLegalitas>
+            {
+                new OssLegalitas()
+            },
+            DataRptka = new OssRptka
+            {
+                RptkaJabatan = new List<OssRptkaJabatan>
+                {
+                    new OssRptkaJabatan
+                    {
+                        RptkaTkiPendamping = new List<OssRptkaTkiPendamping>
+                        {
+                            new OssRptkaTkiPendamping()
+                        }
+                    }
+                },
+                RptkaNegara = new List<OssRptkaNegara>
+                {
+                    new OssRptkaNegara()
+                },
+                RptkaLokasi = new List<OssRptkaLokasi>
+                {
+                    new OssRptkaLokasi()
+                }
+            },
+            DataProyek = new List<OssProyek>
+            {
+                new OssProyek
+                {
+                    DataLokasiProyek = new List<OssProyekLokasi>
+                    {
+                        new OssProyekLokasi
+                        {
+                            DataLokasiProyek = new List<OssProyekLokasiLokasi>
+                            {
+                                new OssProyekLokasiLokasi()
+                            },
+                            DataPosisiProyek = new List<OssProyekPosisi>
+                            {
+                                new OssProyekPosisi()
+                            }
+                        }
+                    },
+                    DataProyekProduk = new List<OssProyekProduk>
+                    {
+                        new OssProyekProduk()
+                    }
+                }
+            },
+            DataDni = new List<OssDni>
+            {
+                new OssDni()
+            },
+            DataChecklist = new List<OssChecklist>
+            {
+                new OssChecklist
+                {
+                    DataPersyaratan = new List<OssChecklistPersyaratan>
+                    {
+                        new OssChecklistPersyaratan()
+                    }
+                }
+            }
+        };
+        private static readonly List<OssFullInfo> _dummyInfoList = new List<OssFullInfo>
+        {
+            _dummyInfo,
+            _dummyInfoB
+        };
         private static readonly OssFullInfo _invalidCredentialInfo = new OssFullInfo
         {
             Keterangan = "Gagal melakukan login ke API OSS."
