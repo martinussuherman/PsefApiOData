@@ -40,6 +40,8 @@ namespace PsefApiOData.Misc
             string nik,
             string passphrase)
         {
+            FileStream readStream = File.OpenRead(filePath);
+
             try
             {
                 HttpRequestMessage request = new HttpRequestMessage(
@@ -50,7 +52,6 @@ namespace PsefApiOData.Misc
                     _options.Value.Password);
 
                 var formData = new MultipartFormDataContent();
-                FileStream readStream = File.OpenRead(filePath);
                 StreamContent streamContent = new StreamContent(readStream);
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
                 formData.Add(streamContent, "file", "tanda-daftar-psef.pdf");
@@ -86,6 +87,7 @@ namespace PsefApiOData.Misc
                         FailureContent = await response.Content.ReadAsStringAsync()
                     };
 
+                    File.Delete(filePath);
                     log.Error(
                         "Proses e-signature gagal!!!\nStatus: {@Status}\nServer Response: {@Response}",
                         errorResult.StatusCode,
@@ -112,6 +114,8 @@ namespace PsefApiOData.Misc
                     .File("log/e-signature-log.txt", rollingInterval: RollingInterval.Day)
                     .CreateLogger();
                 log.Error("Proses e-signature gagal!!!\nMessage: {@Message}", e.Message);
+                readStream.Close();
+                File.Delete(filePath);
 
                 return new ElectronicSignatureResult
                 {
