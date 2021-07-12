@@ -1271,8 +1271,6 @@ namespace PsefApiOData.Controllers
                 perizinan = new Perizinan
                 {
                     PermohonanId = update.Id,
-                    ExpiredAt = _invalidPerizinan,
-                    IssuedAt = _invalidPerizinan,
                     PreviousId = update.PreviousPerizinanId
                 };
 
@@ -1288,6 +1286,9 @@ namespace PsefApiOData.Controllers
                     .FirstOrDefaultAsync();
             }
 
+            perizinan.ExpiredAt = expiry;
+            perizinan.IssuedAt = DateTime.Today;
+
             Pemohon pemohon = await _context.Pemohon
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
@@ -1300,7 +1301,15 @@ namespace PsefApiOData.Controllers
                 data.Nik,
                 data.Passphrase);
 
-            perizinan.TandaDaftarUrl = result.FullPath;
+            if (!result.SignResult.IsSuccess)
+            {
+                perizinan.ExpiredAt = _invalidPerizinan;
+                perizinan.IssuedAt = _invalidPerizinan;
+            }
+            else
+            {
+                perizinan.TandaDaftarUrl = result.FullPath;
+            }
 
             if (update.PerizinanId == null)
             {
@@ -1337,10 +1346,7 @@ namespace PsefApiOData.Controllers
                 return BadRequest(result.SignResult);
             }
 
-            perizinan.ExpiredAt = expiry;
-            perizinan.IssuedAt = DateTime.Today;
             update.StatusId = PermohonanStatus.Selesai.Id;
-            _context.Entry(perizinan).State = EntityState.Modified;
             _context.Entry(update).State = EntityState.Modified;
             _context.HistoryPermohonan.Add(CreateHistory(update, data));
 
