@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PsefApiOData.Models;
 using PsefApiOData.Controllers;
-using System;
 
 namespace PsefApiOData.Configuration
 {
