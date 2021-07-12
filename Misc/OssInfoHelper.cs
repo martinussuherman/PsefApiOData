@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -47,9 +48,11 @@ namespace PsefApiOData.Misc
                 return _invalidNibInfo;
             }
 
-            if (id == "0000000000000")
+            OssFullInfo dummyData = _dummyInfoList.FirstOrDefault(c => c.Nib == id);
+
+            if (dummyData != null)
             {
-                return _dummyInfo;
+                return dummyData;
             }
 
             if (_memoryCache.TryGetValue(
