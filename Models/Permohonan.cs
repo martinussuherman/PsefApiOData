@@ -230,6 +230,12 @@ namespace PsefApiOData.Models
         public string PembayaranPnbpUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan Pernyataan Keaslian Dokumen document url.
+        /// </summary>
+        /// <value>The Permohonan's Pernyataan Keaslian Dokumen document url.</value>
+        public string PernyataanKeaslianDokumenUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the Permohonan last update.
         /// </summary>
         /// <value>The Permohonan's last update.</value>
