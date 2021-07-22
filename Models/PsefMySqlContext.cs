@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace PsefApiOData.Models
 {
@@ -681,7 +681,14 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.PermohonanNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PernyataanKeaslianDokumenUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
