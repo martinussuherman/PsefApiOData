@@ -1260,9 +1260,7 @@ namespace PsefApiOData.Controllers
             }
 
             DateTime maxExpiry = DateTime.Today.AddYears(_perizinanYears);
-            DateTime expiry = maxExpiry.CompareTo(update.StraExpiry) > 0 ?
-                update.StraExpiry :
-                maxExpiry;
+            DateTime expiry = maxExpiry;
             Perizinan perizinan;
 
             // PerizinanId == null -> never generated before, PerizinanId != null -> regenerated
