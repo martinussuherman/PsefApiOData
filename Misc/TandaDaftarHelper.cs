@@ -191,7 +191,7 @@ namespace PsefApiOData.Misc
             float leftCol = 5;
             float rightCol = graphics.ClientSize.Width / 2 + 5;
             float leftColTop = top + 14;
-            float rightColTop = top + 14;
+            float rightColTop;
             float width = (graphics.ClientSize.Width - 20) / 2;
             PdfStandardFont labelFont = new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Italic);
             PdfStandardFont contentFont = new PdfStandardFont(PdfFontFamily.Helvetica, 11, PdfFontStyle.Bold);
@@ -201,18 +201,19 @@ namespace PsefApiOData.Misc
             };
 
             leftColTop = DrawString(
-                "Nomor Tanda Daftar PSE:",
+                "Bidang:",
                 graphics,
                 labelFont,
                 leftAlign,
                 new RectangleF(leftCol, leftColTop, width, 0));
             leftColTop = DrawString(
-                permohonan.PermohonanNumber,
+                "PELAYANAN",
                 graphics,
                 contentFont,
                 leftAlign,
                 new RectangleF(leftCol, leftColTop, width, 0));
             leftColTop += 4;
+            rightColTop = leftColTop;
 
             leftColTop = DrawString(
                 "Tanggal Terbit:",
@@ -226,20 +227,6 @@ namespace PsefApiOData.Misc
                 contentFont,
                 leftAlign,
                 new RectangleF(leftCol, leftColTop, width, 0));
-
-            rightColTop = DrawString(
-                "Bidang:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop = DrawString(
-                "PELAYANAN",
-                graphics,
-                contentFont,
-                leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop += 4;
 
             rightColTop = DrawString(
                 "Tanggal Berakhir:",
