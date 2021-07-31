@@ -17,8 +17,7 @@ namespace PsefApiOData.Configuration
         /// <param name="apiVersion">The <see cref="ApiVersion">API version</see> associated with the <paramref name="builder"/>.</param>
         public void Apply(ODataModelBuilder builder, ApiVersion apiVersion)
         {
-            ComplexTypeConfiguration<DashboardInfo> info = builder
-                .ComplexType<DashboardInfo>();
+            builder.ComplexType<DashboardInfo>();
 
             builder.Function(nameof(DashboardInfoController.DashboardPemohon))
                 .Returns<DashboardInfo>();
