@@ -382,6 +382,41 @@ namespace PsefApiOData.Controllers
                 e.StatusId == PermohonanStatus.Ditolak.Id);
         }
 
+        /// <summary>
+        /// Gets a single PermohonanSystemUpdate for the current user Permohonan with status Dikembalikan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
+        /// <returns>PermohonanSystemUpdate for the current user Permohonan with status Dikembalikan.</returns>
+        /// <response code="200">PermohonanSystemUpdate successfully retrieved.</response>
+        /// <response code="400">PermohonanSystemUpdate not found.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(PermohonanSystemUpdate), Status200OK)]
+        [EnableQuery]
+        public async Task<ActionResult> AlasanDikembalikan(uint permohonanId)
+        {
+            HistoryPermohonan history = await _context.HistoryPermohonan
+                .OrderByDescending(e => e.UpdatedAt)
+                .FirstOrDefaultAsync(e =>
+                    e.PermohonanId == permohonanId &&
+                    e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                    e.StatusId == PermohonanStatus.DikembalikanVerifikator.Id);
+
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new PermohonanSystemUpdate
+            {
+                PermohonanId = (uint)history.PermohonanId,
+                Reason = history.Reason
+            });
+        }
+
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);
