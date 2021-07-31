@@ -36,6 +36,9 @@ namespace PsefApiOData.Configuration
             permohonan.Collection
                 .Function(nameof(PermohonanCurrentUserController.Ditolak))
                 .ReturnsFromEntitySet<Permohonan>(nameof(Permohonan));
+            permohonan.Collection
+                .Function(nameof(PermohonanCurrentUserController.AlasanDikembalikan))
+                .Returns<PermohonanSystemUpdate>();
 
             permohonan.Collection
                 .Action(nameof(PermohonanCurrentUserController.Ajukan));
