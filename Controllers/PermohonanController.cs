@@ -1242,8 +1242,8 @@ namespace PsefApiOData.Controllers
             GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
             string folderPath = Path.Combine(_environment.WebRootPath, result.DatePath, result.FileName);
             result.SignResult = await _signatureService.SignPdfAsync(
-                folderPath, 
-                _signatureOptions.Value.Nik, 
+                folderPath,
+                _signatureOptions.Value.Nik,
                 passphrase);
             return result;
         }
