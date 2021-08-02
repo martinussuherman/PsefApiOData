@@ -47,6 +47,12 @@ namespace PsefApiOData.Models
         public uint? PerizinanId { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan submit date.
+        /// </summary>
+        /// <value>The Permohonan's submit date.</value>
+        public DateTime SubmittedAt { get; set; }
+
+        /// <summary>
         /// Gets or sets the associated Permohonan Status identifier.
         /// </summary>
         /// <value>The associated Permohonan Status identifier.</value>

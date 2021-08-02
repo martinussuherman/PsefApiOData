@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace PsefApiOData.Models
 {
@@ -736,6 +736,10 @@ namespace PsefApiOData.Models
                     .HasDefaultValueSql("''''''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SubmittedAt)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("'0000-00-00'");
 
                 entity.Property(e => e.SuratPermohonanUrl)
                     .IsRequired()
