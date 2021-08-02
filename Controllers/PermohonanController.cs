@@ -1134,7 +1134,7 @@ namespace PsefApiOData.Controllers
             PermohonanSystemUpdate data,
             IQueryable<Permohonan> query,
             PermohonanStatus status,
-            object delegateFunction = null)
+            Action<PemohonUserInfo> delegateAction = null)
         {
             Permohonan update = await query
                 .FirstOrDefaultAsync(c => c.Id == data.PermohonanId);
@@ -1156,10 +1156,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            if (delegateFunction != null)
-            {
-                // call delegate function to do extra processing, ex: send email 
-            }
+            delegateAction?.Invoke(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
 
             return NoContent();
         }
