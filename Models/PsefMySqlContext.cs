@@ -121,21 +121,21 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Address)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ApotekerName)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -150,21 +150,21 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.SiaNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.SipaNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.StraNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -190,21 +190,21 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.DisplayFormat)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.DateFormat)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.LastValueDate)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci")
                     .IsConcurrencyToken();
@@ -216,7 +216,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
@@ -237,7 +237,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -266,7 +266,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Reason)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -277,7 +277,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.UpdatedBy)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -297,7 +297,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Url)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
@@ -311,21 +311,21 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Content)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ImageUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.LinkUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -336,7 +336,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
@@ -353,7 +353,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -384,7 +384,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -475,42 +475,42 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Address)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.CompanyName)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.Nib)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.PenanggungJawab)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
@@ -534,7 +534,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.PerizinanNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -549,7 +549,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.TandaDaftarUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -584,77 +584,77 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.ApotekerEmail)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ApotekerName)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ApotekerPhone)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ApotekerNik)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.DokumenApiUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.DokumenPseUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.Domain)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ImbUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.IzinLokasiUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.IzinUsahaUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.KomitmenKerjasamaApotekUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -666,7 +666,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.PembayaranPnbpUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -699,21 +699,21 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.ProsesBisnisUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ProviderName)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.SpplUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -726,14 +726,14 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.StraNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.StraUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -744,21 +744,21 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.SuratPermohonanUrl)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.SystemName)
                     .IsRequired()
                     .HasColumnType("text")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.TenagaAhliName)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -794,7 +794,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("tinytext")
-                    .HasDefaultValueSql("''''''")
+                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
