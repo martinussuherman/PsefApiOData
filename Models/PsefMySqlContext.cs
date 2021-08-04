@@ -721,7 +721,7 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.StraExpiry)
                     .HasColumnType("date")
-                    .HasDefaultValueSql("'''0000-00-00'''");
+                    .HasDefaultValueSql("'0000-00-00'");
 
                 entity.Property(e => e.StraNumber)
                     .IsRequired()
