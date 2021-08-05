@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace PsefApiOData.Models
 {
@@ -140,12 +140,10 @@ namespace PsefApiOData.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.PermohonanId)
-                    .HasColumnType("int(11) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("int(11) unsigned");
 
                 entity.Property(e => e.ProvinsiId)
-                    .HasColumnType("tinyint(3) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("tinyint(3) unsigned");
 
                 entity.Property(e => e.SiaNumber)
                     .IsRequired()
@@ -231,8 +229,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.KecamatanId)
-                    .HasColumnType("smallint(5) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("smallint(5) unsigned");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -258,10 +255,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Id).HasColumnType("bigint(20) unsigned");
 
                 entity.Property(e => e.PermohonanId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
-
-                entity.Property(e => e.StatusId).HasColumnType("tinyint(3) unsigned");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.Reason)
                     .IsRequired()
@@ -269,6 +263,9 @@ namespace PsefApiOData.Models
                     .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StatusId)
+                    .HasColumnType("tinyint(3) unsigned");
 
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime")
@@ -358,8 +355,7 @@ namespace PsefApiOData.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ProvinsiId)
-                    .HasColumnType("tinyint(3) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("tinyint(3) unsigned");
 
                 entity.HasOne(d => d.Provinsi)
                     .WithMany(p => p.KabupatenKota)
@@ -378,8 +374,7 @@ namespace PsefApiOData.Models
                 entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
 
                 entity.Property(e => e.KabupatenKotaId)
-                    .HasColumnType("smallint(5) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("smallint(5) unsigned");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -539,12 +534,10 @@ namespace PsefApiOData.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.PermohonanId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.PreviousId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.TandaDaftarUrl)
                     .IsRequired()
@@ -671,12 +664,10 @@ namespace PsefApiOData.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.PemohonId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.PerizinanId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.PermohonanNumber)
                     .IsRequired()
@@ -693,8 +684,7 @@ namespace PsefApiOData.Models
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.PreviousPerizinanId)
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValueSql("'NULL'");
+                    .HasColumnType("int(10) unsigned");
 
                 entity.Property(e => e.ProsesBisnisUrl)
                     .IsRequired()
