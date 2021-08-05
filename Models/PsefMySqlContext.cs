@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace PsefApiOData.Models
 {
@@ -185,14 +185,14 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
 
-                entity.Property(e => e.DisplayFormat)
+                entity.Property(e => e.DateFormat)
                     .IsRequired()
                     .HasColumnType("tinytext")
                     .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.DateFormat)
+                entity.Property(e => e.DisplayFormat)
                     .IsRequired()
                     .HasColumnType("tinytext")
                     .HasDefaultValueSql("''")
@@ -588,14 +588,14 @@ namespace PsefApiOData.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.ApotekerPhone)
+                entity.Property(e => e.ApotekerNik)
                     .IsRequired()
                     .HasColumnType("tinytext")
                     .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.ApotekerNik)
+                entity.Property(e => e.ApotekerPhone)
                     .IsRequired()
                     .HasColumnType("tinytext")
                     .HasDefaultValueSql("''")
