@@ -269,7 +269,7 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime")
-                    .HasDefaultValueSql("'current_timestamp()'");
+                    .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.UpdatedBy)
                     .IsRequired()
@@ -328,7 +328,7 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.PublishedAt)
                     .HasColumnType("datetime")
-                    .HasDefaultValueSql("'current_timestamp()'");
+                    .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -653,7 +653,7 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.LastUpdate)
                     .HasColumnType("timestamp")
-                    .HasDefaultValueSql("'current_timestamp()'")
+                    .HasDefaultValueSql("current_timestamp()")
                     .ValueGeneratedOnAddOrUpdate();
 
                 entity.Property(e => e.PembayaranPnbpUrl)
