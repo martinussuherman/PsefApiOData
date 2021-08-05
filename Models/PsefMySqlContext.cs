@@ -404,7 +404,7 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasColumnType("mediumtext")
+                    .HasColumnType("text")
                     .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
@@ -803,7 +803,7 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasColumnType("mediumtext")
+                    .HasColumnType("text")
                     .HasDefaultValueSql("''")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
