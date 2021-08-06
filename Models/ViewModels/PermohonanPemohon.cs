@@ -14,6 +14,12 @@ namespace PsefApiOData.Models
         public uint PermohonanId { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan submit date.
+        /// </summary>
+        /// <value>The Permohonan's submit date.</value>
+        public DateTime SubmittedAt { get; set; }
+
+        /// <summary>
         /// Gets or sets the Permohonan number.
         /// </summary>
         /// <value>The Permohonan's number.</value>
