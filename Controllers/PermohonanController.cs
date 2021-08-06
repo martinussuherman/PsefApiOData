@@ -1209,6 +1209,7 @@ namespace PsefApiOData.Controllers
             return new PermohonanPemohon
             {
                 PermohonanId = permohonan.Id,
+                SubmittedAt = permohonan.SubmittedAt,
                 PermohonanNumber = permohonan.PermohonanNumber,
                 Domain = permohonan.Domain,
                 StatusName = permohonan.StatusName,
