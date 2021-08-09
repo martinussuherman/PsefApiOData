@@ -1358,6 +1358,34 @@ namespace PsefApiOData.Controllers
 
             return NoContent();
         }
+        private void SendEmailPermohonanDikembalikan(PemohonUserInfo info)
+        {
+            _smtpEmailService.SendEmailAsync(
+                info.Email,
+                "Permohonan Dikembalikan",
+                "Permohonan anda dikembalikan, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
+        }
+        private void SendEmailPermohonanDitolak(PemohonUserInfo info)
+        {
+            _smtpEmailService.SendEmailAsync(
+                info.Email,
+                "Permohonan Ditolak",
+                "Mohon maaf, Permohonan anda telah ditolak, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
+        }
+        private void SendEmailPerizinanDiterbitkan(PemohonUserInfo info)
+        {
+            _smtpEmailService.SendEmailAsync(
+                info.Email,
+                "Perizinan Telah Terbit",
+                "Permohonan anda telah diterbitkan perizinannya, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
+        }
+        private void SendEmailPerizinanHampirKadaluarsa(PemohonUserInfo info)
+        {
+            _smtpEmailService.SendEmailAsync(
+                info.Email,
+                "Perizinan Hampir Habis",
+                "Perizinan anda sudah hampir habis masa berlakunya, mohon persiapkan untuk mengurus perpanjangannya.");
+        }
 
         private readonly static Calculator _calculator = new Calculator();
         private readonly PemohonUserInfoHelper _pemohonHelper;
