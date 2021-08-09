@@ -37,6 +37,7 @@ namespace PsefApiOData.Controllers
         /// <param name="identityApi">Identity API service.</param>
         /// <param name="ossApi">Oss API service.</param>
         /// <param name="signatureService">Electronic Signature API service.</param>
+        /// <param name="smtpEmailService">SMTP email service.</param>
         /// <param name="memoryCache">Memory cache.</param>
         /// <param name="environment">Web Host environment.</param>
         /// <param name="signatureOptions">Electronic signature options.</param>
@@ -47,6 +48,7 @@ namespace PsefApiOData.Controllers
             IIdentityApiService identityApi,
             IOssApiService ossApi,
             ElectronicSignatureService signatureService,
+            SmtpEmailService smtpEmailService,
             IMemoryCache memoryCache,
             IWebHostEnvironment environment,
             IOptions<ElectronicSignatureOptions> signatureOptions,
@@ -54,6 +56,7 @@ namespace PsefApiOData.Controllers
         {
             _ossApi = ossApi;
             _signatureService = signatureService;
+            _smtpEmailService = smtpEmailService;
             _memoryCache = memoryCache;
             _environment = environment;
             _signatureOptions = signatureOptions;
@@ -1362,6 +1365,7 @@ namespace PsefApiOData.Controllers
         private readonly PsefMySqlContext _context;
         private readonly IOssApiService _ossApi;
         private readonly ElectronicSignatureService _signatureService;
+        private readonly SmtpEmailService _smtpEmailService;
         private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
