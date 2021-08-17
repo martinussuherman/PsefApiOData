@@ -22,6 +22,8 @@ namespace PsefApiOData.Configuration
                 .Returns<string>();
             builder.Function(nameof(FileController.UploadNewsImage))
                 .Returns<string>();
+            builder.Function(nameof(FileController.UploadUnduhan))
+                .Returns<string>();
         }
     }
 }
