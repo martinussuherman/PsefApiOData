@@ -53,6 +53,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<HomepageNews> HomepageNews { get; set; }
 
         /// <summary>
+        /// Homepage Unduhan table
+        /// </summary>
+        /// <value>Homepage Unduhan</value>
+        public virtual DbSet<HomepageUnduhan> HomepageUnduhan { get; set; }
+
+        /// <summary>
         /// Kabupaten/Kota table
         /// </summary>
         /// <value>Kabupaten/Kota</value>
@@ -331,6 +337,27 @@ namespace PsefApiOData.Models
                     .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<HomepageUnduhan>(entity =>
+            {
+                entity.ToTable("homepageunduhan");
+
+                entity.Property(e => e.Id).HasColumnType("smallint(5) unsigned");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Url)
                     .IsRequired()
                     .HasColumnType("text")
                     .HasDefaultValueSql("''")
