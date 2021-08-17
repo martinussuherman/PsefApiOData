@@ -262,6 +262,7 @@ namespace PsefApiOData.Controllers
             }
 
             update.StatusId = PermohonanStatus.Diajukan.Id;
+            update.SubmittedAt = DateTime.Today;
 
             HistoryPermohonan submitHistory = new HistoryPermohonan
             {
