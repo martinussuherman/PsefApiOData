@@ -102,8 +102,33 @@ namespace PsefApiOData.Controllers
                 _maxFileSize);
         }
 
+        /// <summary>
+        /// Upload unduhan file.
+        /// </summary>
+        /// <param name="file">Unduhan file</param>
+        /// <returns>The unduhan file relative path.</returns>
+        [MultiRoleAuthorize(
+            ApiRole.Admin,
+            ApiRole.SuperAdmin)]
+        [HttpPost]
+        [ODataRoute(nameof(UploadUnduhan))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(string), Status200OK)]
+        [ProducesResponseType(typeof(string), Status400BadRequest)]
+        public async Task<IActionResult> UploadUnduhan(IFormFile file)
+        {
+            string[] pathSegment = { "upload", "unduhan" };
+            return await _operation.UploadFile(
+                Url,
+                file,
+                pathSegment,
+                _unduhanPermittedExtensions,
+                _maxFileSize);
+        }
+
         private readonly FileOperation _operation;
         private readonly string[] _userPermittedExtensions = { ".pdf" };
+        private readonly string[] _unduhanPermittedExtensions = { ".pdf" };
         private readonly string[] _imagePermittedExtensions = { ".gif", ".jpg", ".jpeg", ".png" };
         private const int _maxFileSize = 5300000;
     }
