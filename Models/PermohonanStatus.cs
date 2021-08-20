@@ -54,7 +54,7 @@ namespace PsefApiOData.Models
         public static PermohonanStatus DisetujuiVerifikator => new PermohonanStatus
         {
             Id = 3,
-            Name = "Disetujui oleh Verifikator",
+            Name = "Diteruskan oleh Verifikator",
             PemohonDisplayedName = "Dalam Proses"
         };
 
@@ -76,7 +76,7 @@ namespace PsefApiOData.Models
         public static PermohonanStatus DisetujuiKepalaSeksi => new PermohonanStatus
         {
             Id = 5,
-            Name = "Disetujui oleh Kepala Seksi",
+            Name = "Diteruskan oleh Kepala Seksi",
             PemohonDisplayedName = "Dalam Proses"
         };
 
@@ -98,7 +98,7 @@ namespace PsefApiOData.Models
         public static PermohonanStatus DisetujuiKepalaSubDirektorat => new PermohonanStatus
         {
             Id = 7,
-            Name = "Disetujui oleh Kepala Sub Direktorat",
+            Name = "Diteruskan oleh Kepala Sub Direktorat",
             PemohonDisplayedName = "Dalam Proses"
         };
 
@@ -120,7 +120,7 @@ namespace PsefApiOData.Models
         public static PermohonanStatus DisetujuiDirekturPelayananFarmasi => new PermohonanStatus
         {
             Id = 9,
-            Name = "Disetujui oleh Direktur Pelayanan Farmasi",
+            Name = "Diteruskan oleh Direktur Pelayanan Farmasi",
             PemohonDisplayedName = "Dalam Proses"
         };
 
