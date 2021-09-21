@@ -1,5 +1,5 @@
+using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json.Linq;
 
 namespace PsefApiOData.Misc
@@ -13,7 +13,7 @@ namespace PsefApiOData.Misc
         /// Authenticate to OSS Api.
         /// </summary>
         /// <returns>Token retrieved from the OSS Api authentication endpoint.</returns>
-        Task<JsonWebToken> Authenticate();
+        Task<string> Authenticate();
 
         /// <summary>
         /// Call OSS Api.
@@ -22,6 +22,6 @@ namespace PsefApiOData.Misc
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
         /// <returns>JObject retrieved from the OSS Api.</returns>
-        Task<JObject> CallApiAsync(JsonWebToken token, string uri, string content);
+        Task<JObject> CallApiAsync(string token, string uri, HttpContent content);
     }
 }
