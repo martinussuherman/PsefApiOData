@@ -60,7 +60,7 @@ namespace PsefApiOData.Misc
                 });
 
             HttpResponseMessage response = await _httpClient.PostAsync(
-                $"{_options.Value.BaseUri}/consumer/login",
+                $"{_options.Value.BaseUri}/api-token-auth/",
                 new StringContent(data, Encoding.UTF8, ApiInfo.JsonOutput));
 
             if (!response.IsSuccessStatusCode)
