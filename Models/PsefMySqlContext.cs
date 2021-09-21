@@ -107,6 +107,12 @@ namespace PsefApiOData.Models
         public virtual DbSet<RumahSakit> RumahSakit { get; set; }
 
         /// <summary>
+        /// Verifikasi Permohonan table
+        /// </summary>
+        /// <value>Verifikasi Permohonan</value>
+        public virtual DbSet<VerifikasiPermohonan> VerifikasiPermohonan { get; set; }
+
+        /// <summary>
         /// Configure model
         /// </summary>
         /// <param name="modelBuilder">Model builder</param>
@@ -885,6 +891,222 @@ namespace PsefApiOData.Models
                     .HasForeignKey(d => d.ProvinsiId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_rumahsakit_provinsi");
+            });
+
+            modelBuilder.Entity<VerifikasiPermohonan>(entity =>
+            {
+                entity.ToTable("verifikasi_permohonan");
+
+                entity.HasIndex(e => e.PermohonanId)
+                    .HasName("FK_verifikasi_permohonan_permohonan");
+
+                entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.ApotekerEmailCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ApotekerEmailCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ApotekerNameCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ApotekerNameCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ApotekerNikCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ApotekerNikCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ApotekerPhoneCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ApotekerPhoneCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.DokumenApiUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.DokumenApiUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.DokumenPseUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.DokumenPseUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.DomainCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.DomainCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ImbUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ImbUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.IzinLokasiUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.IzinLokasiUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.IzinUsahaUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.IzinUsahaUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.KomitmenKerjasamaApotekUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.KomitmenKerjasamaApotekUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PembayaranPnbpUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.PembayaranPnbpUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PermohonanId).HasColumnType("int(11) unsigned");
+
+                entity.Property(e => e.PernyataanKeaslianDokumenUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.PernyataanKeaslianDokumenUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProsesBisnisUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ProsesBisnisUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.ProviderNameCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.ProviderNameCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SpplUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.SpplUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StraExpiryCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.StraExpiryCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StraNumberCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.StraNumberCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.StraUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.StraUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SuratPermohonanUrlCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.SuratPermohonanUrlCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.SystemNameCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.SystemNameCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.TenagaAhliNameCheck).HasColumnType("tinyint(4)");
+
+                entity.Property(e => e.TenagaAhliNameCheckReason)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Permohonan)
+                    .WithMany(p => p.VerifikasiPermohonan)
+                    .HasForeignKey(d => d.PermohonanId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_verifikasi_permohonan_permohonan");
             });
 
             OnModelCreatingPartial(modelBuilder);
