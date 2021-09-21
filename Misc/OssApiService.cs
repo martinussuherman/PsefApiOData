@@ -86,14 +86,14 @@ namespace PsefApiOData.Misc
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
         /// <returns>JObject retrieved from the OSS Api.</returns>
-        public async Task<JObject> CallApiAsync(JsonWebToken token, string uri, string content)
+        public async Task<JObject> CallApiAsync(string token, string uri, HttpContent content)
         {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
                 $"{_options.Value.BaseUri}{uri}");
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.EncodedToken);
-            request.Content = new StringContent(content, Encoding.UTF8, ApiInfo.JsonOutput);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Token", token);
+            request.Content = content;
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
