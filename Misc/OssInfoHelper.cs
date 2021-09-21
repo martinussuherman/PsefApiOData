@@ -137,16 +137,16 @@ namespace PsefApiOData.Misc
         {
             AlamatPenanggungJwb = "Jl. Kemana Saja No. 987",
             BlokPenanggungJwb = "A",
-            DaerahIdPenanggungJwb = "",
+            DaerahIdPenanggungJwb = string.Empty,
             EmailPenanggungJwb = "badu@fiktif.com",
             FlagAsing = "N",
-            FlagPajakPenanggungJwb = "",
+            FlagPajakPenanggungJwb = string.Empty,
             JabatanPenanggungJwb = "Direktur",
             JalanPenanggungJwb = "Jl. Kemana Saja",
             JnsIdentitasPenanggungJwb = "KTP",
             KebangsaanPenanggungJwb = "WNI",
             KelurahanPenanggungJwb = "Kelurahan X",
-            KetPajakPenanggungJwb = "",
+            KetPajakPenanggungJwb = string.Empty,
             KodePosPenanggungJwb = "12345",
             NamaPenanggungJwb = "Badu"
         };
