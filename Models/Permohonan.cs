@@ -20,6 +20,7 @@ namespace PsefApiOData.Models
             Klinik = new HashSet<Klinik>();
             Perizinan = new HashSet<Perizinan>();
             RumahSakit = new HashSet<RumahSakit>();
+            VerifikasiPermohonan = new HashSet<VerifikasiPermohonan>();
         }
 
         /// <summary>
@@ -302,5 +303,12 @@ namespace PsefApiOData.Models
         /// <value>The associated list of Rumah Sakit.</value>
         [IgnoreDataMember]
         public virtual ICollection<RumahSakit> RumahSakit { get; set; }
+
+        /// <summary>
+        /// Gets or sets list of Verifikasi Permohonan associated with the Permohonan.
+        /// </summary>
+        /// <value>The associated list of Verifikasi Permohonan.</value>
+        [IgnoreDataMember]
+        public virtual ICollection<VerifikasiPermohonan> VerifikasiPermohonan { get; set; }
     }
 }
