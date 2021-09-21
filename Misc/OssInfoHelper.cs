@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -62,15 +62,10 @@ namespace PsefApiOData.Misc
                 return cachedInfo;
             }
 
-            var content = new
-            {
-                INQUERYNIB = new
-                {
-                    nib = id
-                }
-            };
+            Dictionary<string, string> formData = new Dictionary<string, string>();
+            formData.Add("nib", id);
 
-            JsonWebToken token = await _ossApi.Authenticate();
+            string token = await _ossApi.Authenticate();
 
             if (token == null)
             {
@@ -79,8 +74,8 @@ namespace PsefApiOData.Misc
 
             JObject response = await _ossApi.CallApiAsync(
                 token,
-                "/KEMKES_inqueryNIB",
-                JsonConvert.SerializeObject(content));
+                "/api/inquery/nib/",
+                new FormUrlEncodedContent(formData));
 
             if (response == null)
             {
