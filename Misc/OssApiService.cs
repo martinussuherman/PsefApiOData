@@ -3,13 +3,12 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.JsonWebTokens;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 
 namespace PsefApiOData.Misc
 {
@@ -47,22 +46,13 @@ namespace PsefApiOData.Misc
                 return cachedToken;
             }
 
-            LoginInfo loginInfo = new LoginInfo
-            {
-                Username = _options.Value.User,
-                Password = _options.Value.Password
-            };
-
-            string data = JsonConvert.SerializeObject(
-                loginInfo,
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
+            Dictionary<string, string> formData = new Dictionary<string, string>();
+            formData.Add("username", _options.Value.User);
+            formData.Add("password", _options.Value.Password);
 
             HttpResponseMessage response = await _httpClient.PostAsync(
                 $"{_options.Value.BaseUri}/api-token-auth/",
-                new StringContent(data, Encoding.UTF8, ApiInfo.JsonOutput));
+                new FormUrlEncodedContent(formData));
 
             if (!response.IsSuccessStatusCode)
             {
@@ -107,13 +97,6 @@ namespace PsefApiOData.Misc
         internal class OssToken
         {
             public string Token { get; set; }
-        }
-
-        internal class LoginInfo
-        {
-            public string Username { get; set; }
-
-            public string Password { get; set; }
         }
 
         private readonly HttpClient _httpClient;
