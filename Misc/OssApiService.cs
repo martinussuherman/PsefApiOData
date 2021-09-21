@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace PsefApiOData.Misc
 {
@@ -37,11 +38,11 @@ namespace PsefApiOData.Misc
         /// Authenticate to OSS Api.
         /// </summary>
         /// <returns>Token retrieved from the OSS Api authentication endpoint.</returns>
-        public async Task<JsonWebToken> Authenticate()
+        public async Task<string> Authenticate()
         {
             if (_memoryCache.TryGetValue(
                 nameof(JsonWebToken),
-                out JsonWebToken cachedToken))
+                out string cachedToken))
             {
                 return cachedToken;
             }
@@ -70,13 +71,12 @@ namespace PsefApiOData.Misc
 
             OssToken ossToken = JsonConvert.DeserializeObject<OssToken>(
                 await response.Content.ReadAsStringAsync());
-            JsonWebToken token = new JsonWebToken(ossToken.Token);
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(token.ValidTo);
+                .SetAbsoluteExpiration(new TimeSpan(_options.Value.CacheHour, 0, 0));
 
-            _memoryCache.Set(nameof(JsonWebToken), token, cacheEntryOptions);
-            return token;
+            _memoryCache.Set(nameof(JsonWebToken), ossToken.Token, cacheEntryOptions);
+            return ossToken.Token;
         }
 
         /// <summary>
