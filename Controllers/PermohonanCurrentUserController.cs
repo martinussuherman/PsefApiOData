@@ -291,6 +291,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
+            SendEmailPermohonanDiajukan(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
             return NoContent();
         }
 
@@ -429,6 +430,13 @@ namespace PsefApiOData.Controllers
         private bool Exists(uint id)
         {
             return _context.Permohonan.Any(e => e.Id == id);
+        }
+        private void SendEmailPermohonanDiajukan(PemohonUserInfo info)
+        {
+            _smtpEmailService.SendEmailAsync(
+                _options.Value.To,
+                "Permohonan Diajukan",
+                $"Pemohon {info.CompanyName} telah mengajukan Permohonan baru, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
         }
 
         private readonly PsefMySqlContext _context;
