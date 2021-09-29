@@ -24,19 +24,19 @@ namespace PsefApiOData.Models
         /// Gets or sets the TglPengajuanNib.
         /// </summary>
         /// <value>The TglPengajuanNib.</value>
-        public DateTime TglPengajuanNib { get; set; }
+        public DateTime? TglPengajuanNib { get; set; }
 
         /// <summary>
         /// Gets or sets the TglTerbitNib.
         /// </summary>
         /// <value>The TglTerbitNib.</value>
-        public DateTime TglTerbitNib { get; set; }
+        public DateTime? TglTerbitNib { get; set; }
 
         /// <summary>
         /// Gets or sets the TglPerubahanNib.
         /// </summary>
         /// <value>The TglPerubahanNib.</value>
-        public DateTime TglPerubahanNib { get; set; }
+        public DateTime? TglPerubahanNib { get; set; }
 
         /// <summary>
         /// Gets or sets the OssId.
@@ -396,7 +396,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the TglLahirUserProses.
         /// </summary>
         /// <value>The TglLahirUserProses.</value>
-        public DateTime TglLahirUserProses { get; set; }
+        public DateTime? TglLahirUserProses { get; set; }
 
         /// <summary>
         /// Gets or sets the DaerahIdUserProses.
