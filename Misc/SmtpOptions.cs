@@ -13,7 +13,7 @@ namespace PsefApiOData.Misc
         /// <summary>
         /// Gets or sets the SMTP Email From address.
         /// </summary>
-        /// <value>The From SMTP Email From address.</value>
+        /// <value>The SMTP Email From address.</value>
         public string From { get; set; }
 
         /// <summary>
