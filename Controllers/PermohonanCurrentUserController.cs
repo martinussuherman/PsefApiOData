@@ -8,6 +8,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -28,15 +29,22 @@ namespace PsefApiOData.Controllers
         /// </summary>
         /// <param name="context">Database context.</param>
         /// <param name="delegateService">Api delegation service.</param>
+        /// <param name="smtpEmailService">SMTP email service.</param>
         /// <param name="identityApi">Identity Api service.</param>
+        /// <param name="options">Permohonan email options</param>
         public PermohonanCurrentUserController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
-            IIdentityApiService identityApi)
+            SmtpEmailService smtpEmailService,
+            IIdentityApiService identityApi,
+            IOptions<PermohonanEmailOptions> options)
         {
-            _identityApi = identityApi;
-            _delegateService = delegateService;
             _context = context;
+            _delegateService = delegateService;
+            _smtpEmailService = smtpEmailService;
+            _identityApi = identityApi;
+            _options = options;
+            _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
 
         /// <summary>
@@ -425,6 +433,9 @@ namespace PsefApiOData.Controllers
 
         private readonly PsefMySqlContext _context;
         private readonly IApiDelegateService _delegateService;
+        private readonly SmtpEmailService _smtpEmailService;
         private readonly IIdentityApiService _identityApi;
+        private readonly IOptions<PermohonanEmailOptions> _options;
+        private readonly PemohonUserInfoHelper _pemohonHelper;
     }
 }
