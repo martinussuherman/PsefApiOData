@@ -136,6 +136,7 @@ namespace PsefApiOData
             services.Configure<ElectronicSignatureOptions>(Configuration.GetSection(ElectronicSignatureOptions.OptionsName));
             services.Configure<OssApiOptions>(Configuration.GetSection(OssApiOptions.OptionsName));
             services.Configure<SmtpOptions>(Configuration.GetSection(SmtpOptions.OptionsName));
+            services.Configure<PermohonanEmailOptions>(Configuration.GetSection(PermohonanEmailOptions.OptionsName));
             services.AddTransient<FileOperation>();
             services.AddTransient<SmtpEmailService>();
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
