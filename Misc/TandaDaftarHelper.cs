@@ -189,7 +189,7 @@ namespace PsefApiOData.Misc
             float top)
         {
             float leftCol = 5;
-            float rightCol = graphics.ClientSize.Width / 2 + 5;
+            float rightCol = (graphics.ClientSize.Width / 2) + 5;
             float leftColTop = top + 14;
             float rightColTop;
             float width = (graphics.ClientSize.Width - 20) / 2;
