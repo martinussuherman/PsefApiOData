@@ -84,7 +84,10 @@ namespace PsefApiOData.Misc
                         FailureContent = await response.Content.ReadAsStringAsync()
                     };
 
+#if !OFFLINE_MODE
                     File.Delete(filePath);
+#endif
+
                     log.Error(
                         "Proses e-signature gagal!!!\nStatus: {@Status}\nServer Response: {@Response}",
                         errorResult.StatusCode,
@@ -109,7 +112,10 @@ namespace PsefApiOData.Misc
                 Logger log = CreateLogger();
                 log.Error("Proses e-signature gagal!!!\nMessage: {@Message}", e.Message);
                 readStream.Close();
+
+#if !OFFLINE_MODE
                 File.Delete(filePath);
+#endif
 
                 return new ElectronicSignatureResult
                 {
