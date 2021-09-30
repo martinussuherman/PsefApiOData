@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
 namespace PsefApiOData.Models
-
 {
     /// <summary>
     /// Represents a Verifikasi Permohonan.
