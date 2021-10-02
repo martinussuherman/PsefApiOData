@@ -21,6 +21,10 @@ namespace PsefApiOData.Configuration
                 .EntitySet<VerifikasiPermohonan>(nameof(VerifikasiPermohonan))
                 .EntityType;
 
+            verifikasi.Collection
+                .Function(ApiInfo.CurrentUser)
+                .ReturnsFromEntitySet<VerifikasiPermohonan>(nameof(VerifikasiPermohonan));
+
             verifikasi.HasKey(p => p.Id);
             verifikasi
                 .Expand(SelectExpandType.Disabled)
