@@ -18,6 +18,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using static Microsoft.AspNetCore.Mvc.CompatibilityVersion;
 using static Microsoft.OData.ODataUrlKeyDelimiter;
@@ -63,7 +64,7 @@ namespace PsefApiOData
 
             ConfigureMisc(services);
             ConfigureDatabase(services);
-            ConfigureCors(services);
+            ConfigureCors(services, Configuration);
             ConfigureOData(services);
 
             ApiSecurityOptions apiSecurityOptions = ReadApiSecurityOptions();
@@ -194,17 +195,20 @@ namespace PsefApiOData
                     }
                 });
         }
-        private static void ConfigureCors(IServiceCollection services)
+        private static void ConfigureCors(IServiceCollection services, IConfiguration configuration)
         {
+            string[] corsOrigins = configuration
+                .GetSection("CorsOrigins")?
+                .GetChildren()?
+                .Select(x => x.Value)?
+                .ToArray();
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins(
-                            "http://localhost:*",
-                            "https://localhost:*",
-                            "https://*.kemkes.go.id");
+                        builder.WithOrigins(corsOrigins);
                     });
             });
         }
