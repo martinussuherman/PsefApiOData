@@ -85,19 +85,20 @@ namespace PsefApiOData
         {
             string basePath = Configuration.GetValue<string>("BasePath");
 
-            app
-                .UsePathBase(basePath)
-                .UseHttpsRedirection()
-                .UseStaticFiles()
-                .UseForwardedHeaders(new ForwardedHeadersOptions()
-                {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                })
-                .UseCors()
-                .UseAuthentication()
-                .UseAuthorization();
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1#middleware-order
+            app.UsePathBase(basePath);
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions()
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             ConfigureMvc(app, modelBuilder);
+            app.UseCors();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             ConfigureSwaggerUI(app, provider, basePath);
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
                 Configuration.GetValue<string>("SfKey"));
