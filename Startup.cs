@@ -209,7 +209,9 @@ namespace PsefApiOData
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins(corsOrigins);
+                        builder
+                            .WithOrigins(corsOrigins)
+                            .SetIsOriginAllowedToAllowWildcardSubdomains();
                     });
             });
         }
