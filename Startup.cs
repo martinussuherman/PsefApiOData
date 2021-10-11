@@ -94,11 +94,11 @@ namespace PsefApiOData
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            ConfigureMvc(app, modelBuilder);
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 
+            ConfigureMvc(app, modelBuilder);
             ConfigureSwaggerUI(app, provider, basePath);
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
                 Configuration.GetValue<string>("SfKey"));
