@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
@@ -211,6 +212,7 @@ namespace PsefApiOData
                     {
                         builder
                             .WithOrigins(corsOrigins)
+                            .WithHeaders(HeaderNames.Authorization)
                             .SetIsOriginAllowedToAllowWildcardSubdomains();
                     });
             });
