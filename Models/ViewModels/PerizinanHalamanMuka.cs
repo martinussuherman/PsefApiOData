@@ -21,6 +21,12 @@ namespace PsefApiOData.Models
         public string CompanyName { get; set; }
 
         /// <summary>
+        /// Gets or sets the Perizinan domain.
+        /// </summary>
+        /// <value>The Perizinan's domain.</value>
+        public string Domain { get; set; }
+
+        /// <summary>
         /// Gets or sets the Perizinan issued date.
         /// </summary>
         /// <value>The Perizinan's issued date.</value>
