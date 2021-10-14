@@ -295,6 +295,7 @@ namespace PsefApiOData.Controllers
                 .Select(c => new PerizinanHalamanMuka
                 {
                     CompanyName = c.Permohonan.Pemohon.CompanyName,
+                    Domain = c.Permohonan.Domain,
                     PerizinanNumber = c.PerizinanNumber,
                     IssuedAt = c.IssuedAt
                 })
