@@ -27,7 +27,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the IdBidangUsaha.
         /// </summary>
         /// <value>The IdBidangUsaha.</value>
-        public int IdBidangUsaha { get; set; }
+        public string IdBidangUsaha { get; set; }
 
         /// <summary>
         /// Gets or sets the JenisProduksi.
