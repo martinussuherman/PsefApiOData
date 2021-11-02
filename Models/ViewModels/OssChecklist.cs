@@ -9,6 +9,12 @@ namespace PsefApiOData.Models
     public class OssChecklist
     {
         /// <summary>
+        /// Gets or sets the IdProduk.
+        /// </summary>
+        /// <value>The IdProduk.</value>
+        public string IdProduk { get; set; }
+
+        /// <summary>
         /// Gets or sets the IdProyek.
         /// </summary>
         /// <value>The IdProyek.</value>
@@ -127,6 +133,18 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The FlagPerpanjangan.</value>
         public string FlagPerpanjangan { get; set; }
+
+        /// <summary>
+        /// Gets or sets the KdDokumen.
+        /// </summary>
+        /// <value>The KdDokumen.</value>
+        public string KdDokumen { get; set; }
+
+        /// <summary>
+        /// Gets or sets the NmDokumen.
+        /// </summary>
+        /// <value>The NmDokumen.</value>
+        public string NmDokumen { get; set; }
 
         /// <summary>
         /// Gets or sets the list of DataPersyaratan.
