@@ -15,6 +15,12 @@ namespace PsefApiOData.Models
         public string IdProyek { get; set; }
 
         /// <summary>
+        /// Gets or sets the NomorProyek.
+        /// </summary>
+        /// <value>The NomorProyek.</value>
+        public string NomorProyek { get; set; }
+
+        /// <summary>
         /// Gets or sets the UraianUsaha.
         /// </summary>
         /// <value>The UraianUsaha.</value>
@@ -265,6 +271,24 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The NamaPerseroanMerger.</value>
         public string NamaPerseroanMerger { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SkalaUsaha.
+        /// </summary>
+        /// <value>The SkalaUsaha.</value>
+        public string SkalaUsaha { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SkalaResiko.
+        /// </summary>
+        /// <value>The SkalaResiko.</value>
+        public string SkalaResiko { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DeskripsiKegiatan.
+        /// </summary>
+        /// <value>The DeskripsiKegiatan.</value>
+        public string DeskripsiKegiatan { get; set; }
 
         /// <summary>
         /// Gets or sets the list of DataLokasiProyek.
