@@ -267,6 +267,12 @@ namespace PsefApiOData.Models
         public decimal TotalModalDitempatkan { get; set; }
 
         /// <summary>
+        /// Gets or sets the FlagUmk.
+        /// </summary>
+        /// <value>The FlagUmk.</value>
+        public string FlagUmk { get; set; }
+
+        /// <summary>
         /// Gets or sets the list of PemegangSaham.
         /// </summary>
         /// <value>The list of PemegangSaham.</value>
