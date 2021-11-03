@@ -33,5 +33,11 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <value>The OSS cache time in hour.</value>
         public int CacheHour { get; set; }
+
+        /// <summary>
+        /// Gets or sets the OSS staging flag.
+        /// </summary>
+        /// <value>The OSS staging flag.</value>
+        public bool IsStaging { get; set; }
     }
 }
