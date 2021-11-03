@@ -110,6 +110,60 @@ namespace PsefApiOData.Misc
             return apiData;
         }
 
+        /// <summary>
+        /// Send perizinan data to OSS.
+        /// </summary>
+        /// <param name="perizinan">The perizinan data.</param>
+        /// <returns>OSS response.</returns>
+        public async Task<JObject> SendLicense(Perizinan perizinan)
+        {
+            string token = await _ossApi.Authenticate();
+
+            if (token == null)
+            {
+                return new JObject();
+            }
+
+            string uri = _options.Value.IsStaging ? "/api/stagging/send/license/" : "/api/send/license/";
+
+            var content = new
+            {
+                IZINFINAL = new
+                {
+                    nib = perizinan.Permohonan.Pemohon.Nib,
+                    id_produk = "",
+                    id_proyek = "",
+                    oss_id = "",
+                    id_izin = "",
+                    kd_izin = "",
+                    kd_daerah = "",
+                    kewenangan = "",
+                    nomor_izin = perizinan.PerizinanNumber,
+                    tgl_terbit_izin = perizinan.IssuedAt,
+                    tgl_berlaku_izin = perizinan.ExpiredAt,
+                    nama_ttd = "",
+                    nip_ttd = "",
+                    jabatan_ttd = "",
+                    status_izin = "",
+                    file_izin = "",
+                    keterangan = "",
+                    file_lampiran = "",
+                    nomenklatur_nomor_izin = "",
+                    data_pnbp = new[]
+                    {
+                        new { kd_akun = "", kd_penerimaan = "", nominal = "" }
+                    }
+                }
+            };
+
+            JObject response = await _ossApi.CallApiAsync(
+                token,
+                uri,
+                new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json"));
+
+            return response;
+        }
+
 
         internal class UnderscorePropertyNamesContractResolver : DefaultContractResolver
         {
