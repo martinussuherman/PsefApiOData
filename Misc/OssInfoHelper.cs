@@ -72,9 +72,11 @@ namespace PsefApiOData.Misc
                 return _invalidCredentialInfo;
             }
 
+            string uri = _options.Value.IsStaging ? "/api/stagging/inquery/nib/" : "/api/inquery/nib/";
+
             JObject response = await _ossApi.CallApiAsync(
                 token,
-                "/api/inquery/nib/",
+                uri,
                 new FormUrlEncodedContent(formData));
 
             if (response == null)
@@ -107,6 +109,7 @@ namespace PsefApiOData.Misc
 
             return apiData;
         }
+
 
         internal class UnderscorePropertyNamesContractResolver : DefaultContractResolver
         {
