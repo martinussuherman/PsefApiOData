@@ -47,8 +47,9 @@ namespace PsefApiOData.Misc
         /// <param name="to">Address to send email to.</param>
         /// <param name="subject">Email subject.</param>
         /// <param name="htmlMessage">Email html message.</param>
+        /// <param name="cc">Email cc addresses. Multiple email addresses must be separated with a comma character (",")</param>
         /// <returns>Task.</returns>
-        public Task SendEmailAsync(string to, string subject, string htmlMessage)
+        public Task SendEmailAsync(string to, string subject, string htmlMessage, string cc = null)
         {
             _logger.LogInformation($"Sending email: {to}, subject: {subject}, message: {htmlMessage}");
 
@@ -65,15 +66,21 @@ namespace PsefApiOData.Misc
                     Body = htmlMessage
                 };
 
+                if (!string.IsNullOrEmpty(cc))
+                {
+                    mail.CC.Add(cc);
+                    cc = string.Empty;
+                }
+
                 _client.Send(mail);
                 _logger.LogInformation(
-                    $"Email: {to}, subject: {subject}, message: {htmlMessage} successfully sent");
+                    $"Email: {to}, cc: {cc}, subject: {subject}, message: {htmlMessage} successfully sent");
 
                 return Task.CompletedTask;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception {ex} during sending email: {to}, subject: {subject}");
+                _logger.LogError($"Exception {ex} during sending email: {to}, cc: {cc}, subject: {subject}");
                 throw;
             }
         }
