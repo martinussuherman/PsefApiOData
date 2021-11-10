@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -27,9 +29,11 @@ namespace PsefApiOData.Controllers
         /// Perizinan REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
-        public PerizinanController(PsefMySqlContext context)
+        /// <param name="mapper"></param>
+        public PerizinanController(PsefMySqlContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -309,5 +313,6 @@ namespace PsefApiOData.Controllers
 
         private readonly DateTime _invalidPerizinan = new DateTime(1901, 1, 1);
         private readonly PsefMySqlContext _context;
+        private readonly IMapper _mapper;
     }
 }
