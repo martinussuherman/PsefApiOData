@@ -118,18 +118,19 @@ namespace PsefApiOData.Controllers
             ApiRole.Admin,
             ApiRole.SuperAdmin)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Perizinan), Status201Created)]
+        [ProducesResponseType(typeof(PerizinanView), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status409Conflict)]
-        public async Task<IActionResult> Post([FromBody] Perizinan create)
+        public async Task<IActionResult> Post([FromBody] PerizinanUpdate create)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Perizinan.Add(create);
+            Perizinan item = _mapper.Map<PerizinanUpdate, Perizinan>(create);
+            _context.Perizinan.Add(item);
 
             try
             {
@@ -137,7 +138,7 @@ namespace PsefApiOData.Controllers
             }
             catch (DbUpdateException)
             {
-                if (Exists(create.Id))
+                if (Exists(item.Id))
                 {
                     return Conflict();
                 }
@@ -145,7 +146,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            return Created(create);
+            return Created(_mapper.Map<Perizinan, PerizinanView>(item));
         }
 
         /// <summary>
