@@ -162,51 +162,36 @@ namespace PsefApiOData.Controllers
         /// <response code="204">The Perizinan was successfully updated.</response>
         /// <response code="400">The Perizinan is invalid.</response>
         /// <response code="404">The Perizinan does not exist.</response>
-        /// <response code="422">The Perizinan identifier is specified on delta and its value is different from id.</response>
         [MultiRoleAuthorize(
             ApiRole.Admin,
             ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Perizinan), Status200OK)]
+        [ProducesResponseType(typeof(PerizinanView), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
-        [ProducesResponseType(Status422UnprocessableEntity)]
         public async Task<IActionResult> Patch(
             [FromODataUri] uint id,
-            [FromBody] Delta<Perizinan> delta)
+            [FromBody] Delta<PerizinanUpdate> delta)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var update = await _context.Perizinan.FindAsync(id);
+            var item = await _context.Perizinan.FindAsync(id);
 
-            if (update == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
+            PerizinanUpdate update = _mapper.Map<Perizinan, PerizinanUpdate>(item);
             delta.Patch(update);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (InvalidOperationException)
-            {
-                if (update.Id != id)
-                {
-                    ModelState.AddModelError(nameof(update.Id), DontSetKeyOnPatch);
-                    return UnprocessableEntity(ModelState);
-                }
-
-                throw;
-            }
-
-            return Updated(update);
+            _mapper.Map(update, item);
+            await _context.SaveChangesAsync();
+            return Updated(_mapper.Map<Perizinan, PerizinanView>(item));
         }
 
         /// <summary>
