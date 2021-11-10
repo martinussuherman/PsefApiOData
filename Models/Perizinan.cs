@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace PsefApiOData.Models
 {
@@ -65,35 +64,30 @@ namespace PsefApiOData.Models
         /// Gets or sets Permohonan associated with the Perizinan.
         /// </summary>
         /// <value>The associated Permohonan.</value>
-        [IgnoreDataMember]
         public virtual Permohonan Permohonan { get; set; }
 
         /// <summary>
         /// Gets or sets Previous Perizinan associated with the Perizinan.
         /// </summary>
         /// <value>The associated Previous Perizinan.</value>
-        [IgnoreDataMember]
         public virtual Perizinan Previous { get; set; }
 
         /// <summary>
         /// Gets or sets Next Perizinan associated with the Perizinan.
         /// </summary>
         /// <value>The associated Next Perizinan.</value>
-        [IgnoreDataMember]
         public virtual ICollection<Perizinan> InversePrevious { get; set; }
 
         /// <summary>
         /// Gets or sets list of Permohonan associated with the Perizinan.
         /// </summary>
         /// <value>The associated list of Permohonan.</value>
-        [IgnoreDataMember]
         public virtual ICollection<Permohonan> PermohonanPerizinanNavigation { get; set; }
 
         /// <summary>
         /// Gets or sets list of Permohonan associated with the Previous Perizinan.
         /// </summary>
         /// <value>The associated list of Permohonan.</value>
-        [IgnoreDataMember]
         public virtual ICollection<Permohonan> PermohonanPreviousPerizinan { get; set; }
     }
 }
