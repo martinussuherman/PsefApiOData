@@ -296,13 +296,7 @@ namespace PsefApiOData.Controllers
                 .Where(c => c.IssuedAt != _invalidPerizinan)
                 .OrderByDescending(c => c.IssuedAt)
                 .Take(20)
-                .Select(c => new PerizinanHalamanMuka
-                {
-                    CompanyName = c.Permohonan.Pemohon.CompanyName,
-                    Domain = c.Permohonan.Domain,
-                    PerizinanNumber = c.PerizinanNumber,
-                    IssuedAt = c.IssuedAt
-                })
+                .ProjectTo<PerizinanHalamanMuka>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
