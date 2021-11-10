@@ -17,7 +17,7 @@ namespace PsefApiOData.Configuration
         /// <param name="apiVersion">The <see cref="ApiVersion">API version</see> associated with the <paramref name="builder"/>.</param>
         public void Apply(ODataModelBuilder builder, ApiVersion apiVersion)
         {
-            builder.ComplexType<Perizinan>();
+            builder.ComplexType<PerizinanUpdate>();
             EntityTypeConfiguration<PerizinanView> perizinan = builder
                .EntitySet<PerizinanView>(nameof(Perizinan))
                .EntityType;
