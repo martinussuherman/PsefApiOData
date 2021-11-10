@@ -248,14 +248,15 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status404NotFound)]
         public async Task<IActionResult> Put(
             [FromODataUri] uint id,
-            [FromBody] Perizinan update)
+            [FromBody] PerizinanUpdate update)
         {
-            if (id != update.Id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            _context.Entry(update).State = EntityState.Modified;
+            Perizinan item = _mapper.Map<PerizinanUpdate, Perizinan>(update);
+            _context.Entry(item).State = EntityState.Modified;
 
             try
             {
@@ -271,7 +272,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            return Updated(update);
+            return Updated(_mapper.Map<Perizinan, PerizinanView>(item));
         }
 
         /// <summary>
