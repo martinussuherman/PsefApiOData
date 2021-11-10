@@ -78,24 +78,28 @@ namespace PsefApiOData.Controllers
         /// <response code="404">The Perizinan does not exist.</response>
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Perizinan), Status200OK)]
+        [ProducesResponseType(typeof(PerizinanView), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<Perizinan> Get([FromODataUri] uint id)
+        public SingleResult<PerizinanView> Get([FromODataUri] uint id)
         {
             if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
             {
                 return SingleResult.Create(
-                    _context.Perizinan.Where(e =>
-                        e.Id == id &&
-                        e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
-                        e.IssuedAt != _invalidPerizinan));
+                    _context.Perizinan
+                        .Where(e =>
+                            e.Id == id &&
+                            e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                            e.IssuedAt != _invalidPerizinan)
+                        .ProjectTo<PerizinanView>(_mapper.ConfigurationProvider));
             }
 
             return SingleResult.Create(
-                _context.Perizinan.Where(e =>
-                    e.Id == id &&
-                    e.IssuedAt != _invalidPerizinan));
+                _context.Perizinan
+                    .Where(e =>
+                        e.Id == id &&
+                        e.IssuedAt != _invalidPerizinan)
+                    .ProjectTo<PerizinanView>(_mapper.ConfigurationProvider));
         }
 
         /// <summary>
