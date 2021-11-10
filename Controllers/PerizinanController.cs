@@ -46,18 +46,24 @@ namespace PsefApiOData.Controllers
         /// <response code="200">Perizinan successfully retrieved.</response>
         [ODataRoute]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(ODataValue<IEnumerable<Perizinan>>), Status200OK)]
+        [ProducesResponseType(typeof(ODataValue<IEnumerable<PerizinanView>>), Status200OK)]
         [EnableQuery]
-        public IQueryable<Perizinan> Get()
+        public IQueryable<PerizinanView> Get()
         {
             if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
             {
-                return _context.Perizinan.Where(e =>
-                    e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
-                    e.IssuedAt != _invalidPerizinan);
+                return _context.Perizinan
+                    .AsNoTracking()
+                    .Where(e =>
+                        e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
+                        e.IssuedAt != _invalidPerizinan)
+                    .ProjectTo<PerizinanView>(_mapper.ConfigurationProvider);
             }
 
-            return _context.Perizinan.Where(e => e.IssuedAt != _invalidPerizinan);
+            return _context.Perizinan
+                .AsNoTracking()
+                .Where(e => e.IssuedAt != _invalidPerizinan)
+                .ProjectTo<PerizinanView>(_mapper.ConfigurationProvider);
         }
 
         /// <summary>
