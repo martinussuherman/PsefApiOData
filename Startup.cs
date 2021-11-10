@@ -1,3 +1,4 @@
+﻿using AutoMapper;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
@@ -146,6 +147,7 @@ namespace PsefApiOData
             services.AddHttpClient<IIdentityApiService, IdentityApiService>();
             services.AddHttpClient<IOssApiService, OssApiService>();
             services.AddHttpClient<ElectronicSignatureService>();
+            services.AddAutoMapper(typeof(MappingProfile));
         }
         private void ConfigureMvc(IApplicationBuilder app, VersionedODataModelBuilder modelBuilder)
         {
