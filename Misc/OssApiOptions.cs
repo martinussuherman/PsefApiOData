@@ -39,5 +39,17 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <value>The OSS staging flag.</value>
         public bool IsStaging { get; set; }
+
+        /// <summary>
+        /// Gets or sets the OSS kode izin.
+        /// </summary>
+        /// <value>The OSS kode izin.</value>
+        public string KodeIzin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the OSS nomenklatur nomor izin.
+        /// </summary>
+        /// <value>The OSS nomenklatur nomor izin.</value>
+        public string NomenklaturNomorIzin { get; set; }
     }
 }
