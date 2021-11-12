@@ -255,6 +255,12 @@ namespace PsefApiOData.Models
         public string IdIzin { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan id proyek.
+        /// </summary>
+        /// <value>The Permohonan's id proyek.</value>
+        public string IdProyek { get; set; }
+
+        /// <summary>
         /// Gets or sets Pemohon associated with the Permohonan.
         /// </summary>
         /// <value>The associated Pemohon.</value>
