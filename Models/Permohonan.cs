@@ -249,6 +249,12 @@ namespace PsefApiOData.Models
         public DateTime LastUpdate { get; set; }
 
         /// <summary>
+        /// Gets or sets the Permohonan id izin (received from OSS).
+        /// </summary>
+        /// <value>The Permohonan's id izin.</value>
+        public string IdIzin { get; set; }
+
+        /// <summary>
         /// Gets or sets Pemohon associated with the Permohonan.
         /// </summary>
         /// <value>The associated Pemohon.</value>
