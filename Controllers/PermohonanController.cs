@@ -42,6 +42,7 @@ namespace PsefApiOData.Controllers
         /// <param name="environment">Web Host environment.</param>
         /// <param name="signatureOptions">Electronic signature options.</param>
         /// <param name="ossOptions">OSS API configuration options.</param>
+        /// <param name="emailOptions">SMTP email options.</param>
         public PermohonanController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
@@ -52,7 +53,8 @@ namespace PsefApiOData.Controllers
             IMemoryCache memoryCache,
             IWebHostEnvironment environment,
             IOptions<ElectronicSignatureOptions> signatureOptions,
-            IOptions<OssApiOptions> ossOptions)
+            IOptions<OssApiOptions> ossOptions,
+            IOptions<PermohonanEmailOptions> emailOptions)
         {
             _ossApi = ossApi;
             _signatureService = signatureService;
@@ -61,6 +63,7 @@ namespace PsefApiOData.Controllers
             _environment = environment;
             _signatureOptions = signatureOptions;
             _ossOptions = ossOptions;
+            _emailOptions = emailOptions;
             _context = context;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
             _helper = new PermohonanHelper(context);
@@ -1400,6 +1403,7 @@ namespace PsefApiOData.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
         private readonly IOptions<OssApiOptions> _ossOptions;
+        private readonly IOptions<PermohonanEmailOptions> _emailOptions;
         private readonly DateTime _invalidPerizinan = new DateTime(1901, 1, 1);
         private const int _perizinanYears = 5;
         private const int _maxPermohonanDiajukan = 3;
