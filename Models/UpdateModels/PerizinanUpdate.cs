@@ -5,7 +5,7 @@ namespace PsefApiOData.Models
     /// <summary>
     /// Represents a Perizinan Update information.
     /// </summary>
-    public partial class PerizinanUpdate
+    public class PerizinanUpdate
     {
         /// <summary>
         /// Gets or sets the associated Permohonan identifier.
