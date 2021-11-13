@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -29,6 +30,7 @@ namespace PsefApiOData.Controllers
         /// Pemohon REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
+        /// <param name="mapper">AutoMapper mapping profile.</param>
         /// <param name="delegateService">Api delegation service.</param>
         /// <param name="identityApi">Identity Api service.</param>
         /// <param name="ossApi">Oss Api service.</param>
@@ -36,6 +38,7 @@ namespace PsefApiOData.Controllers
         /// <param name="options">OSS API configuration options.</param>
         public PemohonController(
             PsefMySqlContext context,
+            IMapper mapper,
             IApiDelegateService delegateService,
             IIdentityApiService identityApi,
             IOssApiService ossApi,
@@ -46,6 +49,7 @@ namespace PsefApiOData.Controllers
             _memoryCache = memoryCache;
             _options = options;
             _context = context;
+            _mapper = mapper;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
 
@@ -548,6 +552,7 @@ namespace PsefApiOData.Controllers
 
         private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PsefMySqlContext _context;
+        private readonly IMapper _mapper;
         private readonly IOssApiService _ossApi;
         private readonly IMemoryCache _memoryCache;
         private readonly IOptions<OssApiOptions> _options;
