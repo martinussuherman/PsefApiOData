@@ -242,7 +242,7 @@ namespace PsefApiOData.Controllers
             ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Perizinan), Status200OK)]
+        [ProducesResponseType(typeof(PerizinanView), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
