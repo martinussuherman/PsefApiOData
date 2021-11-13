@@ -29,7 +29,7 @@ namespace PsefApiOData.Controllers
         /// Perizinan REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
-        /// <param name="mapper"></param>
+        /// <param name="mapper">AutoMapper mapping profile.</param>
         public PerizinanController(PsefMySqlContext context, IMapper mapper)
         {
             _context = context;
