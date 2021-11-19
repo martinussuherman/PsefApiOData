@@ -17,6 +17,12 @@ namespace PsefApiOData.Misc
         public string From { get; set; }
 
         /// <summary>
+        /// Gets or sets the SMTP Email From address display name.
+        /// </summary>
+        /// <value>The SMTP Email From address display name.</value>
+        public string FromDisplay { get; set; }
+
+        /// <summary>
         /// Gets or sets the SMTP Host name.
         /// </summary>
         /// <value>The SMTP Host name.</value>
