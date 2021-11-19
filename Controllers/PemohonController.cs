@@ -452,12 +452,11 @@ namespace PsefApiOData.Controllers
         /// <response code="422">The Pemohon identifier is specified on delta and its value is different from id.</response>
         [ODataRoute(CurrentUser)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(typeof(PemohonView), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
-        [ProducesResponseType(Status422UnprocessableEntity)]
-        public async Task<IActionResult> PatchCurrentUser([FromBody] Delta<Pemohon> delta)
+        public async Task<IActionResult> PatchCurrentUser([FromBody] Delta<PemohonUpdate> delta)
         {
             if (!ModelState.IsValid)
             {
@@ -465,43 +464,30 @@ namespace PsefApiOData.Controllers
             }
 
             string currentUserId = ApiHelper.GetUserId(HttpContext.User);
-            Pemohon update = await _context.Pemohon
+            var item = await _context.Pemohon
                 .FirstOrDefaultAsync(c => c.UserId == currentUserId);
 
-            if (update == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            var oldId = update.Id;
+            PemohonUpdate update = _mapper.Map<Pemohon, PemohonUpdate>(item);
             delta.Patch(update);
+            _mapper.Map(update, item);
 
-            if (update.UserId != currentUserId)
+            if (item.UserId != currentUserId)
             {
                 return BadRequest(currentUserId);
             }
 
-            if (!await CheckNibAndUpdatePemohon(update))
+            if (!await CheckNibAndUpdatePemohon(item))
             {
                 return InvalidNib();
             }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (InvalidOperationException)
-            {
-                if (update.Id != oldId)
-                {
-                    ModelState.AddModelError(nameof(update.Id), DontSetKeyOnPatch);
-                    return UnprocessableEntity(ModelState);
-                }
-
-                throw;
-            }
-
-            return Updated(update);
+            await _context.SaveChangesAsync();
+            return Updated(_mapper.Map<Pemohon, PemohonView>(item));
         }
 
         private async Task<bool> CheckNibAndUpdatePemohon(Pemohon data)
