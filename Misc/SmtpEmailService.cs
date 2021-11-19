@@ -51,7 +51,8 @@ namespace PsefApiOData.Misc
         /// <returns>Task.</returns>
         public Task SendEmailAsync(string to, string subject, string htmlMessage, string cc = null)
         {
-            _logger.LogInformation($"Sending email: {to}, subject: {subject}, message: {htmlMessage}");
+            cc ??= string.Empty;
+            _logger.LogInformation($"Sending email: {to}, cc: {cc}, subject: {subject}, message: {htmlMessage}");
 
             try
             {
@@ -69,7 +70,6 @@ namespace PsefApiOData.Misc
                 if (!string.IsNullOrEmpty(cc))
                 {
                     mail.CC.Add(cc);
-                    cc = string.Empty;
                 }
 
                 _client.Send(mail);
