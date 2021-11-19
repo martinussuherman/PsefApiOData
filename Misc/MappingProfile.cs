@@ -35,6 +35,10 @@ namespace PsefApiOData.Misc
 
             CreateMap<PerizinanUpdate, Perizinan>();
             CreateMap<Perizinan, PerizinanUpdate>();
+
+            CreateMap<Pemohon, PemohonView>();
+            CreateMap<PemohonUpdate, Pemohon>();
+            CreateMap<Pemohon, PemohonUpdate>();
         }
     }
 }
