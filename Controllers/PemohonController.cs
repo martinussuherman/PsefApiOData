@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -150,11 +150,11 @@ namespace PsefApiOData.Controllers
             ApiRole.Admin,
             ApiRole.SuperAdmin)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status201Created)]
+        [ProducesResponseType(typeof(PemohonView), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status409Conflict)]
-        public async Task<IActionResult> Post([FromBody] Pemohon create)
+        public async Task<IActionResult> Post([FromBody] PemohonUpdate create)
         {
             if (!ModelState.IsValid)
             {
@@ -166,12 +166,14 @@ namespace PsefApiOData.Controllers
                 return Conflict(create.UserId);
             }
 
-            if (!await CheckNibAndUpdatePemohon(create))
+            Pemohon item = _mapper.Map<PemohonUpdate, Pemohon>(create);
+
+            if (!await CheckNibAndUpdatePemohon(item))
             {
                 return InvalidNib();
             }
 
-            _context.Pemohon.Add(create);
+            _context.Pemohon.Add(item);
 
             try
             {
@@ -179,15 +181,15 @@ namespace PsefApiOData.Controllers
             }
             catch (DbUpdateException)
             {
-                if (Exists(create.Id))
+                if (Exists(item.Id))
                 {
-                    return Conflict(create.Id);
+                    return Conflict();
                 }
 
                 throw;
             }
 
-            return Created(create);
+            return Created(_mapper.Map<Pemohon, PemohonView>(item));
         }
 
         /// <summary>
