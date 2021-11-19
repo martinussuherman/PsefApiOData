@@ -291,25 +291,26 @@ namespace PsefApiOData.Controllers
             ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(typeof(PemohonView), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
         public async Task<IActionResult> Put(
             [FromODataUri] uint id,
-            [FromBody] Pemohon update)
+            [FromBody] PemohonUpdate update)
         {
-            if (id != update.Id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            if (!await CheckNibAndUpdatePemohon(update))
+            Pemohon item = _mapper.Map<PemohonUpdate, Pemohon>(update);
+            _context.Entry(item).State = EntityState.Modified;
+
+            if (!await CheckNibAndUpdatePemohon(item))
             {
                 return InvalidNib();
             }
-
-            _context.Entry(update).State = EntityState.Modified;
 
             try
             {
@@ -325,7 +326,7 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            return Updated(update);
+            return Updated(_mapper.Map<Pemohon, PemohonView>(item));
         }
 
         /// <summary>
