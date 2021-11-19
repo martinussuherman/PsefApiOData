@@ -205,56 +205,42 @@ namespace PsefApiOData.Controllers
         /// <response code="204">The Pemohon was successfully updated.</response>
         /// <response code="400">The Pemohon is invalid.</response>
         /// <response code="404">The Pemohon does not exist.</response>
-        /// <response code="422">The Pemohon identifier is specified on delta and its value is different from id.</response>
         [MultiRoleAuthorize(
             ApiRole.Admin,
             ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(typeof(PemohonView), Status200OK)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status404NotFound)]
-        [ProducesResponseType(Status422UnprocessableEntity)]
         public async Task<IActionResult> Patch(
             [FromODataUri] uint id,
-            [FromBody] Delta<Pemohon> delta)
+            [FromBody] Delta<PemohonUpdate> delta)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var update = await _context.Pemohon.FindAsync(id);
+            var item = await _context.Pemohon.FindAsync(id);
 
-            if (update == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
+            PemohonUpdate update = _mapper.Map<Pemohon, PemohonUpdate>(item);
             delta.Patch(update);
+            _mapper.Map(update, item);
 
-            if (!await CheckNibAndUpdatePemohon(update))
+            if (!await CheckNibAndUpdatePemohon(item))
             {
                 return InvalidNib();
             }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (InvalidOperationException)
-            {
-                if (update.Id != id)
-                {
-                    ModelState.AddModelError(nameof(update.Id), DontSetKeyOnPatch);
-                    return UnprocessableEntity(ModelState);
-                }
-
-                throw;
-            }
-
-            return Updated(update);
+            await _context.SaveChangesAsync();
+            return Updated(_mapper.Map<Pemohon, PemohonView>(item));
         }
 
         /// <summary>
