@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -81,6 +83,54 @@ namespace PsefApiOData.Misc
             catch (Exception ex)
             {
                 _logger.LogError($"Exception {ex} during sending email: {to}, cc: {cc}, subject: {subject}");
+                throw;
+            }
+        }
+        /// <summary>
+        /// Send email via STMP.
+        /// </summary>
+        /// <param name="receiver">Receiver email address.</param>
+        /// <param name="cc">Carbon copy email addresses.</param>
+        /// <param name="subject">Email subject.</param>
+        /// <param name="htmlMessage">Email html message.</param>
+        /// <returns>Task.</returns>
+        public Task SendEmailAsync(
+            MailAddress receiver,
+            MailAddressCollection cc,
+            string subject,
+            string htmlMessage)
+        {
+            IEnumerable<MailAddress> nonNullCc = cc ?? Enumerable.Empty<MailAddress>();
+            _logger.LogInformation($"Sending email: {receiver.DisplayName} <{receiver.Address}>, cc: {nonNullCc}, subject: {subject}, message: {htmlMessage}");
+
+            try
+            {
+                string from = string.IsNullOrEmpty(_options.Value.From) ?
+                    _options.Value.Login :
+                    _options.Value.From;
+
+                MailMessage mail = new MailMessage(
+                    new MailAddress(from, _options.Value.FromDisplay),
+                    receiver)
+                {
+                    IsBodyHtml = true,
+                    Subject = subject,
+                    Body = htmlMessage
+                };
+
+                foreach (MailAddress ccAddress in nonNullCc)
+                {
+                    mail.CC.Add(ccAddress);
+                }
+
+                _client.Send(mail);
+                _logger.LogInformation($"Email: {receiver.DisplayName} <{receiver.Address}>, cc: {nonNullCc}, subject: {subject}, message: {htmlMessage} successfully sent");
+
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception {ex} during sending email: {receiver.Address}, cc: {nonNullCc}, subject: {subject}");
                 throw;
             }
         }
