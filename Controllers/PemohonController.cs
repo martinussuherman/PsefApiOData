@@ -367,13 +367,15 @@ namespace PsefApiOData.Controllers
         /// <response code="404">The Pemohon does not exist.</response>
         [ODataRoute(CurrentUser)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status200OK)]
+        [ProducesResponseType(typeof(PemohonView), Status200OK)]
         [ProducesResponseType(Status404NotFound)]
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
-        public SingleResult<Pemohon> GetCurrentUser()
+        public SingleResult<PemohonView> GetCurrentUser()
         {
             return SingleResult.Create(
-                _context.Pemohon.Where(e => e.UserId == ApiHelper.GetUserId(HttpContext.User)));
+                _context.Pemohon
+                    .Where(e => e.UserId == ApiHelper.GetUserId(HttpContext.User))
+                    .ProjectTo<PemohonView>(_mapper.ConfigurationProvider));
         }
 
         /// <summary>
