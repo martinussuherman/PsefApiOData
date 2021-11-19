@@ -17,9 +17,10 @@ namespace PsefApiOData.Configuration
         /// <param name="apiVersion">The <see cref="ApiVersion">API version</see> associated with the <paramref name="builder"/>.</param>
         public void Apply(ODataModelBuilder builder, ApiVersion apiVersion)
         {
-            EntityTypeConfiguration<Pemohon> pemohon = builder
-                .EntitySet<Pemohon>(nameof(Pemohon))
-                .EntityType;
+            builder.ComplexType<PemohonUpdate>();
+            EntityTypeConfiguration<PemohonView> pemohon = builder
+               .EntitySet<PemohonView>(nameof(Pemohon))
+               .EntityType;
             ComplexTypeConfiguration<PemohonUserInfo> pemohonUserInfo = builder
                 .ComplexType<PemohonUserInfo>();
 
@@ -28,7 +29,7 @@ namespace PsefApiOData.Configuration
                 .Returns<PemohonUserInfo>();
             pemohon.Collection
                 .Function(ApiInfo.CurrentUser)
-                .ReturnsFromEntitySet<Pemohon>(nameof(Pemohon));
+                .ReturnsFromEntitySet<PemohonView>(nameof(Pemohon));
             pemohon.Collection
                 .Function(nameof(PemohonController.TotalCount))
                 .Returns<long>();
