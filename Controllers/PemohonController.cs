@@ -392,11 +392,11 @@ namespace PsefApiOData.Controllers
         /// <response code="409">The Pemohon with supplied id already exist.</response>
         [ODataRoute(CurrentUser)]
         [Produces(JsonOutput)]
-        [ProducesResponseType(typeof(Pemohon), Status201Created)]
+        [ProducesResponseType(typeof(PemohonView), Status201Created)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         [ProducesResponseType(Status409Conflict)]
-        public async Task<IActionResult> PostCurrentUser([FromBody] Pemohon create)
+        public async Task<IActionResult> PostCurrentUser([FromBody] PemohonUpdate create)
         {
             if (!ModelState.IsValid)
             {
@@ -410,13 +410,15 @@ namespace PsefApiOData.Controllers
                 return Conflict(userId);
             }
 
-            if (!await CheckNibAndUpdatePemohon(create))
+            Pemohon item = _mapper.Map<PemohonUpdate, Pemohon>(create);
+
+            if (!await CheckNibAndUpdatePemohon(item))
             {
                 return InvalidNib();
             }
 
-            create.UserId = userId;
-            _context.Pemohon.Add(create);
+            item.UserId = userId;
+            _context.Pemohon.Add(item);
 
             try
             {
@@ -424,15 +426,15 @@ namespace PsefApiOData.Controllers
             }
             catch (DbUpdateException)
             {
-                if (Exists(create.Id))
+                if (Exists(item.Id))
                 {
-                    return Conflict(create.Id);
+                    return Conflict();
                 }
 
                 throw;
             }
 
-            return Created(create);
+            return Created(_mapper.Map<Pemohon, PemohonView>(item));
         }
 
         /// <summary>
