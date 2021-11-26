@@ -78,11 +78,19 @@ namespace PsefApiOData.Misc
         /// <returns>JObject retrieved from the OSS Api.</returns>
         public async Task<JObject> CallApiAsync(string token, string uri, HttpContent content)
         {
+            return await CallApiInternalAsync(new AuthenticationHeaderValue("Token", token), uri, content);
+        }
+
+        private async Task<JObject> CallApiInternalAsync(
+            AuthenticationHeaderValue authenticationHeader,
+            string uri,
+            HttpContent content)
+        {
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Post,
                 $"{_options.Value.BaseUri}{uri}");
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Token", token);
+            request.Headers.Authorization = authenticationHeader;
             request.Content = content;
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
