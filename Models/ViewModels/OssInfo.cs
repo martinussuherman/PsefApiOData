@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PsefApiOData.Models
 {
@@ -12,6 +11,7 @@ namespace PsefApiOData.Models
         /// Gets or sets the OSS Information NIB.
         /// </summary>
         /// <value>The OSS Information's NIB.</value>
+        [Key]
         public string Nib { get; set; }
 
         /// <summary>
