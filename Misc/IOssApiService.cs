@@ -16,12 +16,21 @@ namespace PsefApiOData.Misc
         Task<string> Authenticate();
 
         /// <summary>
-        /// Call OSS Api.
+        /// Call OSS Api with Token auth header.
         /// </summary>
         /// <param name="token">Access token for the OSS Api.</param>
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
         /// <returns>JObject retrieved from the OSS Api.</returns>
         Task<JObject> CallApiAsync(string token, string uri, HttpContent content);
+
+        /// <summary>
+        /// Call OSS Api with Bearer auth header.
+        /// </summary>
+        /// <param name="token">Access token for the OSS Api.</param>
+        /// <param name="uri">Uri of Api request.</param>
+        /// <param name="content">Content of Api request.</param>
+        /// <returns>JObject retrieved from the OSS Api.</returns>
+        Task<JObject> CallBearerAuthApiAsync(string token, string uri, HttpContent content);
     }
 }
