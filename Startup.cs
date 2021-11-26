@@ -213,6 +213,7 @@ namespace PsefApiOData
                     builder =>
                     {
                         builder
+                            .AllowAnyMethod()
                             .WithOrigins(corsOrigins)
                             .WithHeaders(HeaderNames.Authorization)
                             .SetIsOriginAllowedToAllowWildcardSubdomains();
