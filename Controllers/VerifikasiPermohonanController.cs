@@ -308,7 +308,28 @@ namespace PsefApiOData.Controllers
             return SingleResult.Create(
                 _context.VerifikasiPermohonan.Where(
                     e => e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
-                    e.Permohonan.Id == permohonanId));
+                    e.PermohonanId == permohonanId));
+        }
+
+        /// <summary>
+        /// Gets a single Verifikasi Permohonan.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
+        /// <returns>The requested Verifikasi Permohonan.</returns>
+        /// <response code="200">The Verifikasi Permohonan was successfully retrieved.</response>
+        /// <response code="404">The Verifikasi Permohonan does not exist.</response>
+        [ODataRoute(nameof(ByPermohonan))]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(VerifikasiPermohonan), Status200OK)]
+        [ProducesResponseType(Status404NotFound)]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
+        public SingleResult<VerifikasiPermohonan> ByPermohonan(uint permohonanId)
+        {
+            return SingleResult.Create(
+                _context.VerifikasiPermohonan.Where(e => e.PermohonanId == permohonanId));
         }
 
         private bool Exists(uint id)
