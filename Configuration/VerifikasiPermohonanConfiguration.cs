@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using PsefApiOData.Controllers;
 using PsefApiOData.Models;
 
 namespace PsefApiOData.Configuration
@@ -23,6 +24,10 @@ namespace PsefApiOData.Configuration
 
             verifikasi.Collection
                 .Function(ApiInfo.CurrentUser)
+                .ReturnsFromEntitySet<VerifikasiPermohonan>(nameof(VerifikasiPermohonan));
+
+            verifikasi.Collection
+                .Function(nameof(VerifikasiPermohonanController.ByPermohonan))
                 .ReturnsFromEntitySet<VerifikasiPermohonan>(nameof(VerifikasiPermohonan));
 
             verifikasi.HasKey(p => p.Id);
