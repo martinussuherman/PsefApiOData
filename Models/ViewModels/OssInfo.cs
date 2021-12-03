@@ -15,9 +15,9 @@ namespace PsefApiOData.Models
         public string Nib { get; set; }
 
         /// <summary>
-        /// Gets or sets the OSS Information name.
+        /// Gets or sets the OSS Information company name.
         /// </summary>
-        /// <value>The OSS Information's name.</value>
+        /// <value>The OSS Information's company name.</value>
         public string Name { get; set; }
 
         /// <summary>
