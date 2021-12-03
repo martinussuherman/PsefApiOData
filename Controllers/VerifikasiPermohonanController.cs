@@ -295,6 +295,7 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
+        /// <param name="permohonanId">The requested Permohonan identifier.</param>
         /// <returns>The requested Verifikasi Permohonan.</returns>
         /// <response code="200">The Verifikasi Permohonan was successfully retrieved.</response>
         /// <response code="404">The Verifikasi Permohonan does not exist.</response>
