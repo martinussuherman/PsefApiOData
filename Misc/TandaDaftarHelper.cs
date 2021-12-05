@@ -114,14 +114,8 @@ namespace PsefApiOData.Misc
                 converter.ConvertUnits(297, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point));
 
             document.PageSettings.SetMargins(
-                converter.ConvertUnits(
-                    3,
-                    PdfGraphicsUnit.Centimeter,
-                    PdfGraphicsUnit.Point),
-                converter.ConvertUnits(
-                    2,
-                    PdfGraphicsUnit.Centimeter,
-                    PdfGraphicsUnit.Point));
+                converter.ConvertUnits(15, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point),
+                converter.ConvertUnits(25, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point));
         }
 
         private float DrawLogo(PdfGraphics graphics, float top)
