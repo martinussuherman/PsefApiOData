@@ -110,14 +110,8 @@ namespace PsefApiOData.Misc
             PdfUnitConverter converter = new PdfUnitConverter();
 
             document.PageSettings.Size = new SizeF(
-                converter.ConvertUnits(
-                    8.5f,
-                    PdfGraphicsUnit.Inch,
-                    PdfGraphicsUnit.Point),
-                converter.ConvertUnits(
-                    13f,
-                    PdfGraphicsUnit.Inch,
-                    PdfGraphicsUnit.Point));
+                converter.ConvertUnits(210, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point),
+                converter.ConvertUnits(297, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point));
 
             document.PageSettings.SetMargins(
                 converter.ConvertUnits(
