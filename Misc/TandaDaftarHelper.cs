@@ -146,25 +146,28 @@ namespace PsefApiOData.Misc
                 Alignment = PdfTextAlignment.Center
             };
 
-            top += 6;
+            PdfUnitConverter converter = new PdfUnitConverter();
+
+            top += converter.ConvertUnits(12, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
             top = DrawString(
-                "KEMENTERIAN KESEHATAN\nREPUBLIK INDONESIA",
+                "PEMERINTAH REPUBLIK INDONESIA ",
                 graphics,
-                new PdfStandardFont(PdfFontFamily.Helvetica, 11),
+                new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold),
                 centered,
                 new RectangleF(0, top, graphics.ClientSize.Width, 0));
-            top += 10;
+
+            top += converter.ConvertUnits(12, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
             top = DrawString(
-                "TANDA DAFTAR\nPENYELENGGARA SISTEM ELEKTRONIK FARMASI (PSEF)",
+                "PERIZINAN BERUSAHA UNTUK MENUNJANG KEGIATAN USAHA\nPENYELENGGARA SISTEM ELEKTRONIK FARMASI (PSEF)\nLAMPIRAN",
                 graphics,
-                new PdfStandardFont(PdfFontFamily.Helvetica, 14, PdfFontStyle.Bold),
+                new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold),
                 centered,
                 new RectangleF(0, top, graphics.ClientSize.Width, 0));
-            top += 10;
+            top += converter.ConvertUnits(4, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
             top = DrawString(
-                $"NOMOR: {perizinan.PerizinanNumber}",
+                $"PB-UMKU: {perizinan.PerizinanNumber}",
                 graphics,
-                new PdfStandardFont(PdfFontFamily.Helvetica, 14, PdfFontStyle.Bold),
+                new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold),
                 centered,
                 new RectangleF(0, top, graphics.ClientSize.Width, 0));
 
