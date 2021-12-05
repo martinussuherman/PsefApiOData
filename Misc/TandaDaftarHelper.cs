@@ -121,11 +121,13 @@ namespace PsefApiOData.Misc
         private float DrawLogo(PdfGraphics graphics, float top)
         {
             PdfBitmap logo = new PdfBitmap(new FileStream(
-                "logo-kemkes.jpg",
+                "logo-garuda.jpg",
                 FileMode.Open,
                 FileAccess.Read));
-            float drawWidth = logo.Width / 4;
-            float drawHeight = logo.Height / 4;
+            PdfUnitConverter converter = new PdfUnitConverter();
+
+            float drawWidth = converter.ConvertUnits(26, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
+            float drawHeight = drawWidth;
 
             graphics.DrawImage(
                 logo,
