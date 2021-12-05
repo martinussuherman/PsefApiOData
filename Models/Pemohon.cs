@@ -46,12 +46,6 @@ namespace PsefApiOData.Models
         public string Nib { get; set; }
 
         /// <summary>
-        /// Gets or sets the Pemohon OSS information.
-        /// </summary>
-        /// <value>The Pemohon's OSS information.</value>
-        public OssInfo OssInfo { get; set; }
-
-        /// <summary>
         /// Gets or sets the Pemohon company name.
         /// </summary>
         /// <value>The Pemohon's company name.</value>
