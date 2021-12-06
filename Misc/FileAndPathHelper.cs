@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 
 namespace PsefApiOData.Misc
@@ -9,7 +10,12 @@ namespace PsefApiOData.Misc
     {
         public bool ValidateFileName(IFormFile file)
         {
-            return file != null && !string.IsNullOrWhiteSpace(file.FileName);
+            //https://stackoverflow.com/questions/62771/how-do-i-check-if-a-given-string-is-a-legal-valid-file-name-under-windows#62855
+            Regex invalidChars = new Regex($"[{Regex.Escape(new string(Path.GetInvalidPathChars()))}]");
+
+            return file != null &&
+                !string.IsNullOrWhiteSpace(file.FileName) &&
+                !invalidChars.IsMatch(file.FileName);
         }
 
         public bool ValidateFileSize(IFormFile file, int maxSizeBytes)
