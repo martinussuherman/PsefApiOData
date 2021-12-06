@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -143,7 +142,7 @@ namespace PsefApiOData.Misc
             return new ValidateResult
             {
                 IsValid = true,
-                Message = WebUtility.HtmlEncode(file.FileName)
+                Message = file.FileName
             };
         }
 
