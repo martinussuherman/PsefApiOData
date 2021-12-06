@@ -141,33 +141,32 @@ namespace PsefApiOData.Misc
 
         private float DrawHeader(Perizinan perizinan, PdfGraphics graphics, float top)
         {
+            PdfStandardFont headerFont = new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold);
             PdfStringFormat centered = new PdfStringFormat
             {
                 Alignment = PdfTextAlignment.Center
             };
-
             PdfUnitConverter converter = new PdfUnitConverter();
 
             top += converter.ConvertUnits(12, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
             top = DrawString(
                 "PEMERINTAH REPUBLIK INDONESIA ",
                 graphics,
-                new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold),
+                headerFont,
                 centered,
                 new RectangleF(0, top, graphics.ClientSize.Width, 0));
-
             top += converter.ConvertUnits(12, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
             top = DrawString(
                 "PERIZINAN BERUSAHA UNTUK MENUNJANG KEGIATAN USAHA\nPENYELENGGARA SISTEM ELEKTRONIK FARMASI (PSEF)\nLAMPIRAN",
                 graphics,
-                new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold),
+                headerFont,
                 centered,
                 new RectangleF(0, top, graphics.ClientSize.Width, 0));
             top += converter.ConvertUnits(4, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
             top = DrawString(
                 $"PB-UMKU: {perizinan.PerizinanNumber}",
                 graphics,
-                new PdfStandardFont(PdfFontFamily.Helvetica, 13, PdfFontStyle.Bold),
+                headerFont,
                 centered,
                 new RectangleF(0, top, graphics.ClientSize.Width, 0));
 
