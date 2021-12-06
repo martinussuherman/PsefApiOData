@@ -180,160 +180,111 @@ namespace PsefApiOData.Misc
             PdfGraphics graphics,
             float top)
         {
-            float leftCol = 5;
-            float rightCol = (graphics.ClientSize.Width / 2) + 5;
-            float leftColTop = top + 14;
-            float rightColTop;
-            float width = (graphics.ClientSize.Width - 20) / 2;
-            PdfStandardFont labelFont = new PdfStandardFont(PdfFontFamily.Helvetica, 10, PdfFontStyle.Italic);
-            PdfStandardFont contentFont = new PdfStandardFont(PdfFontFamily.Helvetica, 11, PdfFontStyle.Bold);
+            PdfStandardFont contentFont = new PdfStandardFont(PdfFontFamily.Helvetica, 11);
             PdfStringFormat leftAlign = new PdfStringFormat
             {
                 Alignment = PdfTextAlignment.Left
             };
+            PdfUnitConverter converter = new PdfUnitConverter();
+            float leftCol = 0f;
 
-            leftColTop = DrawString(
-                "Bidang:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop = DrawString(
-                "PELAYANAN",
+            top += converter.ConvertUnits(8, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
+            top = DrawString(
+                "Lampiran berikut memuat data teknis Penyelenggara Sistem Elektronik Farmasi (PSEF) sebagai berikut:",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop += 4;
-            rightColTop = leftColTop;
+                new RectangleF(leftCol, top, graphics.ClientSize.Width, 0));
+            top += converter.ConvertUnits(5, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
 
-            leftColTop = DrawString(
-                "Tanggal Terbit:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop = DrawString(
-                perizinan.IssuedAt.ToString("dd MMMM yyyy", CultureInfo.CreateSpecificCulture("id")),
+            float leftWidth = converter.ConvertUnits(62, PdfGraphicsUnit.Millimeter, PdfGraphicsUnit.Point);
+            float rightWidth = graphics.ClientSize.Width - leftWidth;
+            float rightCol = leftWidth;
+
+            DrawString(
+                "Bidang",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-
-            rightColTop = DrawString(
-                "Tanggal Berakhir:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop = DrawString(
-                perizinan.ExpiredAt.ToString("dd MMMM yyyy", CultureInfo.CreateSpecificCulture("id")),
+                new RectangleF(leftCol, top, leftWidth, 0));
+            top = DrawString(
+                ": Pelayanan",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
+                new RectangleF(rightCol, top, rightWidth, 0));
 
-            top = leftColTop > rightColTop ? leftColTop : rightColTop;
-            leftColTop = rightColTop = top + 12;
-
-            leftColTop = DrawString(
-                "Nama Sistem Elektronik:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop = DrawString(
-                permohonan.SystemName,
+            top += 8;
+            DrawString(
+                "Masa Berlaku",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop += 4;
-
-            leftColTop = DrawString(
-                "Alamat Domain Sistem Elektronik:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop = DrawString(
-                permohonan.Domain,
+                new RectangleF(leftCol, top, leftWidth, 0));
+            top = DrawString(
+                $": Berlaku 5 (lima) tahun sampai dengan {perizinan.ExpiredAt.ToString("dd MMMM yyyy", CultureInfo.CreateSpecificCulture("id"))}",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop += 4;
+                new RectangleF(rightCol, top, rightWidth, 0));
 
-            leftColTop = DrawString(
-                "Apoteker Penanggung Jawab:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop = DrawString(
-                permohonan.ApotekerName,
+            top += 8;
+            DrawString(
+                "Nama Sistem Elektronik",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop += 4;
-
-            leftColTop = DrawString(
-                "Nomor STRA:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop = DrawString(
-                permohonan.StraNumber,
+                new RectangleF(leftCol, top, leftWidth, 0));
+            top = DrawString(
+                $": {permohonan.SystemName}",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(leftCol, leftColTop, width, 0));
-            leftColTop += 4;
+                new RectangleF(rightCol, top, rightWidth, 0));
 
-            rightColTop = DrawString(
-                "Nomor Induk Berusaha:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop = DrawString(
-                (ossInfo?.Nib) != null ? ossInfo.Nib : string.Empty,
+            top += 8;
+            DrawString(
+                "Alamat Domain Sistem Elektronik",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop += 4;
-
-            rightColTop = DrawString(
-                "Diajukan oleh:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop = DrawString(
-                (ossInfo?.NamaPerseroan) != null ? ossInfo.NamaPerseroan : string.Empty,
+                new RectangleF(leftCol, top, leftWidth, 0));
+            top = DrawString(
+                $": {permohonan.Domain}",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop += 4;
+                new RectangleF(rightCol, top, rightWidth, 0));
 
-            rightColTop = DrawString(
-                "Alamat:",
-                graphics,
-                labelFont,
-                leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
-            rightColTop = DrawString(
-                (ossInfo?.AlamatPerseroan) != null ? ossInfo.AlamatPerseroan : string.Empty,
+            top += 8;
+            DrawString(
+                "Apoteker Penanggung Jawab",
                 graphics,
                 contentFont,
                 leftAlign,
-                new RectangleF(rightCol, rightColTop, width, 0));
+                new RectangleF(leftCol, top, leftWidth, 0));
+            top = DrawString(
+                $": {permohonan.ApotekerName}",
+                graphics,
+                contentFont,
+                leftAlign,
+                new RectangleF(rightCol, top, rightWidth, 0));
 
-            return leftColTop > rightColTop ? leftColTop : rightColTop;
+            top += 8;
+            DrawString(
+                "Nomor STRA",
+                graphics,
+                contentFont,
+                leftAlign,
+                new RectangleF(leftCol, top, leftWidth, 0));
+            top = DrawString(
+                $": {permohonan.StraNumber}",
+                graphics,
+                contentFont,
+                leftAlign,
+                new RectangleF(rightCol, top, rightWidth, 0));
+
+            return top;
         }
 
         private float DrawSignature(
