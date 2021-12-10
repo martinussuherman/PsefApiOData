@@ -67,12 +67,7 @@ namespace PsefApiOData.Misc
 
             top = DrawLogo(graphics, top);
             top = DrawHeader(perizinan, graphics, top);
-            top = DrawContent(permohonan, perizinan, ossInfo, graphics, top);
-
-            top = 440;
-            top = DrawSignature(graphics, top);
-            top = DrawFooter(perizinan, graphics, top);
-            top = DrawBsreInfo(graphics, top);
+            DrawContent(permohonan, perizinan, ossInfo, graphics, top);
 
             FileStream fileStream = new FileStream(
                 filePath,
