@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
@@ -646,13 +646,11 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            var result = await GenerateAndSignPdfAsync(
+            var result = GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
                 permohonan,
-                perizinan,
-                data.Nik,
-                data.Passphrase);
+                perizinan);
 
             if (!result.SignResult.IsSuccess)
             {
@@ -1240,20 +1238,20 @@ namespace PsefApiOData.Controllers
         {
             return RomanNumberHelper.ToRomanNumber(date.Month);
         }
-        private async Task<GeneratePdfResult> GenerateAndSignPdfAsync(
+        private GeneratePdfResult GenerateAndSignPdf(
             TandaDaftarHelper helper,
             OssFullInfo ossFullInfo,
             Permohonan permohonan,
-            Perizinan perizinan,
-            string nik,
-            string passphrase)
+            Perizinan perizinan)
         {
             GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
-            string folderPath = Path.Combine(_environment.WebRootPath, result.DatePath, result.FileName);
-            result.SignResult = await _signatureService.SignPdfAsync(
-                folderPath,
-                _signatureOptions.Value.Nik,
-                passphrase);
+            result.SignResult = new ElectronicSignatureResult
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                FailureContent = string.Empty
+            };
+
             return result;
         }
         private async Task<IActionResult> SelesaikanPermohonan(
@@ -1295,13 +1293,11 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
             OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            GeneratePdfResult result = await GenerateAndSignPdfAsync(
+            GeneratePdfResult result = GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
                 update,
-                perizinan,
-                data.Nik,
-                data.Passphrase);
+                perizinan);
 
             if (!result.SignResult.IsSuccess)
             {
