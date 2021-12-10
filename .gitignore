@@ -4,3 +4,4 @@ appsettings.Development.json
 .vscode/**
 log/**
 wwwroot/20*
+wwwroot/upload
