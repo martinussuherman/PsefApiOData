@@ -206,6 +206,10 @@ namespace PsefApiOData
                 .GetChildren()?
                 .Select(x => x.Value)?
                 .ToArray();
+            string[] allowedHeaders = {
+                HeaderNames.Authorization,
+                HeaderNames.ContentType
+            };
 
             services.AddCors(options =>
             {
@@ -215,7 +219,7 @@ namespace PsefApiOData
                         builder
                             .AllowAnyMethod()
                             .WithOrigins(corsOrigins)
-                            .WithHeaders(HeaderNames.Authorization)
+                            .WithHeaders(allowedHeaders)
                             .SetIsOriginAllowedToAllowWildcardSubdomains();
                     });
             });
