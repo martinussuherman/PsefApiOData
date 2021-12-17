@@ -119,7 +119,7 @@ namespace PsefApiOData.Controllers
 
             if (pemohon == null)
             {
-                return BadRequest();
+                return BadRequest("Pemohon not found");
             }
 
             // TODO : automatically set type as New or Extension based on whether
