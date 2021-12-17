@@ -112,11 +112,11 @@ namespace PsefApiOData.Misc
         }
 
         /// <summary>
-        /// Send perizinan data to OSS.
+        /// Send izin final data to OSS.
         /// </summary>
-        /// <param name="perizinan">The perizinan data.</param>
+        /// <param name="izinFinal">The izin final data.</param>
         /// <returns>OSS response.</returns>
-        public async Task<JObject> SendLicense(Perizinan perizinan)
+        public async Task<JObject> SendLicense(OssIzinFinal izinFinal)
         {
             string token = await _ossApi.Authenticate();
 
@@ -129,42 +129,17 @@ namespace PsefApiOData.Misc
 
             var content = new
             {
-                IZINFINAL = new
-                {
-                    nib = perizinan.Permohonan.Pemohon.Nib,
-                    id_produk = "",
-                    id_proyek = "",
-                    oss_id = "",
-                    id_izin = "",
-                    kd_izin = "",
-                    kd_daerah = "",
-                    kewenangan = "",
-                    nomor_izin = perizinan.PerizinanNumber,
-                    tgl_terbit_izin = perizinan.IssuedAt,
-                    tgl_berlaku_izin = perizinan.ExpiredAt,
-                    nama_ttd = "",
-                    nip_ttd = "",
-                    jabatan_ttd = "",
-                    status_izin = "",
-                    file_izin = "",
-                    keterangan = "",
-                    file_lampiran = "",
-                    nomenklatur_nomor_izin = "",
-                    data_pnbp = new[]
-                    {
-                        new { kd_akun = "", kd_penerimaan = "", nominal = "" }
-                    }
-                }
+                IZINFINAL = izinFinal
             };
 
-            JObject response = await _ossApi.CallApiAsync(
-                token,
-                uri,
-                new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json"));
+            StringContent serializedContent = new StringContent(
+                JsonConvert.SerializeObject(content, _snakeSettings),
+                Encoding.UTF8,
+                "application/json");
+            JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
 
             return response;
         }
-
 
         internal class UnderscorePropertyNamesContractResolver : DefaultContractResolver
         {
