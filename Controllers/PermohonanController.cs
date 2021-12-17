@@ -578,7 +578,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> DirekturJenderalSelesaikan(
-            [FromBody] GenerateTandaDaftarData data)
+            [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
                 .FirstOrDefaultAsync(c =>
@@ -602,7 +602,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> ValidatorSelesaikan(
-            [FromBody] GenerateTandaDaftarData data)
+            [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
                 .FirstOrDefaultAsync(c =>
@@ -626,7 +626,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> ValidatorRegenerateTandaDaftar(
-            [FromBody] GenerateTandaDaftarData data)
+            [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan permohonan = await _context.Permohonan
                 .AsNoTracking()
@@ -1255,7 +1255,7 @@ namespace PsefApiOData.Controllers
             return result;
         }
         private async Task<IActionResult> SelesaikanPermohonan(
-            GenerateTandaDaftarData data,
+            PermohonanSystemUpdate data,
             Permohonan update)
         {
             if (update == null)
