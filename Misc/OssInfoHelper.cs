@@ -56,13 +56,6 @@ namespace PsefApiOData.Misc
                 return dummyData;
             }
 
-            if (_memoryCache.TryGetValue(
-                nameof(OssFullInfo) + id,
-                out OssFullInfo cachedInfo))
-            {
-                return cachedInfo;
-            }
-
             Dictionary<string, string> formData = new Dictionary<string, string>();
             formData.Add("nib", id);
 
@@ -102,11 +95,6 @@ namespace PsefApiOData.Misc
 
             OssFullInfo apiData = response["responinqueryNIB"]["dataNIB"]
                 .ToObject<OssFullInfo>(JsonSerializer.CreateDefault(_snakeSettings));
-
-            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(new TimeSpan(_options.Value.CacheHour, 0, 0));
-
-            _memoryCache.Set(nameof(OssFullInfo) + id, apiData, cacheEntryOptions);
 
             return apiData;
         }
