@@ -64,28 +64,16 @@ namespace PsefApiOData.Models
         public string NomorIzin { get; set; }
 
         /// <summary>
-        /// Gets the tanggal terbit izin.
+        /// Gets or sets the tanggal terbit izin.
         /// </summary>
         /// <value>The tanggal terbit izin.</value>
-        public string TglTerbitIzin
-        {
-            get
-            {
-                return IssuedAt.ToString("yyyy-MM-dd");
-            }
-        }
+        public string TglTerbitIzin { get; set; }
 
         /// <summary>
-        /// Gets the tanggal berlaku izin.
+        /// Gets or sets the tanggal berlaku izin.
         /// </summary>
         /// <value>The tanggal berlaku izin.</value>
-        public string TglBerlakuIzin
-        {
-            get
-            {
-                return ExpiredAt.ToString("yyyy-MM-dd");
-            }
-        }
+        public string TglBerlakuIzin { get; set; }
 
         /// <summary>
         /// Gets or sets the nama ttd.
@@ -140,19 +128,5 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The Nib.</value>
         public List<OssDataPnbp> DataPnbp { get; set; }
-
-        /// <summary>
-        /// Gets or sets the issued date.
-        /// </summary>
-        /// <value>The issued date.</value>
-        [JsonIgnore]
-        public DateTime IssuedAt { get; set; }
-
-        /// <summary>
-        /// Gets or sets the expired date.
-        /// </summary>
-        /// <value>The expired date.</value>
-        [JsonIgnore]
-        public DateTime ExpiredAt { get; set; }
     }
 }
