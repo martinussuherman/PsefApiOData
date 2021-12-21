@@ -102,9 +102,9 @@ namespace PsefApiOData.Misc
         /// <summary>
         /// Send izin final data to OSS.
         /// </summary>
-        /// <param name="izinFinal">The izin final data.</param>
+        /// <param name="data">The izin final data.</param>
         /// <returns>OSS response.</returns>
-        public async Task<JObject> SendLicense(OssIzinFinal izinFinal)
+        public async Task<JObject> SendLicense(OssIzinFinal data)
         {
             string token = await _ossApi.Authenticate();
 
@@ -113,15 +113,20 @@ namespace PsefApiOData.Misc
                 return new JObject();
             }
 
-            string uri = _options.Value.IsStaging ? "/api/stagging/send/license/" : "/api/send/license/";
+            string uri = _options.Value.IsStaging ?
+                "/api/stagging/send/license/" :
+                "/api/send/license/";
 
             var content = new
             {
-                IZINFINAL = izinFinal
+                IZINFINAL = data
             };
 
+            string contentString = JsonConvert
+                .SerializeObject(content, _snakeSettings)
+                .Replace("izinfinal", "IZINFINAL");
             StringContent serializedContent = new StringContent(
-                JsonConvert.SerializeObject(content, _snakeSettings),
+                contentString,
                 Encoding.UTF8,
                 "application/json");
             JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
