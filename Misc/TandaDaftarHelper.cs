@@ -59,6 +59,7 @@ namespace PsefApiOData.Misc
             result.FullPath = _urlHelper.Content($"~/{result.DatePath}/{result.FileName}");
             string filePath = PrepareFileAndFolder(result.DatePath, result.FileName);
             PdfDocument document = new PdfDocument();
+            document.FileStructure.Version = PdfVersion.Version1_3;
             float top = 0;
 
             SetupPage(document);
