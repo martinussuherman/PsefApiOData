@@ -14,6 +14,12 @@ namespace PsefApiOData.Models
         public uint Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the associated Permohonan identifier..
+        /// </summary>
+        /// <value>The associated Permohonan identifier.</value>
+        public uint PermohonanId { get; set; }
+
+        /// <summary>
         /// Gets or sets the Perizinan number.
         /// </summary>
         /// <value>The Perizinan's number.</value>
