@@ -134,6 +134,41 @@ namespace PsefApiOData.Misc
             return response;
         }
 
+        /// <summary>
+        /// Request file izin from OSS.
+        /// </summary>
+        /// <param name="data">The receive file request data.</param>
+        /// <returns>OSS response.</returns>
+        public async Task<JObject> ReceiveFile(OssReceiveFileRequest data)
+        {
+            string token = await _ossApi.Authenticate();
+
+            if (token == null)
+            {
+                return new JObject();
+            }
+
+            string uri = _options.Value.IsStaging ?
+                "/api/stagging/get/receive-file-ds/" :
+                "/api/get/receive-file-ds/";
+
+            var content = new
+            {
+                RECEIVEFILEDS = data
+            };
+
+            string contentString = JsonConvert
+                .SerializeObject(content, _snakeSettings)
+                .Replace("receivefileds", "RECEIVEFILEDS");
+            StringContent serializedContent = new StringContent(
+                contentString,
+                Encoding.UTF8,
+                "application/json");
+            JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
+
+            return response;
+        }
+
         internal class UnderscorePropertyNamesContractResolver : DefaultContractResolver
         {
             internal UnderscorePropertyNamesContractResolver()
