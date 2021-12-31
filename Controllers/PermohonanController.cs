@@ -646,6 +646,7 @@ namespace PsefApiOData.Controllers
             var result = await GenerateAndSignPdfAsync(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                pemohon,
                 permohonan,
                 perizinan,
                 data.Nik,
@@ -1240,12 +1241,13 @@ namespace PsefApiOData.Controllers
         private async Task<GeneratePdfResult> GenerateAndSignPdfAsync(
             TandaDaftarHelper helper,
             OssFullInfo ossFullInfo,
+            Pemohon pemohon,
             Permohonan permohonan,
             Perizinan perizinan,
             string nik,
             string passphrase)
         {
-            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
+            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, pemohon, permohonan, perizinan);
             string folderPath = Path.Combine(_environment.WebRootPath, result.DatePath, result.FileName);
             result.SignResult = await _signatureService.SignPdfAsync(
                 folderPath,
@@ -1295,6 +1297,7 @@ namespace PsefApiOData.Controllers
             GeneratePdfResult result = await GenerateAndSignPdfAsync(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                pemohon,
                 update,
                 perizinan,
                 data.Nik,
