@@ -40,6 +40,14 @@ namespace PsefApiOData.Misc
             string nik,
             string passphrase)
         {
+#if OFFLINE_MODE
+            return new ElectronicSignatureResult
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                FailureContent = string.Empty
+            };
+#else
             FileStream readStream = File.OpenRead(filePath);
 
             try
@@ -84,10 +92,7 @@ namespace PsefApiOData.Misc
                         FailureContent = await response.Content.ReadAsStringAsync()
                     };
 
-#if !OFFLINE_MODE
                     File.Delete(filePath);
-#endif
-
                     log.Error(
                         "Proses e-signature gagal!!!\nStatus: {@Status}\nServer Response: {@Response}",
                         errorResult.StatusCode,
@@ -113,9 +118,7 @@ namespace PsefApiOData.Misc
                 log.Error("Proses e-signature gagal!!!\nMessage: {@Message}", e.Message);
                 readStream.Close();
 
-#if !OFFLINE_MODE
                 File.Delete(filePath);
-#endif
 
                 return new ElectronicSignatureResult
                 {
@@ -124,6 +127,7 @@ namespace PsefApiOData.Misc
                     FailureContent = e.Message
                 };
             }
+#endif
         }
         private Logger CreateLogger()
         {

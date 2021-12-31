@@ -650,6 +650,7 @@ namespace PsefApiOData.Controllers
             var result = GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                pemohon,
                 permohonan,
                 perizinan);
 
@@ -1242,10 +1243,11 @@ namespace PsefApiOData.Controllers
         private GeneratePdfResult GenerateAndSignPdf(
             TandaDaftarHelper helper,
             OssFullInfo ossFullInfo,
+            Pemohon pemohon,
             Permohonan permohonan,
             Perizinan perizinan)
         {
-            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, permohonan, perizinan);
+            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, pemohon, permohonan, perizinan);
             result.SignResult = new ElectronicSignatureResult
             {
                 IsSuccess = true,
@@ -1319,6 +1321,7 @@ namespace PsefApiOData.Controllers
             GeneratePdfResult result = GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 ossInfo,
+                pemohon,
                 update,
                 perizinan);
 

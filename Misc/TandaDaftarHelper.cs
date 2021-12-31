@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
@@ -40,17 +41,21 @@ namespace PsefApiOData.Misc
         /// Generate Tanda Daftar Pdf.
         /// </summary>
         /// <param name="ossInfo">Oss info.</param>
+        /// <param name="pemohon">Pemohon.</param>
         /// <param name="permohonan">Permohonan.</param>
         /// <param name="perizinan">Perizinan.</param>
         /// <returns>A GeneratePdfResult that contains information about generated pdf.</returns>
         public GeneratePdfResult GeneratePdf(
             OssFullInfo ossInfo,
+            Pemohon pemohon,
             Permohonan permohonan,
             Perizinan perizinan)
         {
+            Guid randomizer = Guid.NewGuid();
+
             GeneratePdfResult result = new GeneratePdfResult
             {
-                FileName = $"{ApiHelper.GetUserId(_httpContext.User)}.pdf",
+                FileName = $"{pemohon.UserId}-{randomizer.ToString()[..13]}.pdf",
                 DatePath = perizinan.IssuedAt.ToString(
                     "yyyy-MM-dd",
                     DateTimeFormatInfo.InvariantInfo)
