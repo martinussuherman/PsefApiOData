@@ -101,21 +101,12 @@ namespace PsefApiOData.Controllers
         /// Gets a single Pemohon.
         /// </summary>
         /// <remarks>
-        /// *Min role: Verifikator*
+        /// *Min role: None*
         /// </remarks>
         /// <param name="id">The requested Pemohon identifier.</param>
         /// <returns>The requested Pemohon.</returns>
         /// <response code="200">The Pemohon was successfully retrieved.</response>
         /// <response code="404">The Pemohon does not exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Verifikator,
-            ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
-            ApiRole.Dirjen,
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(PemohonUserInfo), Status200OK)]
