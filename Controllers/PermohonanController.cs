@@ -117,21 +117,12 @@ namespace PsefApiOData.Controllers
         /// Gets a single Permohonan.
         /// </summary>
         /// <remarks>
-        /// *Min role: Verifikator*
+        /// *Min role: None*
         /// </remarks>
         /// <param name="id">The requested Permohonan identifier.</param>
         /// <returns>The requested Permohonan.</returns>
         /// <response code="200">The Permohonan was successfully retrieved.</response>
         /// <response code="404">The Permohonan does not exist.</response>
-        [MultiRoleAuthorize(
-            ApiRole.Verifikator,
-            ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
-            ApiRole.Dirjen,
-            ApiRole.Admin,
-            ApiRole.SuperAdmin)]
         [ODataRoute(IdRoute)]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(Permohonan), Status200OK)]
@@ -139,6 +130,13 @@ namespace PsefApiOData.Controllers
         [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Select)]
         public SingleResult<Permohonan> Get([FromODataUri] uint id)
         {
+            if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
+            {
+                return SingleResult.Create(_context.Permohonan
+                    .Where(e => e.Id == id &&
+                    e.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User)));
+            }
+
             return SingleResult.Create(
                 _context.Permohonan.Where(e => e.Id == id));
         }
