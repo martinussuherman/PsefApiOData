@@ -57,16 +57,15 @@ namespace PsefApiOData.Controllers
             IOptions<OssApiOptions> ossOptions,
             IOptions<PermohonanEmailOptions> emailOptions)
         {
-            _ossApi = ossApi;
             _signatureService = signatureService;
             _smtpEmailService = smtpEmailService;
-            _memoryCache = memoryCache;
             _environment = environment;
             _signatureOptions = signatureOptions;
             _ossOptions = ossOptions;
             _emailOptions = emailOptions;
             _context = context;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
+            _ossHelper = new OssInfoHelper(ossApi, memoryCache, ossOptions);
             _helper = new PermohonanHelper(context);
         }
 
@@ -644,10 +643,9 @@ namespace PsefApiOData.Controllers
             Pemohon pemohon = await _context.Pemohon
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
-            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
             var result = GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
-                await ossInfoHelper.RetrieveInfo(pemohon.Nib),
+                await _ossHelper.RetrieveInfo(pemohon.Nib),
                 pemohon,
                 permohonan,
                 perizinan);
@@ -1293,8 +1291,7 @@ namespace PsefApiOData.Controllers
             Pemohon pemohon = await _context.Pemohon
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
-            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _memoryCache, _ossOptions);
-            OssFullInfo ossInfo = await ossInfoHelper.RetrieveInfo(pemohon.Nib);
+            OssFullInfo ossInfo = await _ossHelper.RetrieveInfo(pemohon.Nib);
             OssChecklist dataChecklist = ossInfo.DataChecklist
                 .FirstOrDefault(c => c.IdIzin == update.IdIzin);
             OssIzinFinal izinFinal = new OssIzinFinal
@@ -1311,7 +1308,7 @@ namespace PsefApiOData.Controllers
                 NomenklaturNomorIzin = _ossOptions.Value.NomenklaturNomorIzin
             };
 
-            JObject getIzinNumberResponse = await ossInfoHelper.SendLicense(izinFinal);
+            JObject getIzinNumberResponse = await _ossHelper.SendLicense(izinFinal);
             izinFinal.NomorIzin = perizinan.PerizinanNumber =
                 getIzinNumberResponse["responreceiveLicense"]["nomor_izin"].ToString();
             bool getNumberSuccess =
@@ -1340,7 +1337,7 @@ namespace PsefApiOData.Controllers
             {
                 izinFinal.FileIzin = izinFinal.FileLampiran =
                     $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{result.FullPath}";
-                JObject sendIzinResponse = await ossInfoHelper.SendLicense(izinFinal);
+                JObject sendIzinResponse = await _ossHelper.SendLicense(izinFinal);
                 sendLicenseSuccess =
                     sendIzinResponse["responreceiveLicense"]["kode"].ToObject<int>() == 200;
             }
@@ -1431,11 +1428,10 @@ namespace PsefApiOData.Controllers
         private readonly static Calculator _calculator = new Calculator();
         private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PermohonanHelper _helper;
+        private readonly OssInfoHelper _ossHelper;
         private readonly PsefMySqlContext _context;
-        private readonly IOssApiService _ossApi;
         private readonly ElectronicSignatureService _signatureService;
         private readonly SmtpEmailService _smtpEmailService;
-        private readonly IMemoryCache _memoryCache;
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
         private readonly IOptions<OssApiOptions> _ossOptions;
