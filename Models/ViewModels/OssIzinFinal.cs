@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace PsefApiOData.Models
 {
@@ -124,9 +122,9 @@ namespace PsefApiOData.Models
         public string FileLampiran { get; set; }
 
         /// <summary>
-        /// Gets or sets the Nib.
+        /// Gets or sets the list of data pnbp.
         /// </summary>
-        /// <value>The Nib.</value>
+        /// <value>The list of data pnbp.</value>
         public List<OssDataPnbp> DataPnbp { get; set; }
     }
 }
