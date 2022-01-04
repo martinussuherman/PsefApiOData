@@ -1336,7 +1336,7 @@ namespace PsefApiOData.Controllers
             if (getNumberSuccess)
             {
                 izinFinal.FileIzin = izinFinal.FileLampiran =
-                    $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{result.FullPath}";
+                    $"https://{HttpContext.Request.Host.Value}{result.FullPath}";
                 JObject sendIzinResponse = await _ossHelper.SendLicense(izinFinal);
                 sendLicenseSuccess =
                     sendIzinResponse["responreceiveLicense"]["kode"].ToObject<int>() == 200;
