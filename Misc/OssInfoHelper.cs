@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -130,6 +129,34 @@ namespace PsefApiOData.Misc
                 Encoding.UTF8,
                 "application/json");
             JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Send perizinan status data to OSS.
+        /// </summary>
+        /// <returns>OSS response.</returns>
+        public async Task<JObject> SendLicenseStatus(OssIzinStatus data)
+        {
+            string token = await _ossApi.Authenticate();
+
+            if (token == null)
+            {
+                return new JObject();
+            }
+
+            string uri = _options.Value.IsStaging ? "/api/stagging/send/license-status/" : "/api/send/license-status/";
+
+            var content = new
+            {
+                IZINSTATUS = data
+            };
+
+            JObject response = await _ossApi.CallApiAsync(
+                token,
+                uri,
+                new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json"));
 
             return response;
         }
