@@ -35,6 +35,22 @@ namespace PsefApiOData.Misc
         }
 
         /// <summary>
+        /// OSS Izin Status Enumeration.
+        /// </summary>
+        public enum StatusIzin
+        {
+            /// <summary>
+            /// Status Validasi.
+            /// </summary>
+            Validasi = 20,
+
+            /// <summary>
+            /// Status Ditolak.
+            /// </summary>
+            Ditolak = 90
+        }
+
+        /// <summary>
         /// Gets a single OSS Full Information.
         /// </summary>
         /// <param name="id">The requested OSS Full Information identifier.</param>
