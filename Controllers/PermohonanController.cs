@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using PsefApiOData.Misc;
@@ -39,7 +38,6 @@ namespace PsefApiOData.Controllers
         /// <param name="ossApi">Oss API service.</param>
         /// <param name="signatureService">Electronic Signature API service.</param>
         /// <param name="smtpEmailService">SMTP email service.</param>
-        /// <param name="memoryCache">Memory cache.</param>
         /// <param name="environment">Web Host environment.</param>
         /// <param name="signatureOptions">Electronic signature options.</param>
         /// <param name="ossOptions">OSS API configuration options.</param>
@@ -51,7 +49,6 @@ namespace PsefApiOData.Controllers
             IOssApiService ossApi,
             ElectronicSignatureService signatureService,
             SmtpEmailService smtpEmailService,
-            IMemoryCache memoryCache,
             IWebHostEnvironment environment,
             IOptions<ElectronicSignatureOptions> signatureOptions,
             IOptions<OssApiOptions> ossOptions,
@@ -65,7 +62,7 @@ namespace PsefApiOData.Controllers
             _emailOptions = emailOptions;
             _context = context;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
-            _ossHelper = new OssInfoHelper(ossApi, memoryCache, ossOptions);
+            _ossHelper = new OssInfoHelper(ossApi, ossOptions);
             _helper = new PermohonanHelper(context);
         }
 
