@@ -6,7 +6,6 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
@@ -27,14 +26,12 @@ namespace PsefApiOData.Controllers
         /// OSS Information REST service.
         /// </summary>
         /// <param name="ossApi">OSS Api service.</param>
-        /// <param name="memoryCache">Memory cache.</param>
         /// <param name="options">OSS API configuration options.</param>
         public OssInfoController(
             IOssApiService ossApi,
-            IMemoryCache memoryCache,
             IOptions<OssApiOptions> options)
         {
-            _helper = new OssInfoHelper(ossApi, memoryCache, options);
+            _helper = new OssInfoHelper(ossApi, options);
         }
 
         /// <summary>
