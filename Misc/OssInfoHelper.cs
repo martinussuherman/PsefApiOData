@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -48,6 +50,39 @@ namespace PsefApiOData.Misc
             /// Status Ditolak.
             /// </summary>
             Ditolak = 90
+        }
+
+        /// <summary>
+        /// Update OSS Izin Status.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <param name="permohonan">The permohonan information.</param>
+        /// <param name="status">The izin status to set.</param>
+        /// <returns>OSS response.</returns>
+        public async Task<JObject> UpdateLicenseStatusAsync(
+            PsefMySqlContext context,
+            Permohonan permohonan,
+            StatusIzin status)
+        {
+            Pemohon pemohon = await context.Pemohon
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
+            OssFullInfo ossInfo = await RetrieveInfo(pemohon.Nib);
+            OssChecklist dataChecklist = ossInfo.DataChecklist
+                .FirstOrDefault(c => c.IdIzin == permohonan.IdIzin);
+            OssIzinStatus ossData = new OssIzinStatus
+            {
+                Nib = pemohon.Nib,
+                IdProduk = dataChecklist.IdProduk,
+                IdProyek = dataChecklist.IdProyek,
+                OssId = ossInfo.OssId,
+                IdIzin = permohonan.IdIzin,
+                KdIzin = _options.Value.KodeIzin,
+                KdStatus = ((int)status).ToString(),
+                TglStatus = DateTime.Today.ToString("yyyy-MM-dd")
+            };
+
+            return await SendLicenseStatus(ossData);
         }
 
         /// <summary>
