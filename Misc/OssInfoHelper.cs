@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -24,15 +23,12 @@ namespace PsefApiOData.Misc
         /// Oss Information helpers.
         /// </summary>
         /// <param name="ossApi">OSS Api service.</param>
-        /// <param name="memoryCache">Memory cache.</param>
         /// <param name="options">OSS API configuration options.</param>
         public OssInfoHelper(
             IOssApiService ossApi,
-            IMemoryCache memoryCache,
             IOptions<OssApiOptions> options)
         {
             _ossApi = ossApi;
-            _memoryCache = memoryCache;
             _options = options;
         }
 
@@ -468,7 +464,6 @@ namespace PsefApiOData.Misc
             Keterangan = "NIB harus 13 karakter."
         };
         private readonly IOssApiService _ossApi;
-        private readonly IMemoryCache _memoryCache;
         private readonly IOptions<OssApiOptions> _options;
     }
 }
