@@ -1159,6 +1159,11 @@ namespace PsefApiOData.Controllers
 
             delegateAction?.Invoke(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
 
+            if (status == PermohonanStatus.Ditolak)
+            {
+                await _ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Ditolak);
+            }
+
             return NoContent();
         }
         private HistoryPermohonan CreateHistory(Permohonan permohonan, PermohonanSystemUpdate update)
