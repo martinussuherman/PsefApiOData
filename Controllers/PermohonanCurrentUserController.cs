@@ -297,6 +297,8 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
+            OssInfoHelper ossHelper = new OssInfoHelper(_ossApi, _ossOptions);
+            await ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Validasi);
             SendEmailPermohonanDiajukan(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
             return NoContent();
         }
