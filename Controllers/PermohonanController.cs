@@ -367,7 +367,7 @@ namespace PsefApiOData.Controllers
                     c.StatusId == PermohonanStatus.Diajukan.Id)
                 .CountAsync();
 
-            if (diajukanCount == _maxPermohonanDiajukan)
+            if (diajukanCount >= _maxPermohonanDiajukan)
             {
                 return await ProcessPermohonan(
                     data,
