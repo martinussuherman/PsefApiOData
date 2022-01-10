@@ -200,10 +200,14 @@ namespace PsefApiOData.Misc
                 IZINSTATUS = data
             };
 
-            JObject response = await _ossApi.CallApiAsync(
-                token,
-                uri,
-                new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json"));
+            string contentString = JsonConvert
+                .SerializeObject(content, _snakeSettings)
+                .Replace("izinstatus", "IZINSTATUS");
+            StringContent serializedContent = new StringContent(
+                contentString,
+                Encoding.UTF8,
+                "application/json");
+            JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
 
             return response;
         }
