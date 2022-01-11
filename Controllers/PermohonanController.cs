@@ -1159,7 +1159,7 @@ namespace PsefApiOData.Controllers
 
             delegateAction?.Invoke(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
 
-            if (status == PermohonanStatus.Ditolak)
+            if (status.Id == PermohonanStatus.Ditolak.Id)
             {
                 await _ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Ditolak);
             }
