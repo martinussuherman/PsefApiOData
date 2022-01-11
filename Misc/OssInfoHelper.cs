@@ -66,6 +66,16 @@ namespace PsefApiOData.Misc
             OssFullInfo ossInfo = await RetrieveInfo(pemohon.Nib);
             OssChecklist dataChecklist = ossInfo.DataChecklist
                 .FirstOrDefault(c => c.IdIzin == permohonan.IdIzin);
+            OssDataPnbpIzinStatus dataPnbp = new OssDataPnbpIzinStatus
+            {
+                KdAkun = string.Empty,
+                KdBilling = string.Empty,
+                KdPenerimaan = string.Empty,
+                Nominal = string.Empty,
+                TglBilling = string.Empty,
+                TglExpire = string.Empty,
+                UrlDokumen = string.Empty
+            };
             OssIzinStatus ossData = new OssIzinStatus
             {
                 Nib = pemohon.Nib,
@@ -75,7 +85,8 @@ namespace PsefApiOData.Misc
                 IdIzin = permohonan.IdIzin,
                 KdIzin = _options.Value.KodeIzin,
                 KdStatus = ((int)status).ToString(),
-                TglStatus = DateTime.Today.ToString("yyyy-MM-dd")
+                TglStatus = DateTime.Today.ToString("yyyy-MM-dd"),
+                DataPnbp = dataPnbp
             };
 
             return await SendLicenseStatus(ossData);
