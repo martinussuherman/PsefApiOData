@@ -53,11 +53,11 @@ namespace PsefApiOData.Controllers
 
             return Ok(new OssInfo
             {
-                Nib = fullInfo?.Nib ?? "",
-                Address = fullInfo?.AlamatPerseroan ?? "",
-                Name = fullInfo?.NamaPerseroan ?? "",
-                Npwp = fullInfo?.NpwpPerseroan ?? "",
-                Director = fullInfo?.NamaUserProses ?? ""
+                Nib = fullInfo?.Nib ?? string.Empty,
+                Address = fullInfo?.AlamatPerseroan ?? string.Empty,
+                Name = fullInfo?.NamaPerseroan ?? string.Empty,
+                Npwp = fullInfo?.NpwpPerseroan ?? string.Empty,
+                Director = fullInfo?.NamaUserProses ?? string.Empty
             });
         }
 
