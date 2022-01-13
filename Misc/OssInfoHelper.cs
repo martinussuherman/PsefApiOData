@@ -43,6 +43,11 @@ namespace PsefApiOData.Misc
             Validasi = 20,
 
             /// <summary>
+            /// Status Validasi.
+            /// </summary>
+            Disetujui = 50,
+
+            /// <summary>
             /// Status Ditolak.
             /// </summary>
             Ditolak = 90
