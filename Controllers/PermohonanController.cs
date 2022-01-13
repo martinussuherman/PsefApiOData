@@ -1145,6 +1145,27 @@ namespace PsefApiOData.Controllers
                 return NotFound();
             }
 
+            if (status.Id == PermohonanStatus.Ditolak.Id)
+            {
+                Pemohon pemohon = await _context.Pemohon
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
+                OssFullInfo ossInfo = await _ossHelper.RetrieveInfo(pemohon.Nib);
+                OssIzinFinal izinFinal = new OssIzinFinal();
+                OssSendLicenseResponse response = await _ossHelper.UpdateLicenseAsync(
+                    izinFinal,
+                    _ossOptions,
+                    ossInfo,
+                    pemohon,
+                    update,
+                    OssInfoHelper.StatusIzin.Ditolak);
+
+                if (!response.IsSuccess)
+                {
+                    return BadRequest();
+                }
+            }
+
             update.StatusId = status.Id;
             _context.HistoryPermohonan.Add(CreateHistory(update, data));
 
@@ -1158,11 +1179,6 @@ namespace PsefApiOData.Controllers
             }
 
             delegateAction?.Invoke(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
-
-            if (status.Id == PermohonanStatus.Ditolak.Id)
-            {
-                await _ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Ditolak);
-            }
 
             return NoContent();
         }
