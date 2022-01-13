@@ -166,13 +166,18 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <param name="data">The izin final data.</param>
         /// <returns>OSS response.</returns>
-        public async Task<JObject> SendLicense(OssIzinFinal data)
+        public async Task<OssSendLicenseResponse> SendLicense(OssIzinFinal data)
         {
             string token = await _ossApi.Authenticate();
 
             if (token == null)
             {
-                return new JObject();
+                return new OssSendLicenseResponse
+                {
+                    StatusCode = Status401Unauthorized,
+                    Information = "Authentication failed",
+                    LicenseNumber = string.Empty
+                };
             }
 
             string uri = _options.Value.IsStaging ?
@@ -193,7 +198,12 @@ namespace PsefApiOData.Misc
                 "application/json");
             JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
 
-            return response;
+            return new OssSendLicenseResponse
+            {
+                StatusCode = response["responreceiveLicense"]["kode"].ToObject<int>(),
+                Information = response["responreceiveLicense"]["keterangan"].ToString(),
+                LicenseNumber = response["responreceiveLicense"]["nomor_izin"].ToString()
+            };
         }
 
         /// <summary>
