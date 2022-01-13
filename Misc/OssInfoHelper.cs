@@ -200,13 +200,17 @@ namespace PsefApiOData.Misc
         /// Send perizinan status data to OSS.
         /// </summary>
         /// <returns>OSS response.</returns>
-        public async Task<JObject> SendLicenseStatus(OssIzinStatus data)
+        public async Task<OssResponse> SendLicenseStatus(OssIzinStatus data)
         {
             string token = await _ossApi.Authenticate();
 
             if (token == null)
             {
-                return new JObject();
+                return new OssResponse
+                {
+                    StatusCode = Status401Unauthorized,
+                    Information = "Authentication failed"
+                };
             }
 
             string uri = _options.Value.IsStaging ? "/api/stagging/send/license-status/" : "/api/send/license-status/";
@@ -225,7 +229,11 @@ namespace PsefApiOData.Misc
                 "application/json");
             JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
 
-            return response;
+            return new OssResponse
+            {
+                StatusCode = response["responreceiveLicenseStatus"]["kode"].ToObject<int>(),
+                Information = response["responreceiveLicenseStatus"]["keterangan"].ToString()
+            };
         }
 
         /// <summary>
