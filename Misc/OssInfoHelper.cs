@@ -98,6 +98,42 @@ namespace PsefApiOData.Misc
         }
 
         /// <summary>
+        /// Update OSS Izin.
+        /// </summary>
+        /// <param name="izinFinal">The izin final information.</param>
+        /// <param name="options">The OSS Api options.</param>
+        /// <param name="ossInfo">The OSS information.</param>
+        /// <param name="pemohon">The pemohon information.</param>
+        /// <param name="permohonan">The permohonan information.</param>
+        /// <param name="status">The izin status.</param>
+        /// <returns>OSS response.</returns>
+        public async Task<OssSendLicenseResponse> UpdateLicenseAsync(
+            OssIzinFinal izinFinal,
+            IOptions<OssApiOptions> options,
+            OssFullInfo ossInfo,
+            Pemohon pemohon,
+            Permohonan permohonan,
+            StatusIzin status)
+        {
+            OssChecklist dataChecklist = ossInfo.DataChecklist?
+                .FirstOrDefault(c => c.IdIzin == permohonan.IdIzin);
+
+            izinFinal.Nib = pemohon.Nib;
+            izinFinal.IdProduk = dataChecklist.IdProduk;
+            izinFinal.IdProyek = dataChecklist.IdProyek;
+            izinFinal.OssId = ossInfo.OssId;
+            izinFinal.IdIzin = permohonan.IdIzin;
+            izinFinal.KdIzin = options.Value.KodeIzin;
+            izinFinal.StatusIzin = ((int)status).ToString();
+            izinFinal.NomenklaturNomorIzin = options.Value.NomenklaturNomorIzin;
+
+            OssSendLicenseResponse response = await SendLicense(izinFinal);
+            response.IzinFinal = izinFinal;
+
+            return response;
+        }
+
+        /// <summary>
         /// Gets a single OSS Full Information.
         /// </summary>
         /// <param name="id">The requested OSS Full Information identifier.</param>
