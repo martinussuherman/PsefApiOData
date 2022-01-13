@@ -60,7 +60,7 @@ namespace PsefApiOData.Misc
         /// <param name="permohonan">The permohonan information.</param>
         /// <param name="status">The izin status to set.</param>
         /// <returns>OSS response.</returns>
-        public async Task<JObject> UpdateLicenseStatusAsync(
+        public async Task<OssResponse> UpdateLicenseStatusAsync(
             PsefMySqlContext context,
             Permohonan permohonan,
             StatusIzin status)
@@ -69,7 +69,7 @@ namespace PsefApiOData.Misc
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
             OssFullInfo ossInfo = await RetrieveInfo(pemohon.Nib);
-            OssChecklist dataChecklist = ossInfo.DataChecklist
+            OssChecklist dataChecklist = ossInfo.DataChecklist?
                 .FirstOrDefault(c => c.IdIzin == permohonan.IdIzin);
             OssDataPnbpIzinStatus dataPnbp = new OssDataPnbpIzinStatus
             {
@@ -84,8 +84,8 @@ namespace PsefApiOData.Misc
             OssIzinStatus ossData = new OssIzinStatus
             {
                 Nib = pemohon.Nib,
-                IdProduk = dataChecklist.IdProduk,
-                IdProyek = dataChecklist.IdProyek,
+                IdProduk = dataChecklist?.IdProduk ?? string.Empty,
+                IdProyek = dataChecklist?.IdProyek ?? string.Empty,
                 OssId = ossInfo.OssId,
                 IdIzin = permohonan.IdIzin,
                 KdIzin = _options.Value.KodeIzin,
