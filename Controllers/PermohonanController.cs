@@ -1412,9 +1412,9 @@ namespace PsefApiOData.Controllers
                 "Permohonan anda dikembalikan, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
                 _emailOptions.Value.To);
         }
-        private void SendEmailPermohonanDitolak(PemohonUserInfo info)
+        private async Task SendEmailPermohonanDitolakAsync(PemohonUserInfo info)
         {
-            _smtpEmailService.SendEmailAsync(
+            await _smtpEmailService.SendEmailAsync(
                 info.Email,
                 "Permohonan Ditolak",
                 "Mohon maaf, Permohonan anda telah ditolak, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
