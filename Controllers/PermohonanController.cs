@@ -1428,9 +1428,9 @@ namespace PsefApiOData.Controllers
                 "Permohonan anda telah diterbitkan perizinannya, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
                 _emailOptions.Value.To);
         }
-        private void SendEmailPerizinanHampirKadaluarsa(PemohonUserInfo info)
+        private async Task SendEmailPerizinanHampirKadaluarsaAsync(PemohonUserInfo info)
         {
-            _smtpEmailService.SendEmailAsync(
+            await _smtpEmailService.SendEmailAsync(
                 info.Email,
                 "Perizinan Hampir Habis",
                 "Perizinan anda sudah hampir habis masa berlakunya, mohon persiapkan untuk mengurus perpanjangannya.",
