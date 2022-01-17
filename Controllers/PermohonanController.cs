@@ -1420,9 +1420,9 @@ namespace PsefApiOData.Controllers
                 "Mohon maaf, Permohonan anda telah ditolak, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
                 _emailOptions.Value.To);
         }
-        private void SendEmailPerizinanDiterbitkan(PemohonUserInfo info)
+        private async Task SendEmailPerizinanDiterbitkanAsync(PemohonUserInfo info)
         {
-            _smtpEmailService.SendEmailAsync(
+            await _smtpEmailService.SendEmailAsync(
                 info.Email,
                 "Perizinan Telah Terbit",
                 "Permohonan anda telah diterbitkan perizinannya, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
