@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
@@ -299,7 +300,8 @@ namespace PsefApiOData.Controllers
 
             OssInfoHelper ossHelper = new OssInfoHelper(_ossApi, _ossOptions);
             await ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Validasi);
-            SendEmailPermohonanDiajukan(await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
+            await SendEmailPermohonanDiajukanAsync(
+                await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
             return NoContent();
         }
 
@@ -439,10 +441,11 @@ namespace PsefApiOData.Controllers
         {
             return _context.Permohonan.Any(e => e.Id == id);
         }
-        private void SendEmailPermohonanDiajukan(PemohonUserInfo info)
+        private async Task SendEmailPermohonanDiajukanAsync(PemohonUserInfo info)
         {
-            _smtpEmailService.SendEmailAsync(
-                _options.Value.To,
+            await _smtpEmailService.SendEmailAsync(
+                new MailAddress(_options.Value.To, _options.Value.ToDisplay ?? string.Empty),
+                new MailAddressCollection(),
                 "Permohonan Diajukan",
                 $"Pemohon {info.CompanyName} telah mengajukan Permohonan baru, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
         }
