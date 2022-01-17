@@ -15,5 +15,11 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <value>The Permohonan email To address.</value>
         public string To { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Permohonan email To displayed address.
+        /// </summary>
+        /// <value>The Permohonan email To displayed address.</value>
+        public string ToDisplay { get; set; }
     }
 }
