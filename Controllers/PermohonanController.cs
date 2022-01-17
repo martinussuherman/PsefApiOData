@@ -1310,27 +1310,21 @@ namespace PsefApiOData.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == update.PemohonId);
             OssFullInfo ossInfo = await _ossHelper.RetrieveInfo(pemohon.Nib);
-            OssChecklist dataChecklist = ossInfo.DataChecklist
-                .FirstOrDefault(c => c.IdIzin == update.IdIzin);
             OssIzinFinal izinFinal = new OssIzinFinal
             {
-                Nib = pemohon.Nib,
-                IdProduk = dataChecklist.IdProduk,
-                IdProyek = dataChecklist.IdProyek,
-                OssId = ossInfo.OssId,
-                IdIzin = update.IdIzin,
-                KdIzin = _ossOptions.Value.KodeIzin,
                 TglTerbitIzin = perizinan.IssuedAt.ToString("yyyy-MM-dd"),
                 TglBerlakuIzin = perizinan.ExpiredAt.ToString("yyyy-MM-dd"),
-                StatusIzin = "50",
-                NomenklaturNomorIzin = _ossOptions.Value.NomenklaturNomorIzin
             };
+            OssSendLicenseResponse getIzinNumberResponse = await _ossHelper.UpdateLicenseAsync(
+                izinFinal,
+                _ossOptions,
+                ossInfo,
+                pemohon,
+                update,
+                OssInfoHelper.StatusIzin.Disetujui);
 
-            JObject getIzinNumberResponse = await _ossHelper.SendLicense(izinFinal);
-            izinFinal.NomorIzin = perizinan.PerizinanNumber =
-                getIzinNumberResponse["responreceiveLicense"]["nomor_izin"].ToString();
-            bool getNumberSuccess =
-                getIzinNumberResponse["responreceiveLicense"]["kode"].ToObject<int>() == 200;
+            izinFinal = getIzinNumberResponse.IzinFinal;
+            izinFinal.NomorIzin = perizinan.PerizinanNumber = getIzinNumberResponse.LicenseNumber;
             GeneratePdfResult result = GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 ossInfo,
@@ -1338,7 +1332,7 @@ namespace PsefApiOData.Controllers
                 update,
                 perizinan);
 
-            if (!getNumberSuccess || !result.SignResult.IsSuccess)
+            if (!getIzinNumberResponse.IsSuccess || !result.SignResult.IsSuccess)
             {
                 perizinan.ExpiredAt = _invalidPerizinan;
                 perizinan.IssuedAt = _invalidPerizinan;
@@ -1351,13 +1345,13 @@ namespace PsefApiOData.Controllers
 
             bool sendLicenseSuccess = true;
 
-            if (getNumberSuccess)
+            if (getIzinNumberResponse.IsSuccess)
             {
                 izinFinal.FileIzin = izinFinal.FileLampiran =
                     $"https://{HttpContext.Request.Host.Value}{result.FullPath}";
-                JObject sendIzinResponse = await _ossHelper.SendLicense(izinFinal);
-                sendLicenseSuccess =
-                    sendIzinResponse["responreceiveLicense"]["kode"].ToObject<int>() == 200;
+
+                OssSendLicenseResponse sendIzinResponse = await _ossHelper.SendLicense(izinFinal);
+                sendLicenseSuccess = sendIzinResponse.IsSuccess;
             }
 
             if (update.PerizinanId == null)
@@ -1390,9 +1384,9 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            if (!getNumberSuccess || !sendLicenseSuccess || !result.SignResult.IsSuccess)
+            if (!getIzinNumberResponse.IsSuccess || !sendLicenseSuccess || !result.SignResult.IsSuccess)
             {
-                return BadRequest($"OSS Izin Number: {getNumberSuccess}, OSS Send License: {sendLicenseSuccess}, ESign: {result.SignResult.IsSuccess}");
+                return BadRequest($"OSS Izin Number: {getIzinNumberResponse.IsSuccess}, OSS Send License: {sendLicenseSuccess}, ESign: {result.SignResult.IsSuccess}");
             }
 
             update.StatusId = PermohonanStatus.Selesai.Id;
