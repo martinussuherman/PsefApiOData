@@ -1404,9 +1404,9 @@ namespace PsefApiOData.Controllers
 
             return NoContent();
         }
-        private void SendEmailPermohonanDikembalikan(PemohonUserInfo info)
+        private async Task SendEmailPermohonanDikembalikanAsync(PemohonUserInfo info)
         {
-            _smtpEmailService.SendEmailAsync(
+            await _smtpEmailService.SendEmailAsync(
                 info.Email,
                 "Permohonan Dikembalikan",
                 "Permohonan anda dikembalikan, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
