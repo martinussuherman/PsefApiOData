@@ -109,9 +109,7 @@ namespace PsefApiOData.Misc
                     _options.Value.Login :
                     _options.Value.From;
 
-                MailMessage mail = new MailMessage(
-                    new MailAddress(from, _options.Value.FromDisplay),
-                    receiver)
+                MailMessage mail = new MailMessage(new MailAddress(from, _options.Value.FromDisplay), receiver)
                 {
                     IsBodyHtml = true,
                     Subject = subject,
