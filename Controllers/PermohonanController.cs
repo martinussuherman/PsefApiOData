@@ -373,14 +373,14 @@ namespace PsefApiOData.Controllers
                     data,
                     _helper.Verifikator(),
                     PermohonanStatus.Ditolak,
-                    SendEmailPermohonanDitolak);
+                    SendEmailPermohonanDitolakAsync);
             }
 
             return await ProcessPermohonan(
                 data,
                 _helper.Verifikator(),
                 PermohonanStatus.DikembalikanVerifikator,
-                SendEmailPermohonanDikembalikan);
+                SendEmailPermohonanDikembalikanAsync);
         }
 
         /// <summary>
