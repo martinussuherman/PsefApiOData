@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using PsefApiOData.Models;
 
 namespace PsefApiOData.Misc
@@ -79,6 +81,21 @@ namespace PsefApiOData.Misc
             return _context.Permohonan
                 .Where(c =>
                     c.StatusId == PermohonanStatus.Ditolak.Id);
+        }
+
+        public HistoryPermohonan CreateHistory(
+            Permohonan permohonan,
+            PermohonanSystemUpdate update,
+            HttpContext httpContext)
+        {
+            return new HistoryPermohonan
+            {
+                PermohonanId = permohonan.Id,
+                StatusId = permohonan.StatusId,
+                Reason = update.Reason ?? string.Empty,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = ApiHelper.GetUserName(httpContext.User)
+            };
         }
 
         private readonly PsefMySqlContext _context;

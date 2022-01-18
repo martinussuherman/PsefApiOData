@@ -1167,7 +1167,7 @@ namespace PsefApiOData.Controllers
             }
 
             update.StatusId = status.Id;
-            _context.HistoryPermohonan.Add(CreateHistory(update, data));
+            _context.HistoryPermohonan.Add(_helper.CreateHistory(update, data, HttpContext));
 
             try
             {
@@ -1184,17 +1184,6 @@ namespace PsefApiOData.Controllers
             }
 
             return NoContent();
-        }
-        private HistoryPermohonan CreateHistory(Permohonan permohonan, PermohonanSystemUpdate update)
-        {
-            return new HistoryPermohonan
-            {
-                PermohonanId = permohonan.Id,
-                StatusId = permohonan.StatusId,
-                Reason = update.Reason ?? string.Empty,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = ApiHelper.GetUserName(HttpContext.User)
-            };
         }
         private async Task<List<PermohonanPemohon>> MergeList(
             List<Permohonan> permohonanList,
@@ -1394,7 +1383,7 @@ namespace PsefApiOData.Controllers
 
             update.StatusId = PermohonanStatus.Selesai.Id;
             _context.Entry(update).State = EntityState.Modified;
-            _context.HistoryPermohonan.Add(CreateHistory(update, data));
+            _context.HistoryPermohonan.Add(_helper.CreateHistory(update, data, HttpContext));
 
             try
             {
