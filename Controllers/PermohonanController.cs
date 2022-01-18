@@ -1405,6 +1405,8 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
+            await SendEmailPerizinanDiterbitkanAsync(
+                await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
             return NoContent();
         }
         private async Task SendEmailPermohonanDikembalikanAsync(PemohonUserInfo info)
