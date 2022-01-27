@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using PsefApiOData.Models;
 
 namespace PsefApiOData.Misc
 {
@@ -78,7 +79,8 @@ namespace PsefApiOData.Misc
         /// <returns>JObject retrieved from the OSS Api.</returns>
         public async Task<JObject> CallApiAsync(string token, string uri, HttpContent content)
         {
-            return await CallApiInternalAsync(new AuthenticationHeaderValue("Token", token), uri, content);
+            OssResponse response = await CallApiInternalAsync(new AuthenticationHeaderValue("Token", token), uri, content);
+            return response.Content;
         }
 
         /// <summary>
@@ -90,10 +92,11 @@ namespace PsefApiOData.Misc
         /// <returns>JObject retrieved from the OSS Api.</returns>
         public async Task<JObject> CallBearerAuthApiAsync(string token, string uri, HttpContent content)
         {
-            return await CallApiInternalAsync(new AuthenticationHeaderValue("Bearer", token), uri, content);
+            OssResponse response = await CallApiInternalAsync(new AuthenticationHeaderValue("Bearer", token), uri, content);
+            return response.Content;
         }
 
-        private async Task<JObject> CallApiInternalAsync(
+        private async Task<OssResponse> CallApiInternalAsync(
             AuthenticationHeaderValue authenticationHeader,
             string uri,
             HttpContent content)
@@ -105,13 +108,12 @@ namespace PsefApiOData.Misc
             request.Headers.Authorization = authenticationHeader;
             request.Content = content;
             HttpResponseMessage response = await _httpClient.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
+            return new OssResponse
             {
-                return default;
-            }
-
-            return JObject.Parse(await response.Content.ReadAsStringAsync());
+                StatusCode = (int)response.StatusCode,
+                Information = response.ReasonPhrase,
+                Content = JObject.Parse(await response?.Content?.ReadAsStringAsync() ?? string.Empty)
+            };
         }
 
         internal class OssToken
