@@ -1,6 +1,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using PsefApiOData.Models;
 
 namespace PsefApiOData.Misc
 {
@@ -21,8 +21,8 @@ namespace PsefApiOData.Misc
         /// <param name="token">Access token for the OSS Api.</param>
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
-        /// <returns>JObject retrieved from the OSS Api.</returns>
-        Task<JObject> CallApiAsync(string token, string uri, HttpContent content);
+        /// <returns>OSS response from the OSS Api.</returns>
+        Task<OssResponse> CallApiAsync(string token, string uri, HttpContent content);
 
         /// <summary>
         /// Call OSS Api with Bearer auth header.
@@ -30,7 +30,7 @@ namespace PsefApiOData.Misc
         /// <param name="token">Access token for the OSS Api.</param>
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
-        /// <returns>JObject retrieved from the OSS Api.</returns>
-        Task<JObject> CallBearerAuthApiAsync(string token, string uri, HttpContent content);
+        /// <returns>OSS response from the OSS Api.</returns>
+        Task<OssResponse> CallBearerAuthApiAsync(string token, string uri, HttpContent content);
     }
 }
