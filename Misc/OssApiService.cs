@@ -76,11 +76,10 @@ namespace PsefApiOData.Misc
         /// <param name="token">Access token for the OSS Api.</param>
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
-        /// <returns>JObject retrieved from the OSS Api.</returns>
-        public async Task<JObject> CallApiAsync(string token, string uri, HttpContent content)
+        /// <returns>OSS response from the OSS Api.</returns>
+        public async Task<OssResponse> CallApiAsync(string token, string uri, HttpContent content)
         {
-            OssResponse response = await CallApiInternalAsync(new AuthenticationHeaderValue("Token", token), uri, content);
-            return response.Content;
+            return await CallApiInternalAsync(new AuthenticationHeaderValue("Token", token), uri, content);
         }
 
         /// <summary>
@@ -89,11 +88,10 @@ namespace PsefApiOData.Misc
         /// <param name="token">Access token for the OSS Api.</param>
         /// <param name="uri">Uri of Api request.</param>
         /// <param name="content">Content of Api request.</param>
-        /// <returns>JObject retrieved from the OSS Api.</returns>
-        public async Task<JObject> CallBearerAuthApiAsync(string token, string uri, HttpContent content)
+        /// <returns>OSS response from the OSS Api.</returns>
+        public async Task<OssResponse> CallBearerAuthApiAsync(string token, string uri, HttpContent content)
         {
-            OssResponse response = await CallApiInternalAsync(new AuthenticationHeaderValue("Bearer", token), uri, content);
-            return response.Content;
+            return await CallApiInternalAsync(new AuthenticationHeaderValue("Bearer", token), uri, content);
         }
 
         private async Task<OssResponse> CallApiInternalAsync(
