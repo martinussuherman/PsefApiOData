@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 
 namespace PsefApiOData.Models
@@ -33,5 +34,11 @@ namespace PsefApiOData.Models
         /// </summary>
         /// <value>The response information.</value>
         public string Information { get; set; }
+
+        /// <summary>
+        /// Gets or sets the response content.
+        /// </summary>
+        /// <value>The response content.</value>
+        public JObject Content { get; set; }
     }
 }
