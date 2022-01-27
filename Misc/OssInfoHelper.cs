@@ -166,17 +166,17 @@ namespace PsefApiOData.Misc
 
             string uri = _options.Value.IsStaging ? "/api/stagging/inquery/nib/" : "/api/inquery/nib/";
 
-            JObject response = await _ossApi.CallApiAsync(
+            OssResponse response = await _ossApi.CallApiAsync(
                 token,
                 uri,
                 new FormUrlEncodedContent(formData));
 
-            if (response == null)
+            if (!response.IsSuccess)
             {
                 return _connectionErrorInfo;
             }
 
-            int status = response["responinqueryNIB"]["kode"].ToObject<int>();
+            int status = response.Content["responinqueryNIB"]["kode"].ToObject<int>();
 
             if (status != Status200OK)
             {
@@ -187,11 +187,11 @@ namespace PsefApiOData.Misc
                     AlamatPerseroan = string.Empty,
                     NpwpPerseroan = string.Empty,
                     NamaUserProses = string.Empty,
-                    Keterangan = response["responinqueryNIB"]["keterangan"].ToObject<string>()
+                    Keterangan = response.Content["responinqueryNIB"]["keterangan"].ToObject<string>()
                 };
             }
 
-            OssFullInfo apiData = response["responinqueryNIB"]["dataNIB"]
+            OssFullInfo apiData = response.Content["responinqueryNIB"]["dataNIB"]
                 .ToObject<OssFullInfo>(JsonSerializer.CreateDefault(_snakeSettings));
 
             return apiData;
