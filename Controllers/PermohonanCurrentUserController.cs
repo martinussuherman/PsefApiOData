@@ -31,25 +31,19 @@ namespace PsefApiOData.Controllers
         /// <param name="context">Database context.</param>
         /// <param name="delegateService">Api delegation service.</param>
         /// <param name="ossApi"></param>
-        /// <param name="smtpEmailService">SMTP email service.</param>
         /// <param name="identityApi">Identity Api service.</param>
-        /// <param name="options">Permohonan email options</param>
         /// <param name="ossOptions"></param>
         public PermohonanCurrentUserController(
             PsefMySqlContext context,
             IApiDelegateService delegateService,
             IOssApiService ossApi,
-            SmtpEmailService smtpEmailService,
             IIdentityApiService identityApi,
-            IOptions<PermohonanEmailOptions> options,
             IOptions<OssApiOptions> ossOptions)
         {
             _context = context;
             _delegateService = delegateService;
             _ossApi = ossApi;
-            _smtpEmailService = smtpEmailService;
             _identityApi = identityApi;
-            _options = options;
             _ossOptions = ossOptions;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
@@ -463,9 +457,7 @@ namespace PsefApiOData.Controllers
         private readonly PsefMySqlContext _context;
         private readonly IApiDelegateService _delegateService;
         private readonly IOssApiService _ossApi;
-        private readonly SmtpEmailService _smtpEmailService;
         private readonly IIdentityApiService _identityApi;
-        private readonly IOptions<PermohonanEmailOptions> _options;
         private readonly IOptions<OssApiOptions> _ossOptions;
         private readonly PemohonUserInfoHelper _pemohonHelper;
     }
