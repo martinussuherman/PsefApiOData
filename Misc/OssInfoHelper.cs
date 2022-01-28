@@ -283,12 +283,17 @@ namespace PsefApiOData.Misc
                 contentString,
                 Encoding.UTF8,
                 "application/json");
-            JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
+            OssResponse response = await _ossApi.CallApiAsync(token, uri, serializedContent);
+
+            if (!response.IsSuccess)
+            {
+                return response;
+            }
 
             return new OssResponse
             {
-                StatusCode = response["responreceiveLicenseStatus"]["kode"].ToObject<int>(),
-                Information = response["responreceiveLicenseStatus"]["keterangan"].ToString()
+                StatusCode = response.Content["responreceiveLicenseStatus"]["kode"].ToObject<int>(),
+                Information = response.Content["responreceiveLicenseStatus"]["keterangan"].ToString()
             };
         }
 
