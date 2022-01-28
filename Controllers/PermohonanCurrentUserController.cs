@@ -249,13 +249,18 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Min role: None*
         /// </remarks>
+        /// <param name="service">SMTP email service.</param>
+        /// <param name="options">Permohonan email options</param>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
-        public async Task<IActionResult> Ajukan([FromBody] PermohonanSystemUpdate data)
+        public async Task<IActionResult> Ajukan(
+            [FromServices] SmtpEmailService service,
+            [FromServices] IOptions<PermohonanEmailOptions> options,
+            [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
                 .Include(c => c.Pemohon)
