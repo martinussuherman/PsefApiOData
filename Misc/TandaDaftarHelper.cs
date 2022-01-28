@@ -62,7 +62,8 @@ namespace PsefApiOData.Misc
             };
 
             result.FullPath = _urlHelper.Content($"~/{result.DatePath}/{result.FileName}");
-            string filePath = PrepareFileAndFolder(result.DatePath, result.FileName);
+            FileAndPathHelper helper = new FileAndPathHelper();
+            string filePath = helper.PrepareFileAndFolder(_environment, result.DatePath, result.FileName);
             PdfDocument document = new PdfDocument();
             document.FileStructure.Version = PdfVersion.Version1_3;
             float top = 0;
@@ -85,25 +86,6 @@ namespace PsefApiOData.Misc
             document.Close(true);
 
             return result;
-        }
-
-        private string PrepareFileAndFolder(string datePath, string fileName)
-        {
-            string folderPath = Path.Combine(_environment.WebRootPath, datePath);
-
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
-
-            string filePath = Path.Combine(folderPath, fileName);
-
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-
-            return filePath;
         }
 
         private void SetupPage(PdfDocument document)
