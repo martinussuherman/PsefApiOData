@@ -306,6 +306,8 @@ namespace PsefApiOData.Controllers
             OssInfoHelper ossHelper = new OssInfoHelper(_ossApi, _ossOptions);
             await ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Validasi);
             await SendEmailPermohonanDiajukanAsync(
+                service,
+                options,
                 await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
             return NoContent();
         }
@@ -446,10 +448,13 @@ namespace PsefApiOData.Controllers
         {
             return _context.Permohonan.Any(e => e.Id == id);
         }
-        private async Task SendEmailPermohonanDiajukanAsync(PemohonUserInfo info)
+        private async Task SendEmailPermohonanDiajukanAsync(
+            SmtpEmailService service,
+            IOptions<PermohonanEmailOptions> options,
+            PemohonUserInfo info)
         {
-            await _smtpEmailService.SendEmailAsync(
-                new MailAddress(_options.Value.To, _options.Value.ToDisplay ?? string.Empty),
+            await service.SendEmailAsync(
+                new MailAddress(options.Value.To, options.Value.ToDisplay ?? string.Empty),
                 new MailAddressCollection(),
                 "Permohonan Diajukan",
                 $"Pemohon {info.CompanyName} telah mengajukan Permohonan baru, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
