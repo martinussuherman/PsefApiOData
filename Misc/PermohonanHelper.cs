@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using PsefApiOData.Models;
+using PsefApiOData.Models.ViewModels;
 
 namespace PsefApiOData.Misc
 {
@@ -96,6 +98,24 @@ namespace PsefApiOData.Misc
                 UpdatedAt = DateTime.Now,
                 UpdatedBy = ApiHelper.GetUserName(httpContext.User)
             };
+        }
+
+        public GeneratePdfResult GenerateAndSignPdf(
+            TandaDaftarHelper helper,
+            OssFullInfo ossFullInfo,
+            Pemohon pemohon,
+            Permohonan permohonan,
+            Perizinan perizinan)
+        {
+            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, pemohon, permohonan, perizinan);
+            result.SignResult = new ElectronicSignatureResult
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                FailureContent = string.Empty
+            };
+
+            return result;
         }
 
         private readonly PsefMySqlContext _context;
