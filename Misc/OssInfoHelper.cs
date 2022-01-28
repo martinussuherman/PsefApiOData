@@ -302,13 +302,17 @@ namespace PsefApiOData.Misc
         /// </summary>
         /// <param name="data">The receive file request data.</param>
         /// <returns>OSS response.</returns>
-        public async Task<JObject> ReceiveFile(OssReceiveFileRequest data)
+        public async Task<OssResponse> ReceiveFile(OssReceiveFileRequest data)
         {
             string token = await _ossApi.Authenticate();
 
             if (token == null)
             {
-                return new JObject();
+                return new OssResponse
+                {
+                    StatusCode = Status401Unauthorized,
+                    Information = "Authentication failed"
+                };
             }
 
             string uri = _options.Value.IsStaging ?
@@ -327,7 +331,12 @@ namespace PsefApiOData.Misc
                 contentString,
                 Encoding.UTF8,
                 "application/json");
-            JObject response = await _ossApi.CallApiAsync(token, uri, serializedContent);
+            OssResponse response = await _ossApi.CallApiAsync(token, uri, serializedContent);
+
+            if (!response.IsSuccess)
+            {
+                return response;
+            }
 
             return response;
         }
