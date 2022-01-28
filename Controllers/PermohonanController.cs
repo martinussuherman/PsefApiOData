@@ -640,7 +640,7 @@ namespace PsefApiOData.Controllers
             Pemohon pemohon = await _context.Pemohon
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == permohonan.PemohonId);
-            var result = GenerateAndSignPdf(
+            var result = _helper.GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 await _ossHelper.RetrieveInfo(pemohon.Nib),
                 pemohon,
@@ -1246,23 +1246,6 @@ namespace PsefApiOData.Controllers
         {
             return RomanNumberHelper.ToRomanNumber(date.Month);
         }
-        private GeneratePdfResult GenerateAndSignPdf(
-            TandaDaftarHelper helper,
-            OssFullInfo ossFullInfo,
-            Pemohon pemohon,
-            Permohonan permohonan,
-            Perizinan perizinan)
-        {
-            GeneratePdfResult result = helper.GeneratePdf(ossFullInfo, pemohon, permohonan, perizinan);
-            result.SignResult = new ElectronicSignatureResult
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                FailureContent = string.Empty
-            };
-
-            return result;
-        }
         private async Task<IActionResult> SelesaikanPermohonan(
             PermohonanSystemUpdate data,
             Permohonan update)
@@ -1317,7 +1300,7 @@ namespace PsefApiOData.Controllers
 
             izinFinal = getIzinNumberResponse.IzinFinal;
             izinFinal.NomorIzin = perizinan.PerizinanNumber = getIzinNumberResponse.LicenseNumber;
-            GeneratePdfResult result = GenerateAndSignPdf(
+            GeneratePdfResult result = _helper.GenerateAndSignPdf(
                 new TandaDaftarHelper(_environment, HttpContext, Url, _signatureOptions),
                 ossInfo,
                 pemohon,
