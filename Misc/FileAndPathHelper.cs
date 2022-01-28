@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace PsefApiOData.Misc
@@ -41,6 +42,28 @@ namespace PsefApiOData.Misc
             }
 
             return true;
+        }
+
+        public string PrepareFileAndFolder(
+            IWebHostEnvironment environment,
+            string datePath,
+            string fileName)
+        {
+            string folderPath = Path.Combine(environment.WebRootPath, datePath);
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            string filePath = Path.Combine(folderPath, fileName);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            return filePath;
         }
     }
 }
