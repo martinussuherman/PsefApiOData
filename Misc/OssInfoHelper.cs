@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -301,8 +302,9 @@ namespace PsefApiOData.Misc
         /// Request file izin from OSS.
         /// </summary>
         /// <param name="data">The receive file request data.</param>
+        /// <param name="savedFilePath">The saved file path.</param>
         /// <returns>OSS response.</returns>
-        public async Task<OssResponse> ReceiveFile(OssReceiveFileRequest data)
+        public async Task<OssResponse> ReceiveFile(OssReceiveFileRequest data, string savedFilePath)
         {
             string token = await _ossApi.Authenticate();
 
@@ -338,6 +340,22 @@ namespace PsefApiOData.Misc
                 return response;
             }
 
+            string fileUrl = response.Content["respongetFileDS"].Values<string>("url_file").LastOrDefault();
+            WebClient webClient = new WebClient();
+            webClient.Headers.Add(HttpRequestHeader.Authorization, $"Token {token}");
+
+            try
+            {
+                await webClient.DownloadFileTaskAsync(fileUrl, savedFilePath);
+            }
+            catch (WebException e)
+            {
+                response.StatusCode = (int)HttpStatusCode.Forbidden;
+                response.Information = e.Message;
+            }
+
+            response.StatusCode = (int)HttpStatusCode.OK;
+            response.Information = savedFilePath;
             return response;
         }
 
