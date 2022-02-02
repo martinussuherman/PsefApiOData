@@ -61,6 +61,12 @@ namespace PsefApiOData.Models
         public string TandaDaftarUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the Perizinan OSS document url.
+        /// </summary>
+        /// <value>The Perizinan's OSS document url.</value>
+        public string OssIzinUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets Permohonan associated with the Perizinan.
         /// </summary>
         /// <value>The associated Permohonan.</value>
