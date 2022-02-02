@@ -559,6 +559,13 @@ namespace PsefApiOData.Models
 
                 entity.Property(e => e.IssuedAt).HasColumnType("date");
 
+                entity.Property(e => e.OssIzinUrl)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("''")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.Property(e => e.PerizinanNumber)
                     .IsRequired()
                     .HasColumnType("tinytext")
