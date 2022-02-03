@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
@@ -64,6 +64,10 @@ namespace PsefApiOData.Controllers
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
             _ossHelper = new OssInfoHelper(ossApi, ossOptions);
             _helper = new PermohonanHelper(context);
+            _defaultCc = new MailAddressCollection
+            {
+                new MailAddress(_emailOptions.Value.To, _emailOptions.Value.ToDisplay ?? string.Empty)
+            };
         }
 
         /// <summary>
@@ -1415,6 +1419,7 @@ namespace PsefApiOData.Controllers
         }
 
         private readonly static Calculator _calculator = new Calculator();
+        private readonly MailAddressCollection _defaultCc;
         private readonly PemohonUserInfoHelper _pemohonHelper;
         private readonly PermohonanHelper _helper;
         private readonly OssInfoHelper _ossHelper;
