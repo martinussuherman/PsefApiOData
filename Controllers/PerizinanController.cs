@@ -301,12 +301,17 @@ namespace PsefApiOData.Controllers
         {
             IQueryable<Perizinan> query = _context.Perizinan
                 .Include(e => e.Permohonan)
-                .Include(e => e.Permohonan.Pemohon)
-                .Where(e => e.Id == perizinanId);
+                .Include(e => e.Permohonan.Pemohon);
 
             if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
             {
-                query = query.Where(e => e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+                query = query.Where(e =>
+                    e.Id == perizinanId &&
+                    e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+            }
+            else
+            {
+                query = query.Where(e => e.Id == perizinanId);
             }
 
             Perizinan data = await query.FirstOrDefaultAsync();
