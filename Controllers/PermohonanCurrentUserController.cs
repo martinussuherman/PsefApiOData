@@ -41,9 +41,7 @@ namespace PsefApiOData.Controllers
             IOptions<OssApiOptions> ossOptions)
         {
             _context = context;
-            _delegateService = delegateService;
             _ossApi = ossApi;
-            _identityApi = identityApi;
             _ossOptions = ossOptions;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
@@ -455,9 +453,7 @@ namespace PsefApiOData.Controllers
         }
 
         private readonly PsefMySqlContext _context;
-        private readonly IApiDelegateService _delegateService;
         private readonly IOssApiService _ossApi;
-        private readonly IIdentityApiService _identityApi;
         private readonly IOptions<OssApiOptions> _ossOptions;
         private readonly PemohonUserInfoHelper _pemohonHelper;
     }
