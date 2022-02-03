@@ -36,7 +36,6 @@ namespace PsefApiOData.Controllers
         /// <param name="delegateService">API delegation service.</param>
         /// <param name="identityApi">Identity API service.</param>
         /// <param name="ossApi">Oss API service.</param>
-        /// <param name="signatureService">Electronic Signature API service.</param>
         /// <param name="smtpEmailService">SMTP email service.</param>
         /// <param name="environment">Web Host environment.</param>
         /// <param name="signatureOptions">Electronic signature options.</param>
@@ -47,14 +46,12 @@ namespace PsefApiOData.Controllers
             IApiDelegateService delegateService,
             IIdentityApiService identityApi,
             IOssApiService ossApi,
-            ElectronicSignatureService signatureService,
             SmtpEmailService smtpEmailService,
             IWebHostEnvironment environment,
             IOptions<ElectronicSignatureOptions> signatureOptions,
             IOptions<OssApiOptions> ossOptions,
             IOptions<PermohonanEmailOptions> emailOptions)
         {
-            _signatureService = signatureService;
             _smtpEmailService = smtpEmailService;
             _environment = environment;
             _signatureOptions = signatureOptions;
@@ -1424,7 +1421,6 @@ namespace PsefApiOData.Controllers
         private readonly PermohonanHelper _helper;
         private readonly OssInfoHelper _ossHelper;
         private readonly PsefMySqlContext _context;
-        private readonly ElectronicSignatureService _signatureService;
         private readonly SmtpEmailService _smtpEmailService;
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
