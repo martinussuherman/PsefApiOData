@@ -23,6 +23,10 @@ namespace PsefApiOData.Configuration
                .EntityType;
 
             perizinan.Collection
+                .Function(nameof(PerizinanController.DownloadFileIzinOss))
+                .Returns<string>();
+
+            perizinan.Collection
                 .Function(nameof(PerizinanController.HalamanMuka))
                 .Returns<PerizinanHalamanMuka>();
 
