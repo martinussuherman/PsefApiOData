@@ -29,21 +29,9 @@ namespace PsefApiOData.Controllers
         /// Permohonan for current user REST service.
         /// </summary>
         /// <param name="context">Database context.</param>
-        /// <param name="delegateService">Api delegation service.</param>
-        /// <param name="ossApi"></param>
-        /// <param name="identityApi">Identity Api service.</param>
-        /// <param name="ossOptions"></param>
-        public PermohonanCurrentUserController(
-            PsefMySqlContext context,
-            IApiDelegateService delegateService,
-            IOssApiService ossApi,
-            IIdentityApiService identityApi,
-            IOptions<OssApiOptions> ossOptions)
+        public PermohonanCurrentUserController(PsefMySqlContext context)
         {
             _context = context;
-            _ossApi = ossApi;
-            _ossOptions = ossOptions;
-            _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
 
         /// <summary>
@@ -243,6 +231,10 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="service">SMTP email service.</param>
         /// <param name="options">Permohonan email options</param>
+        /// <param name="ossApi">OSS API service</param>
+        /// <param name="ossOptions">OSS API options</param>
+        /// <param name="delegateService">Api delegation service.</param>
+        /// <param name="identityApi">Identity Api service.</param>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
         [HttpPost]
@@ -252,6 +244,10 @@ namespace PsefApiOData.Controllers
         public async Task<IActionResult> Ajukan(
             [FromServices] SmtpEmailService service,
             [FromServices] IOptions<PermohonanEmailOptions> options,
+            [FromServices] IOssApiService ossApi,
+            [FromServices] IOptions<OssApiOptions> ossOptions,
+            [FromServices] IApiDelegateService delegateService,
+            [FromServices] IIdentityApiService identityApi,
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -269,8 +265,8 @@ namespace PsefApiOData.Controllers
 
             if (update.StatusId == PermohonanStatus.Dibuat.Id)
             {
-                CounterHelper helper = new CounterHelper(_context);
-                update.PermohonanNumber = await helper.GetFormNumber(CounterType.Permohonan);
+                CounterHelper counterHelper = new CounterHelper(_context);
+                update.PermohonanNumber = await counterHelper.GetFormNumber(CounterType.Permohonan);
             }
 
             update.StatusId = PermohonanStatus.Diajukan.Id;
@@ -295,12 +291,13 @@ namespace PsefApiOData.Controllers
                 throw;
             }
 
-            OssInfoHelper ossHelper = new OssInfoHelper(_ossApi, _ossOptions);
+            PemohonUserInfoHelper helper = new PemohonUserInfoHelper(_context, delegateService, identityApi);
+            OssInfoHelper ossHelper = new OssInfoHelper(ossApi, ossOptions);
             await ossHelper.UpdateLicenseStatusAsync(_context, update, OssInfoHelper.StatusIzin.Validasi);
             await SendEmailPermohonanDiajukanAsync(
                 service,
                 options,
-                await _pemohonHelper.Retrieve((uint)update.PemohonId, HttpContext));
+                await helper.Retrieve((uint)update.PemohonId, HttpContext));
             return NoContent();
         }
 
@@ -453,8 +450,5 @@ namespace PsefApiOData.Controllers
         }
 
         private readonly PsefMySqlContext _context;
-        private readonly IOssApiService _ossApi;
-        private readonly IOptions<OssApiOptions> _ossOptions;
-        private readonly PemohonUserInfoHelper _pemohonHelper;
     }
 }
