@@ -1388,34 +1388,34 @@ namespace PsefApiOData.Controllers
         private async Task SendEmailPermohonanDikembalikanAsync(PemohonUserInfo info)
         {
             await _smtpEmailService.SendEmailAsync(
-                info.Email,
+                new MailAddress(info.Email, info.CompanyName),
+                _defaultCc,
                 "Permohonan Dikembalikan",
-                "Permohonan anda dikembalikan, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
-                _emailOptions.Value.To);
+                "Permohonan anda dikembalikan, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
         }
         private async Task SendEmailPermohonanDitolakAsync(PemohonUserInfo info)
         {
             await _smtpEmailService.SendEmailAsync(
-                info.Email,
+                new MailAddress(info.Email, info.CompanyName),
+                _defaultCc,
                 "Permohonan Ditolak",
-                "Mohon maaf, Permohonan anda telah ditolak, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
-                _emailOptions.Value.To);
+                "Mohon maaf, Permohonan anda ditolak, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
         }
         private async Task SendEmailPerizinanDiterbitkanAsync(PemohonUserInfo info)
         {
             await _smtpEmailService.SendEmailAsync(
-                info.Email,
+                new MailAddress(info.Email, info.CompanyName),
+                _defaultCc,
                 "Perizinan Telah Terbit",
-                "Permohonan anda telah diterbitkan perizinannya, silahkan login ke dalam aplikasi PSEF untuk melihatnya.",
-                _emailOptions.Value.To);
+                "Permohonan anda telah diterbitkan perizinannya, silahkan login ke dalam aplikasi PSEF untuk melihatnya.");
         }
         private async Task SendEmailPerizinanHampirKadaluarsaAsync(PemohonUserInfo info)
         {
             await _smtpEmailService.SendEmailAsync(
-                info.Email,
+                new MailAddress(info.Email, info.CompanyName),
+                _defaultCc,
                 "Perizinan Hampir Habis",
-                "Perizinan anda sudah hampir habis masa berlakunya, mohon persiapkan untuk mengurus perpanjangannya.",
-                _emailOptions.Value.To);
+                "Perizinan anda sudah hampir habis masa berlakunya, mohon persiapkan untuk mengurus perpanjangannya.");
         }
 
         private readonly static Calculator _calculator = new Calculator();
