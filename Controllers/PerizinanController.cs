@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,8 +9,10 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -273,6 +276,74 @@ namespace PsefApiOData.Controllers
             }
 
             return Updated(_mapper.Map<Perizinan, PerizinanView>(item));
+        }
+
+        /// <summary>
+        /// Downloads and retrieves file izin OSS url.
+        /// </summary>
+        /// <remarks>
+        /// *Min role: None*
+        /// </remarks>
+        /// <param name="environment">Injected Web Host environment.</param>
+        /// <param name="ossApi">Injected OSS Api service.</param>
+        /// <param name="options">Injected OSS Api configuration options.</param>
+        /// <param name="perizinanId">The requested Perizinan identifier.</param>
+        /// <returns>File izin OSS url.</returns>
+        /// <response code="200">File izin OSS successfully downloaded.</response>
+        [HttpGet]
+        [Produces(JsonOutput)]
+        [ProducesResponseType(typeof(string), Status200OK)]
+        public async Task<IActionResult> DownloadFileIzinOss(
+            [FromServices] IWebHostEnvironment environment,
+            [FromServices] IOssApiService ossApi,
+            [FromServices] IOptions<OssApiOptions> options,
+            [FromQuery] uint perizinanId)
+        {
+            IQueryable<Perizinan> query = _context.Perizinan
+                .Include(e => e.Permohonan)
+                .Include(e => e.Permohonan.Pemohon)
+                .Where(e => e.Id == perizinanId);
+
+            if (string.IsNullOrEmpty(ApiHelper.GetUserRole(HttpContext.User)))
+            {
+                query = query.Where(e => e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User));
+            }
+
+            Perizinan data = await query.FirstOrDefaultAsync();
+
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(data.OssIzinUrl))
+            {
+                return Ok(data.OssIzinUrl);
+            }
+
+            OssReceiveFileRequest request = new OssReceiveFileRequest
+            {
+                IdIzin = data?.Permohonan?.IdIzin ?? string.Empty,
+                Nib = data?.Permohonan?.Pemohon?.Nib ?? string.Empty
+            };
+
+            string fileName = $"{Guid.NewGuid():N}.pdf";
+            string datePath = data.IssuedAt.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
+            string savedPath = Url.Content($"~/{datePath}/{fileName}");
+            FileAndPathHelper pathHelper = new FileAndPathHelper();
+            string filePath = pathHelper.PrepareFileAndFolder(environment, datePath, fileName);
+            OssInfoHelper helper = new OssInfoHelper(ossApi, options);
+            OssResponse response = await helper.ReceiveFile(request, filePath);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.StatusCode);
+            }
+
+            data.OssIzinUrl = savedPath;
+            await _context.SaveChangesAsync();
+
+            return Ok(savedPath);
         }
 
         /// <summary>
