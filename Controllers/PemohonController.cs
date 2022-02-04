@@ -42,10 +42,9 @@ namespace PsefApiOData.Controllers
             IOssApiService ossApi,
             IOptions<OssApiOptions> options)
         {
-            _ossApi = ossApi;
-            _options = options;
             _context = context;
             _mapper = mapper;
+            _ossInfoHelper = new OssInfoHelper(ossApi, options);
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
         }
 
@@ -479,8 +478,7 @@ namespace PsefApiOData.Controllers
 
         private async Task<bool> CheckNibAndUpdatePemohon(Pemohon data)
         {
-            OssInfoHelper ossInfoHelper = new OssInfoHelper(_ossApi, _options);
-            OssFullInfo ossFullInfo = await ossInfoHelper.RetrieveInfo(data.Nib);
+            OssFullInfo ossFullInfo = await _ossInfoHelper.RetrieveInfo(data.Nib);
 
             if (string.IsNullOrEmpty(ossFullInfo.Nib))
             {
@@ -517,9 +515,8 @@ namespace PsefApiOData.Controllers
         }
 
         private readonly PemohonUserInfoHelper _pemohonHelper;
+        private readonly OssInfoHelper _ossInfoHelper;
         private readonly PsefMySqlContext _context;
         private readonly IMapper _mapper;
-        private readonly IOssApiService _ossApi;
-        private readonly IOptions<OssApiOptions> _options;
     }
 }
