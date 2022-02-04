@@ -1155,7 +1155,6 @@ namespace PsefApiOData.Controllers
                 OssIzinFinal izinFinal = new OssIzinFinal();
                 OssSendLicenseResponse response = await _ossHelper.UpdateLicenseAsync(
                     izinFinal,
-                    _ossOptions,
                     ossInfo,
                     pemohon,
                     update,
@@ -1293,7 +1292,6 @@ namespace PsefApiOData.Controllers
             };
             OssSendLicenseResponse getIzinNumberResponse = await _ossHelper.UpdateLicenseAsync(
                 izinFinal,
-                _ossOptions,
                 ossInfo,
                 pemohon,
                 update,
