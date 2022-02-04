@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using PsefApiOData.Misc;
 using PsefApiOData.Models;
 using PsefApiOData.Models.ViewModels;
@@ -55,15 +54,13 @@ namespace PsefApiOData.Controllers
             _smtpEmailService = smtpEmailService;
             _environment = environment;
             _signatureOptions = signatureOptions;
-            _ossOptions = ossOptions;
-            _emailOptions = emailOptions;
             _context = context;
             _pemohonHelper = new PemohonUserInfoHelper(context, delegateService, identityApi);
             _ossHelper = new OssInfoHelper(ossApi, ossOptions);
             _helper = new PermohonanHelper(context);
             _defaultCc = new MailAddressCollection
             {
-                new MailAddress(_emailOptions.Value.To, _emailOptions.Value.ToDisplay ?? string.Empty)
+                new MailAddress(emailOptions.Value.To, emailOptions.Value.ToDisplay ?? string.Empty)
             };
         }
 
@@ -1422,8 +1419,6 @@ namespace PsefApiOData.Controllers
         private readonly SmtpEmailService _smtpEmailService;
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
-        private readonly IOptions<OssApiOptions> _ossOptions;
-        private readonly IOptions<PermohonanEmailOptions> _emailOptions;
         private readonly DateTime _invalidPerizinan = new DateTime(1901, 1, 1);
         private const int _perizinanYears = 5;
         private const int _maxPermohonanDiajukan = 3;
