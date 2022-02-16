@@ -339,6 +339,11 @@ namespace PsefApiOData.Misc
             }
 
             string fileUrl = response.Content["respongetFileDS"].Values<string>("url_file").LastOrDefault();
+            return await DownloadFileAsync(token, fileUrl, savedFilePath);
+        }
+
+        private async Task<OssResponse> DownloadFileAsync(string token, string fileUrl, string savedFilePath)
+        {
             WebClient webClient = new WebClient();
             webClient.Headers.Add(HttpRequestHeader.Authorization, $"Token {token}");
 
@@ -348,13 +353,18 @@ namespace PsefApiOData.Misc
             }
             catch (WebException e)
             {
-                response.StatusCode = (int)HttpStatusCode.Forbidden;
-                response.Information = e.Message;
+                return new OssResponse
+                {
+                    StatusCode = (int)HttpStatusCode.Forbidden,
+                    Information = e.Message
+                };
             }
 
-            response.StatusCode = (int)HttpStatusCode.OK;
-            response.Information = savedFilePath;
-            return response;
+            return new OssResponse
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Information = savedFilePath
+            };
         }
 
         internal class UnderscorePropertyNamesContractResolver : DefaultContractResolver
