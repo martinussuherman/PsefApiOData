@@ -338,7 +338,7 @@ namespace PsefApiOData.Controllers
             FileAndPathHelper pathHelper = new FileAndPathHelper();
             string filePath = pathHelper.PrepareFileAndFolder(environment, datePath, fileName);
             OssInfoHelper helper = new OssInfoHelper(ossApi, options);
-            OssResponse response = await helper.ReceiveFile(request, filePath);
+            OssResponse response = await helper.InquiryFile(request, filePath);
 
             if (!response.IsSuccess)
             {
