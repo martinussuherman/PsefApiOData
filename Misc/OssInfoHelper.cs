@@ -342,6 +342,53 @@ namespace PsefApiOData.Misc
             return await DownloadFileAsync(token, fileUrl, savedFilePath);
         }
 
+        /// <summary>
+        /// Request file izin from OSS via InquiryFile API.
+        /// </summary>
+        /// <param name="data">The receive file request data.</param>
+        /// <param name="savedFilePath">The saved file path.</param>
+        /// <returns>OSS response.</returns>
+        public async Task<OssResponse> InquiryFile(OssReceiveFileRequest data, string savedFilePath)
+        {
+            string token = await _ossApi.Authenticate();
+
+            if (token == null)
+            {
+                return new OssResponse
+                {
+                    StatusCode = Status401Unauthorized,
+                    Information = "Authentication failed"
+                };
+            }
+
+            string uri = _options.Value.IsStaging ?
+                "/api/stagging/inquery/file-ds/" :
+                "/api/inquery/file-ds/";
+
+            Dictionary<string, string> formData = new Dictionary<string, string>();
+            formData.Add("id_permohonan_izin", data.IdIzin);
+            OssResponse response = await _ossApi.CallApiAsync(token, uri, new FormUrlEncodedContent(formData));
+
+            if (!response.IsSuccess)
+            {
+                return response;
+            }
+
+            int status = response.Content["responInqueryFileDS"]["status"].ToObject<int>();
+
+            if (status != (int)HttpStatusCode.OK)
+            {
+                return new OssResponse
+                {
+                    StatusCode = status,
+                    Information = response.Content["responInqueryFileDS"]["keterangan"].ToObject<string>()
+                };
+            }
+
+            string fileUrl = response.Content["responInqueryFileDS"]["view_file_ds"].ToObject<string>();
+            return await DownloadFileAsync(token, fileUrl, savedFilePath);
+        }
+
         private async Task<OssResponse> DownloadFileAsync(string token, string fileUrl, string savedFilePath)
         {
             WebClient webClient = new WebClient();
