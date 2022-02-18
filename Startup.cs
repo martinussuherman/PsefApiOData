@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
@@ -141,6 +141,7 @@ namespace PsefApiOData
             services.Configure<OssApiOptions>(Configuration.GetSection(OssApiOptions.OptionsName));
             services.Configure<SmtpOptions>(Configuration.GetSection(SmtpOptions.OptionsName));
             services.Configure<PermohonanEmailOptions>(Configuration.GetSection(PermohonanEmailOptions.OptionsName));
+            services.Configure<PerizinanOptions>(Configuration.GetSection(PerizinanOptions.OptionsName));
             services.AddTransient<FileOperation>();
             services.AddTransient<SmtpEmailService>();
             services.AddHttpClient<IApiDelegateService, ApiDelegateService>();
