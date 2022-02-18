@@ -580,7 +580,7 @@ namespace PsefApiOData.Controllers
                     c.Id == data.PermohonanId &&
                     c.StatusId == PermohonanStatus.DisetujuiDirekturPelayananFarmasi.Id);
 
-            return await SelesaikanPermohonan(data, update);
+            return await SelesaikanPermohonan(options, data, update);
         }
 
         /// <summary>
@@ -606,7 +606,7 @@ namespace PsefApiOData.Controllers
                     c.Id == data.PermohonanId &&
                     c.StatusId == PermohonanStatus.DisetujuiDirekturJenderal.Id);
 
-            return await SelesaikanPermohonan(data, update);
+            return await SelesaikanPermohonan(options, data, update);
         }
 
         /// <summary>
@@ -1248,6 +1248,7 @@ namespace PsefApiOData.Controllers
             return RomanNumberHelper.ToRomanNumber(date.Month);
         }
         private async Task<IActionResult> SelesaikanPermohonan(
+            IOptions<PerizinanOptions> options,
             PermohonanSystemUpdate data,
             Permohonan update)
         {
@@ -1256,7 +1257,7 @@ namespace PsefApiOData.Controllers
                 return NotFound();
             }
 
-            DateTime maxExpiry = DateTime.Today.AddYears(_perizinanYears);
+            DateTime maxExpiry = DateTime.Today.AddYears(options.Value.ExpiryInYears);
             DateTime expiry = maxExpiry;
             Perizinan perizinan;
 
@@ -1424,7 +1425,6 @@ namespace PsefApiOData.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly IOptions<ElectronicSignatureOptions> _signatureOptions;
         private readonly DateTime _invalidPerizinan = new DateTime(1901, 1, 1);
-        private const int _perizinanYears = 5;
         private const int _maxPermohonanDiajukan = 3;
     }
 }
