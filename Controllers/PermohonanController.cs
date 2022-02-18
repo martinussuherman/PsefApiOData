@@ -563,6 +563,7 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Role: Dirjen*
         /// </remarks>
+        /// <param name="options">Injected Perizinan configuration options.</param>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
         [MultiRoleAuthorize(ApiRole.Dirjen)]
@@ -571,6 +572,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> DirekturJenderalSelesaikan(
+            [FromServices] IOptions<PerizinanOptions> options,
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
@@ -587,6 +589,7 @@ namespace PsefApiOData.Controllers
         /// <remarks>
         /// *Role: Validator*
         /// </remarks>
+        /// <param name="options">Injected Perizinan configuration options.</param>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
         [MultiRoleAuthorize(ApiRole.Validator)]
@@ -595,6 +598,7 @@ namespace PsefApiOData.Controllers
         [ProducesResponseType(Status204NoContent)]
         [ProducesResponseType(Status400BadRequest)]
         public async Task<IActionResult> ValidatorSelesaikan(
+            [FromServices] IOptions<PerizinanOptions> options,
             [FromBody] PermohonanSystemUpdate data)
         {
             Permohonan update = await _context.Permohonan
