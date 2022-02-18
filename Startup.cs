@@ -1,4 +1,5 @@
-using AutoMapper;
+﻿using AutoMapper;
+using FluentScheduler;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
@@ -99,6 +100,7 @@ namespace PsefApiOData
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
+            JobManager.Initialize(new ScheduledJobRegistry(app.ApplicationServices));
 
             ConfigureMvc(app, modelBuilder);
             ConfigureSwaggerUI(app, provider, basePath);
