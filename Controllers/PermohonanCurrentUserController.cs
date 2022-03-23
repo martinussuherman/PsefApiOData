@@ -419,7 +419,8 @@ namespace PsefApiOData.Controllers
                 .FirstOrDefaultAsync(e =>
                     e.PermohonanId == permohonanId &&
                     e.Permohonan.Pemohon.UserId == ApiHelper.GetUserId(HttpContext.User) &&
-                    e.StatusId == PermohonanStatus.DikembalikanVerifikator.Id);
+                    (e.StatusId == PermohonanStatus.DikembalikanVerifikator.Id ||
+                    e.StatusId == PermohonanStatus.Ditolak.Id));
 
             if (history == null)
             {
