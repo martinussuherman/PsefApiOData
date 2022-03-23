@@ -1161,7 +1161,8 @@ namespace PsefApiOData.Controllers
                     update,
                     OssInfoHelper.StatusIzin.Ditolak);
 
-                if (!response.IsSuccess)
+                // Status 422 is for pre-OSS request
+                if (!response.IsSuccess && response.StatusCode != Status422UnprocessableEntity)
                 {
                     return BadRequest();
                 }
