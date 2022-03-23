@@ -117,6 +117,15 @@ namespace PsefApiOData.Misc
             OssChecklist dataChecklist = ossInfo.DataChecklist?
                 .FirstOrDefault(c => c.IdIzin == permohonan.IdIzin);
 
+            if (dataChecklist == null)
+            {
+                return new OssSendLicenseResponse
+                {
+                    StatusCode = Status422UnprocessableEntity,
+                    Information = "Data Checklist Not Found"
+                };
+            }
+
             izinFinal.Nib = pemohon.Nib;
             izinFinal.IdProduk = dataChecklist.IdProduk;
             izinFinal.IdProyek = dataChecklist.IdProyek;
