@@ -13,17 +13,17 @@ namespace PsefApiOData.Misc
         /// <summary>
         /// Kepala seksi role.
         /// </summary>
-        internal const string Kasi = "Psef.Kasi";
+        internal const string Kasi = "Psef.Supervisor";
 
         /// <summary>
         /// Kepala subdit role.
         /// </summary>
-        internal const string Kasubdit = "Psef.Kasubdit";
+        internal const string Kasubdit = "Psef.Timja";
 
         /// <summary>
         /// Diryanfar role.
         /// </summary>
-        internal const string Diryanfar = "Psef.Diryanfar";
+        internal const string Diryanfar = "Psef.Dirpenyanfar";
 
         /// <summary>
         /// Dirjen role.
