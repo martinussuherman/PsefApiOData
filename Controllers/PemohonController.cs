@@ -76,9 +76,9 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
             ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
+            ApiRole.Supervisor,
+            ApiRole.Timja,
+            ApiRole.Dirpenyanfar,
             ApiRole.Dirjen,
             ApiRole.Admin,
             ApiRole.SuperAdmin)]

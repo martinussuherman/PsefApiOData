@@ -90,7 +90,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>Kepala Seksi Dashboard Info.</returns>
         /// <response code="200">Kepala Seksi Dashboard Info.</response>
-        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [MultiRoleAuthorize(ApiRole.Supervisor)]
         [HttpGet]
         [ODataRoute(nameof(DashboardKepalaSeksi))]
         [Produces(JsonOutput)]
@@ -117,7 +117,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>Kepala Sub Direktorat Dashboard Info.</returns>
         /// <response code="200">Kepala Sub Direktorat Dashboard Info.</response>
-        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [MultiRoleAuthorize(ApiRole.Timja)]
         [HttpGet]
         [ODataRoute(nameof(DashboardKepalaSubDirektorat))]
         [Produces(JsonOutput)]
@@ -144,7 +144,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>Direktur Pelayanan Farmasi Dashboard Info.</returns>
         /// <response code="200">Direktur Pelayanan Farmasi Dashboard Info.</response>
-        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [MultiRoleAuthorize(ApiRole.Dirpenyanfar)]
         [HttpGet]
         [ODataRoute(nameof(DashboardDirekturPelayananFarmasi))]
         [Produces(JsonOutput)]

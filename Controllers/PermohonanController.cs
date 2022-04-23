@@ -92,9 +92,9 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
             ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
+            ApiRole.Supervisor,
+            ApiRole.Timja,
+            ApiRole.Dirpenyanfar,
             ApiRole.Dirjen,
             ApiRole.Admin,
             ApiRole.SuperAdmin)]
@@ -389,7 +389,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
-        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [MultiRoleAuthorize(ApiRole.Supervisor)]
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
@@ -411,7 +411,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
-        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [MultiRoleAuthorize(ApiRole.Supervisor)]
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
@@ -433,7 +433,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
-        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [MultiRoleAuthorize(ApiRole.Timja)]
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
@@ -455,7 +455,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
-        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [MultiRoleAuthorize(ApiRole.Timja)]
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
@@ -477,7 +477,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
-        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [MultiRoleAuthorize(ApiRole.Dirpenyanfar)]
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
@@ -499,7 +499,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <param name="data">Permohonan by system update data.</param>
         /// <returns>None.</returns>
-        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [MultiRoleAuthorize(ApiRole.Dirpenyanfar)]
         [HttpPost]
         [Produces(JsonOutput)]
         [ProducesResponseType(Status204NoContent)]
@@ -668,9 +668,9 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
             ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
+            ApiRole.Supervisor,
+            ApiRole.Timja,
+            ApiRole.Dirpenyanfar,
             ApiRole.Dirjen,
             ApiRole.Admin,
             ApiRole.SuperAdmin)]
@@ -730,7 +730,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>All available pending Permohonan for Kepala Seksi.</returns>
         /// <response code="200">Permohonan successfully retrieved.</response>
-        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [MultiRoleAuthorize(ApiRole.Supervisor)]
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
@@ -763,7 +763,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>All available pending Permohonan for Kepala Sub Direktorat.</returns>
         /// <response code="200">Permohonan successfully retrieved.</response>
-        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [MultiRoleAuthorize(ApiRole.Timja)]
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
@@ -796,7 +796,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>All available pending Permohonan for Direktur Pelayanan Farmasi.</returns>
         /// <response code="200">Permohonan successfully retrieved.</response>
-        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [MultiRoleAuthorize(ApiRole.Dirpenyanfar)]
         [HttpGet]
         [Produces(JsonOutput)]
         [ProducesResponseType(typeof(ODataValue<IEnumerable<PermohonanPemohon>>), Status200OK)]
@@ -922,7 +922,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>Pending Permohonan for Kepala Seksi total count.</returns>
         /// <response code="200">Total count of Permohonan retrieved.</response>
-        [MultiRoleAuthorize(ApiRole.Kasi)]
+        [MultiRoleAuthorize(ApiRole.Supervisor)]
         [HttpGet]
         [ODataRoute(nameof(KepalaSeksiPendingTotal))]
         [Produces(JsonOutput)]
@@ -940,7 +940,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>Pending Permohonan for Kepala Sub Direktorat total count.</returns>
         /// <response code="200">Total count of Permohonan retrieved.</response>
-        [MultiRoleAuthorize(ApiRole.Kasubdit)]
+        [MultiRoleAuthorize(ApiRole.Timja)]
         [HttpGet]
         [ODataRoute(nameof(KepalaSubDirektoratPendingTotal))]
         [Produces(JsonOutput)]
@@ -958,7 +958,7 @@ namespace PsefApiOData.Controllers
         /// </remarks>
         /// <returns>Pending Permohonan for Direktur Pelayanan Farmasi total count.</returns>
         /// <response code="200">Total count of Permohonan retrieved.</response>
-        [MultiRoleAuthorize(ApiRole.Diryanfar)]
+        [MultiRoleAuthorize(ApiRole.Dirpenyanfar)]
         [HttpGet]
         [ODataRoute(nameof(DirekturPelayananFarmasiPendingTotal))]
         [Produces(JsonOutput)]
@@ -1103,9 +1103,9 @@ namespace PsefApiOData.Controllers
         [MultiRoleAuthorize(
             ApiRole.Verifikator,
             ApiRole.Validator,
-            ApiRole.Kasi,
-            ApiRole.Kasubdit,
-            ApiRole.Diryanfar,
+            ApiRole.Supervisor,
+            ApiRole.Timja,
+            ApiRole.Dirpenyanfar,
             ApiRole.Dirjen,
             ApiRole.Admin,
             ApiRole.SuperAdmin)]

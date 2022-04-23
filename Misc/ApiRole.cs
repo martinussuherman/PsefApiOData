@@ -11,19 +11,19 @@ namespace PsefApiOData.Misc
         internal const string Verifikator = "Psef.Verifikator";
 
         /// <summary>
-        /// Kepala seksi role.
+        /// Supervisor role.
         /// </summary>
-        internal const string Kasi = "Psef.Supervisor";
+        internal const string Supervisor = "Psef.Supervisor";
 
         /// <summary>
-        /// Kepala subdit role.
+        /// Timja role.
         /// </summary>
-        internal const string Kasubdit = "Psef.Timja";
+        internal const string Timja = "Psef.Timja";
 
         /// <summary>
-        /// Diryanfar role.
+        /// Dirpenyanfar role.
         /// </summary>
-        internal const string Diryanfar = "Psef.Dirpenyanfar";
+        internal const string Dirpenyanfar = "Psef.Dirpenyanfar";
 
         /// <summary>
         /// Dirjen role.
